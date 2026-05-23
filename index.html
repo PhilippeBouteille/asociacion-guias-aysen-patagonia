@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGAP — Guías Aysén Patagonia</title>
+  <meta name="description" content="Asociación de Guías Aysén Patagonia — Guías certificados para trekking, kayak, escalada, fauna y más en la Patagonia chilena.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:#F5A623; --orange-d:#D4891A;
+      --red:#E03030; --blue:#4DBDE8; --green:#3DAF4A;
+      --dark:#1A1A18; --dark2:#252520;
+      --cream:#F8F4EE; --warm:#FDFAF6;
+      --muted:#6B6860;
+      --fd:'Bebas Neue',sans-serif;
+      --fb:'Nunito',sans-serif;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--dark);background:var(--warm);overflow-x:hidden;}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 2rem;height:64px;
+      background:rgba(26,26,24,0.93);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(245,166,35,0.12);
+    }
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .nav-logo-img{height:36px;width:auto;}
+    .nav-brand-text{font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:.05em;line-height:1.1;}
+    .nav-brand-text span{display:block;font-weight:300;font-size:.68rem;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;}
+    .nav-links{display:flex;gap:2rem;list-style:none;}
+    .nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+    .nav-links a:hover{color:var(--orange);}
+    .nav-right{display:flex;align-items:center;gap:.9rem;}
+    .lang-sw{display:flex;gap:.3rem;}
+    .lang-btn{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:3px 8px;font-size:.7rem;font-weight:700;letter-spacing:.05em;cursor:pointer;border-radius:3px;transition:all .2s;font-family:var(--fb);}
+    .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--dark);}
+    .nav-cta{background:var(--orange);color:var(--dark);border:none;padding:8px 18px;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);}
+    .nav-cta:hover{background:var(--orange-d);}
+
+    /* ── HERO ── */
+    #hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1531169509526-f8f1fdaa4a67?w=1800&q=80') center/cover no-repeat;}
+    .hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,26,24,.15) 0%,rgba(26,26,24,.45) 50%,rgba(26,26,24,.88) 100%);}
+    .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:1.4rem;padding:0 1rem;}
+    .hero-logo{width:90px;height:90px;object-fit:contain;animation:fdDown 1s ease both;}
+    .hero-tagline{font-family:var(--fb);font-weight:800;font-size:.82rem;color:var(--orange);letter-spacing:.3em;text-transform:uppercase;animation:fdDown 1s .2s ease both;}
+    .hero-title{font-family:var(--fd);font-size:clamp(3.8rem,9vw,8.5rem);color:white;line-height:.88;letter-spacing:.02em;animation:fdDown 1s .35s ease both;}
+    .hero-title em{font-style:normal;color:var(--orange);}
+    .hero-sub{font-size:1.05rem;color:rgba(255,255,255,.82);max-width:520px;font-weight:400;animation:fdDown 1s .5s ease both;}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fdDown 1s .65s ease both;}
+    .btn-primary{background:var(--orange);color:var(--dark);padding:13px 30px;font-size:.88rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);text-decoration:none;display:inline-block;}
+    .btn-primary:hover{background:var(--orange-d);transform:translateY(-1px);}
+    .btn-outline{background:transparent;color:white;padding:13px 30px;font-size:.88rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:2px solid rgba(255,255,255,.5);cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);text-decoration:none;display:inline-block;}
+    .btn-outline:hover{border-color:white;background:rgba(255,255,255,.1);}
+    .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:fdDown 1s .85s ease both;}
+    .hero-scroll span{color:rgba(255,255,255,.45);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;}
+    .scroll-line{width:1px;height:38px;background:linear-gradient(to bottom,rgba(255,255,255,.45),transparent);}
+
+    /* ── STATS ── */
+    #stats{background:var(--orange);padding:40px 0;}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;}
+    .stat-num{font-family:var(--fd);font-size:3.5rem;color:var(--dark);line-height:1;}
+    .stat-lbl{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(26,26,24,.6);margin-top:.2rem;}
+
+    /* ── BASE ── */
+    section{padding:84px 0;}
+    .container{max-width:1180px;margin:0 auto;padding:0 2rem;}
+    .sec-label{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;}
+    .sec-title{font-family:var(--fd);font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:.9;color:var(--dark);margin-bottom:.9rem;}
+    .sec-title.light{color:white;}
+    .sec-text{max-width:620px;color:var(--muted);font-size:.97rem;line-height:1.82;}
+
+    /* ── MISIÓN ── */
+    #mision{background:var(--warm);}
+    .mision-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+    .mc{background:var(--cream);padding:2.2rem;border-radius:8px;border-left:4px solid var(--orange);margin-top:.9rem;}
+    .mc+.mc{border-left-color:var(--blue);}
+    .mc h3{font-family:var(--fd);font-size:1.8rem;color:var(--dark);margin-bottom:.8rem;}
+    .mc p{color:var(--muted);line-height:1.82;font-size:.94rem;}
+    .val-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem;}
+    .val-item{display:flex;align-items:flex-start;gap:.75rem;}
+    .val-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-top:2px;}
+    .val-name{font-size:.9rem;font-weight:700;color:var(--dark);}
+    .val-desc{font-size:.78rem;color:var(--muted);}
+
+    /* ── TERRITORIO ── */
+    #territorio{background:var(--dark);position:relative;overflow:hidden;}
+    .terr-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1589519160732-576f165b9aad?w=1800&q=80') center/cover no-repeat;opacity:.18;}
+    .terr-content{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+    .terr-text .sec-text{color:rgba(255,255,255,.68);max-width:100%;}
+    .terr-text .sec-text+.sec-text{margin-top:.9rem;}
+    .terr-facts{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
+    .fact-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:1.5rem;border-radius:8px;transition:background .2s;}
+    .fact-card:hover{background:rgba(255,255,255,.12);}
+    .fact-num{font-family:var(--fd);font-size:2.6rem;color:var(--orange);line-height:1;}
+    .fact-desc{font-size:.83rem;color:rgba(255,255,255,.58);margin-top:.25rem;}
+
+    /* ── ESPECIALIDADES ── */
+    #especialidades{background:var(--cream);}
+    .esp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+    .esp-card{background:white;border-radius:8px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default;}
+    .esp-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
+    .esp-img{height:180px;background-size:cover;background-position:center;position:relative;}
+    .esp-badge{position:absolute;top:1rem;left:1rem;padding:4px 10px;border-radius:3px;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:white;}
+    .esp-body{padding:1.2rem;}
+    .esp-body h4{font-family:var(--fd);font-size:1.4rem;color:var(--dark);margin-bottom:.35rem;}
+    .esp-body p{font-size:.84rem;color:var(--muted);line-height:1.62;}
+
+    /* ── GUÍAS ── */
+    #guias{background:var(--warm);}
+    .guias-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;}
+    .filters{display:flex;gap:.45rem;flex-wrap:wrap;}
+    .fbtn{background:none;border:1px solid #ddd;padding:6px 16px;font-size:.78rem;font-weight:700;cursor:pointer;border-radius:20px;transition:all .2s;font-family:var(--fb);color:var(--muted);}
+    .fbtn:hover,.fbtn.active{background:var(--orange);border-color:var(--orange);color:var(--dark);}
+    .guias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+    .g-card{background:white;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
+    .g-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
+    .g-photo{height:220px;background-size:cover;background-position:center top;position:relative;}
+    .g-badge{position:absolute;bottom:1rem;left:1rem;background:var(--orange);color:var(--dark);padding:4px 10px;border-radius:3px;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+    .g-body{padding:1.2rem;}
+    .g-name{font-family:var(--fd);font-size:1.5rem;color:var(--dark);}
+    .g-zone{font-size:.78rem;color:var(--muted);margin-bottom:.7rem;}
+    .g-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.9rem;}
+    .tag{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
+    .tt{background:rgba(61,175,74,.12);color:var(--green);}
+    .tk{background:rgba(77,189,232,.12);color:#2A9DC4;}
+    .te{background:rgba(224,48,48,.12);color:var(--red);}
+    .tf{background:rgba(245,166,35,.12);color:var(--orange-d);}
+    .tfa{background:rgba(61,175,74,.18);color:#2A8C38;}
+    .g-langs{font-size:.8rem;color:var(--muted);}
+    .g-langs strong{color:var(--dark);}
+    .guias-cta{text-align:center;margin-top:2.8rem;}
+
+    /* ── ÚNETE ── */
+    #unete{background:var(--dark2);}
+    .unete-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center;}
+    .benefits{list-style:none;display:flex;flex-direction:column;gap:.9rem;margin-top:2rem;}
+    .benefits li{display:flex;align-items:center;gap:1rem;font-size:.94rem;color:rgba(255,255,255,.8);}
+    .bdot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+    .u-form{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:2.4rem;}
+    .u-form h3{font-family:var(--fd);font-size:2rem;color:white;margin-bottom:1.4rem;}
+    .fg{margin-bottom:.9rem;}
+    .fg label{display:block;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem;}
+    .fg input,.fg select,.fg textarea{width:100%;padding:10px 13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:5px;color:white;font-family:var(--fb);font-size:.9rem;transition:border-color .2s;}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--orange);}
+    .fg select option{background:var(--dark2);}
+    .f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+    /* ── CONTACTO ── */
+    #contacto{background:var(--warm);}
+    .ctc-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start;}
+    .ctc-items{display:flex;flex-direction:column;gap:1.2rem;margin-top:2rem;}
+    .ctc-item{display:flex;align-items:flex-start;gap:1rem;}
+    .ctc-icon{width:40px;height:40px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+    .ctc-txt{font-size:.9rem;}
+    .ctc-txt strong{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+    .c-form{background:var(--cream);border-radius:10px;padding:2.4rem;}
+    .c-form .fg input,.c-form .fg textarea,.c-form .fg select{background:white;border:1px solid #e5e1db;color:var(--dark);}
+    .c-form .fg label{color:var(--muted);}
+    .c-form .fg input:focus,.c-form .fg textarea:focus{border-color:var(--orange);}
+
+    /* ── FOOTER ── */
+    footer{background:var(--dark);padding:60px 0 28px;color:rgba(255,255,255,.48);}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:2rem;}
+    .ft-brand-txt{font-size:.9rem;line-height:1.8;margin-top:1rem;max-width:280px;}
+    .ft-col h4{font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:white;margin-bottom:1rem;}
+    .ft-links{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+    .ft-links a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.88rem;transition:color .2s;}
+    .ft-links a:hover{color:var(--orange);}
+    .ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.78rem;}
+    .ft-social{display:flex;gap:.9rem;}
+    .soc{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);text-decoration:none;font-size:.82rem;transition:all .2s;}
+    .soc:hover{background:var(--orange);color:var(--dark);}
+
+    /* ── ANIMATIONS ── */
+    @keyframes fdDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
+    .fu{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+    .fu.vis{opacity:1;transform:translateY(0);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .nav-links{display:none;}
+      .mision-grid,.terr-content,.unete-grid,.ctc-grid,.ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+      .guias-grid,.esp-grid{grid-template-columns:1fr 1fr;}
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+      .terr-facts{grid-template-columns:1fr 1fr;}
+      section{padding:60px 0;}
+    }
+    @media(max-width:520px){
+      .guias-grid,.esp-grid{grid-template-columns:1fr;}
+      .f2{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <img src="Logos/agap-logo.png" alt="AGAP" class="nav-logo-img" onerror="this.style.display='none'">
+    <div class="nav-brand-text">AGAP<span>Guías Aysén Patagonia</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#mision" data-t="nav_mision">Misión</a></li>
+    <li><a href="#guias" data-t="nav_guias">Guías</a></li>
+    <li><a href="#especialidades" data-t="nav_esp">Especialidades</a></li>
+    <li><a href="#unete" data-t="nav_unete">Únete</a></li>
+    <li><a href="#contacto" data-t="nav_contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-sw">
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    </div>
+    <button class="nav-cta" onclick="document.getElementById('unete').scrollIntoView({behavior:'smooth'})" data-t="nav_unete_btn">Únete</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-content">
+    <img src="Logos/agap-logo.png" alt="AGAP" class="hero-logo" onerror="this.style.display='none'">
+    <div class="hero-tagline" data-t="hero_tag">Aysén · Patagonia · Chile</div>
+    <h1 class="hero-title" data-t="hero_title_html">GUÍAS<br><em>AYSÉN</em><br>PATAGONIA</h1>
+    <p class="hero-sub" data-t="hero_sub">Asociación de guías certificados que conectan viajeros con el alma de la Patagonia profunda</p>
+    <div class="hero-actions">
+      <a href="#guias" class="btn-primary" data-t="hero_btn1">Ver Guías</a>
+      <a href="#unete" class="btn-outline" data-t="hero_btn2">Asociarse</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="fu"><div class="stat-num" id="stat-guias">0</div><div class="stat-lbl" data-t="stat1">Guías Asociados</div></div>
+      <div class="fu"><div class="stat-num">6</div><div class="stat-lbl" data-t="stat2">Especialidades</div></div>
+      <div class="fu"><div class="stat-num">108K</div><div class="stat-lbl" data-t="stat3">km² de territorio</div></div>
+      <div class="fu"><div class="stat-num">3</div><div class="stat-lbl" data-t="stat4">Idiomas</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MISIÓN -->
+<section id="mision">
+  <div class="container">
+    <div class="mision-grid">
+      <div class="fu">
+        <div class="sec-label" data-t="sec_nosotros">Quiénes somos</div>
+        <h2 class="sec-title" data-t="sec_mv_title">MISIÓN &<br>VISIÓN</h2>
+        <div class="mc">
+          <h3>🎯 <span data-t="mision_h">MISIÓN</span></h3>
+          <p data-t="mision_p">Unir y representar a los guías de la región en una sola organización, creando un estilo de vida e identidad asociada al patrimonio de Aysén. Promovemos la conservación y el turismo sostenible.</p>
+        </div>
+        <div class="mc">
+          <h3>🔭 <span data-t="vision_h">VISIÓN</span></h3>
+          <p data-t="vision_p">Ser un gremio líder de guías formalizados y acreditados por AGAP, valorando habilidades y conocimientos locales a través de un sistema de acreditación que incluye evaluaciones y capacitaciones.</p>
+        </div>
+      </div>
+      <div class="fu">
+        <div class="sec-label" data-t="sec_val_lbl">Nuestros valores</div>
+        <h2 class="sec-title" data-t="sec_val_title">LO QUE<br>NOS MUEVE</h2>
+        <p class="sec-text" data-t="val_intro">Guías locales, conocimiento profundo del territorio, compromiso con la naturaleza y las comunidades de Aysén.</p>
+        <div class="val-grid">
+          <div class="val-item"><div class="val-icon" style="background:rgba(245,166,35,.15)">🏔️</div><div><div class="val-name" data-t="v1">Territorio & Identidad</div><div class="val-desc" data-t="v1d">Raíces en Aysén</div></div></div>
+          <div class="val-item"><div class="val-icon" style="background:rgba(61,175,74,.15)">🌿</div><div><div class="val-name" data-t="v2">Turismo Sostenible</div><div class="val-desc" data-t="v2d">Cuidado del entorno</div></div></div>
+          <div class="val-item"><div class="val-icon" style="background:rgba(77,189,232,.15)">🎓</div><div><div class="val-name" data-t="v3">Acreditación AGAP</div><div class="val-desc" data-t="v3d">Calidad certificada</div></div></div>
+          <div class="val-item"><div class="val-icon" style="background:rgba(224,48,48,.15)">🤝</div><div><div class="val-name" data-t="v4">Comunidad</div><div class="val-desc" data-t="v4d">Apoyo mutuo entre guías</div></div></div>
+          <div class="val-item"><div class="val-icon" style="background:rgba(245,166,35,.15)">🛡️</div><div><div class="val-name" data-t="v5">Seguridad</div><div class="val-desc" data-t="v5d">Protocolos profesionales</div></div></div>
+          <div class="val-item"><div class="val-icon" style="background:rgba(61,175,74,.15)">🌏</div><div><div class="val-name" data-t="v6">Conocimiento Local</div><div class="val-desc" data-t="v6d">Saberes del territorio</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERRITORIO -->
+<section id="territorio">
+  <div class="terr-bg"></div>
+  <div class="container">
+    <div class="terr-content">
+      <div class="terr-text fu">
+        <div class="sec-label" data-t="sec_terr_lbl">El Territorio</div>
+        <h2 class="sec-title light" data-t="terr_title">AYSÉN<br>PATAGONIA</h2>
+        <p class="sec-text" data-t="terr_p1">La región más salvaje y menos conocida de la Patagonia chilena. Un territorio de fiordos, glaciares, bosques valdivos y pampas que solo los guías locales conocen a fondo.</p>
+        <p class="sec-text" data-t="terr_p2" style="margin-top:.9rem;">108.494 km² de naturaleza casi intacta, con menos de 100.000 habitantes. El destino de los viajeros que buscan lo auténtico.</p>
+      </div>
+      <div class="terr-facts fu">
+        <div class="fact-card"><div class="fact-num">108K</div><div class="fact-desc" data-t="f1">km² de superficie</div></div>
+        <div class="fact-card"><div class="fact-num">~90K</div><div class="fact-desc" data-t="f2">habitantes</div></div>
+        <div class="fact-card"><div class="fact-num">6</div><div class="fact-desc" data-t="f3">parques nacionales</div></div>
+        <div class="fact-card"><div class="fact-num">∞</div><div class="fact-desc" data-t="f4">fiordos y glaciares</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALIDADES -->
+<section id="especialidades">
+  <div class="container">
+    <div class="fu" style="text-align:center;max-width:600px;margin:0 auto 1rem;">
+      <div class="sec-label" data-t="sec_esp_lbl">Especialidades</div>
+      <h2 class="sec-title" data-t="esp_title">LO QUE<br>OFRECEMOS</h2>
+    </div>
+    <div class="esp-grid">
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80')"><span class="esp-badge" style="background:var(--green)" data-t="esp1_tag">Trekking</span></div>
+        <div class="esp-body"><h4 data-t="esp1_h">TREKKING & SENDERISMO</h4><p data-t="esp1_p">Rutas para todos los niveles en parques, reservas y senderos vírgenes de Aysén.</p></div>
+      </div>
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80')"><span class="esp-badge" style="background:var(--blue)" data-t="esp2_tag">Kayak</span></div>
+        <div class="esp-body"><h4 data-t="esp2_h">KAYAK & FIORDOS</h4><p data-t="esp2_p">Expediciones en kayak por los fiordos, canales y estuarios patagónicos.</p></div>
+      </div>
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=600&q=80')"><span class="esp-badge" style="background:var(--red)" data-t="esp3_tag">Escalada</span></div>
+        <div class="esp-body"><h4 data-t="esp3_h">ESCALADA & MONTAÑA</h4><p data-t="esp3_p">Ascensos y rutas de escalada en la cordillera y formaciones volcánicas de Aysén.</p></div>
+      </div>
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80')"><span class="esp-badge" style="background:var(--orange)" data-t="esp4_tag">Fauna</span></div>
+        <div class="esp-body"><h4 data-t="esp4_h">AVISTAMIENTO DE FAUNA</h4><p data-t="esp4_p">Observación de huemul, puma, cóndor, delfín de Peale y otras especies endémicas.</p></div>
+      </div>
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1504691342899-4d92b50853e1?w=600&q=80')"><span class="esp-badge" style="background:var(--blue)" data-t="esp5_tag">Pesca</span></div>
+        <div class="esp-body"><h4 data-t="esp5_h">PESCA CON MOSCA</h4><p data-t="esp5_p">Ríos y lagos de clase mundial para pesca deportiva de truchas y salmones.</p></div>
+      </div>
+      <div class="esp-card fu">
+        <div class="esp-img" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80')"><span class="esp-badge" style="background:var(--green)" data-t="esp6_tag">Glaciares</span></div>
+        <div class="esp-body"><h4 data-t="esp6_h">GLACIARES & HIELOS</h4><p data-t="esp6_p">Excursiones al Campo de Hielo Norte, ventisqueros y lagunas glaciales de Aysén.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUÍAS -->
+<section id="guias">
+  <div class="container">
+    <div class="guias-hdr">
+      <div class="fu">
+        <div class="sec-label" data-t="sec_guias_lbl">Nuestros Guías</div>
+        <h2 class="sec-title" data-t="guias_title">ENCUENTRA<br>TU GUÍA</h2>
+      </div>
+      <div class="filters fu">
+        <button class="fbtn active" onclick="filterGuias('all',this)" data-t="f_all">Todos</button>
+        <button class="fbtn" onclick="filterGuias('trekking',this)">Trekking</button>
+        <button class="fbtn" onclick="filterGuias('kayak',this)">Kayak</button>
+        <button class="fbtn" onclick="filterGuias('escalada',this)">Escalada</button>
+        <button class="fbtn" onclick="filterGuias('fauna',this)">Fauna</button>
+      </div>
+    </div>
+    <div class="guias-grid" id="guias-grid"></div>
+    <div class="guias-cta fu"><button class="btn-primary" data-t="guias_cta">Ver todos los guías →</button></div>
+  </div>
+</section>
+
+<!-- ÚNETE -->
+<section id="unete">
+  <div class="container">
+    <div class="unete-grid">
+      <div class="fu">
+        <div class="sec-label" data-t="sec_unete_lbl">Para guías</div>
+        <h2 class="sec-title light" data-t="unete_title">ÚNETE A<br>AGAP</h2>
+        <p class="sec-text" style="color:rgba(255,255,255,.65);" data-t="unete_p">Forma parte del gremio de guías de Aysén. Acreditación, visibilidad, comunidad y apoyo profesional.</p>
+        <ul class="benefits">
+          <li><div class="bdot"></div><span data-t="b1">Perfil en el directorio público de guías</span></li>
+          <li><div class="bdot"></div><span data-t="b2">Acreditación AGAP por especialidad</span></li>
+          <li><div class="bdot"></div><span data-t="b3">Formaciones y capacitaciones</span></li>
+          <li><div class="bdot"></div><span data-t="b4">Red profesional de guías de Aysén</span></li>
+          <li><div class="bdot"></div><span data-t="b5">Visibilidad ante turistas nacionales e internacionales</span></li>
+          <li><div class="bdot"></div><span data-t="b6">Participación en las decisiones del gremio</span></li>
+        </ul>
+      </div>
+      <div class="u-form fu">
+        <h3 data-t="uform_title">INSCRIPCIÓN DE GUÍA</h3>
+        <div class="f2">
+          <div class="fg"><label data-t="f_nom">Nombre</label><input type="text" placeholder="Tu nombre"></div>
+          <div class="fg"><label data-t="f_ape">Apellido</label><input type="text" placeholder="Tu apellido"></div>
+        </div>
+        <div class="fg"><label data-t="f_email">Email</label><input type="email" placeholder="tu@email.com"></div>
+        <div class="fg"><label data-t="f_tel">Teléfono / WhatsApp</label><input type="tel" placeholder="+56 9 xxxx xxxx"></div>
+        <div class="fg">
+          <label data-t="f_esp">Especialidad principal</label>
+          <select>
+            <option data-t="f_esp0">Selecciona...</option>
+            <option>Trekking & Senderismo</option>
+            <option>Kayak & Fiordos</option>
+            <option>Escalada & Montaña</option>
+            <option>Avistamiento de Fauna</option>
+            <option>Pesca con Mosca</option>
+            <option>Glaciares & Hielos</option>
+          </select>
+        </div>
+        <div class="fg"><label data-t="f_zona">Zona de operación</label><input type="text" placeholder="Ej: Coyhaique, Baker, Puerto Aysén..."></div>
+        <button class="btn-primary" style="width:100%;margin-top:.4rem;" data-t="f_sub">Enviar solicitud</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <div class="ctc-grid">
+      <div class="fu">
+        <div class="sec-label" data-t="sec_ctc_lbl">Contacto</div>
+        <h2 class="sec-title" data-t="ctc_title">PLANIFICA<br>TU VIAJE</h2>
+        <p class="sec-text" data-t="ctc_p">¿Buscas un guía para tu aventura en Aysén? Contáctanos y te conectamos con el guía ideal.</p>
+        <div class="ctc-items">
+          <div class="ctc-item"><div class="ctc-icon">📍</div><div class="ctc-txt"><strong data-t="ci1">Ubicación</strong>Coyhaique, Región de Aysén, Chile</div></div>
+          <div class="ctc-item"><div class="ctc-icon">📧</div><div class="ctc-txt"><strong>Email</strong>contacto@agapguias.cl</div></div>
+          <div class="ctc-item"><div class="ctc-icon">📱</div><div class="ctc-txt"><strong>WhatsApp</strong>+56 9 xxxx xxxx</div></div>
+          <div class="ctc-item"><div class="ctc-icon">🌐</div><div class="ctc-txt"><strong data-t="ci4">Redes</strong>@agapguias</div></div>
+        </div>
+      </div>
+      <div class="c-form fu">
+        <div class="f2">
+          <div class="fg"><label data-t="f_nom">Nombre</label><input type="text" placeholder="Tu nombre"></div>
+          <div class="fg"><label data-t="f_email">Email</label><input type="email" placeholder="tu@email.com"></div>
+        </div>
+        <div class="fg">
+          <label data-t="f_act">Tipo de actividad</label>
+          <select>
+            <option>Trekking & Senderismo</option>
+            <option>Kayak & Fiordos</option>
+            <option>Escalada & Montaña</option>
+            <option>Avistamiento de Fauna</option>
+            <option>Pesca con Mosca</option>
+            <option>Glaciares & Hielos</option>
+            <option data-t="f_combo">Combinado / Otro</option>
+          </select>
+        </div>
+        <div class="fg"><label data-t="f_msg">Mensaje</label><textarea rows="4" placeholder="Cuéntanos sobre tu proyecto de viaje..."></textarea></div>
+        <button class="btn-primary" style="width:100%;" data-t="ctc_sub">Enviar consulta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="ft-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="Logos/agap-logo.png" alt="AGAP" style="height:48px;" onerror="this.style.display='none'">
+          <div style="font-family:var(--fb);font-weight:800;font-size:1.2rem;color:white;">AGAP</div>
+        </div>
+        <p class="ft-brand-txt" data-t="ft_txt">Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+      </div>
+      <div class="ft-col">
+        <h4 data-t="ft_nav">Navegación</h4>
+        <ul class="ft-links">
+          <li><a href="#mision" data-t="nav_mision">Misión</a></li>
+          <li><a href="#guias" data-t="nav_guias">Guías</a></li>
+          <li><a href="#especialidades" data-t="nav_esp">Especialidades</a></li>
+          <li><a href="#unete" data-t="nav_unete">Únete</a></li>
+          <li><a href="#contacto" data-t="nav_contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4 data-t="ft_leg">Legal</h4>
+        <ul class="ft-links">
+          <li><a href="#" data-t="ft_est">Estatutos AGAP</a></li>
+          <li><a href="#" data-t="ft_cod">Código de Conducta</a></li>
+          <li><a href="#" data-t="ft_priv">Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2025 AGAP — Asociación de Guías Aysén Patagonia</span>
+      <div class="ft-social">
+        <a href="#" class="soc" title="Instagram">IG</a>
+        <a href="#" class="soc" title="Facebook">FB</a>
+        <a href="#" class="soc" title="WhatsApp">WA</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── i18n ──────────────────────────────────────────────────── */
+const T={
+  es:{
+    nav_mision:'Misión',nav_guias:'Guías',nav_esp:'Especialidades',nav_unete:'Únete',nav_contacto:'Contacto',nav_unete_btn:'Únete',
+    hero_tag:'Aysén · Patagonia · Chile',
+    hero_title_html:'GUÍAS<br><em>AYSÉN</em><br>PATAGONIA',
+    hero_sub:'Asociación de guías certificados que conectan viajeros con el alma de la Patagonia profunda',
+    hero_btn1:'Ver Guías',hero_btn2:'Asociarse',
+    stat1:'Guías Asociados',stat2:'Especialidades',stat3:'km² de territorio',stat4:'Idiomas',
+    sec_nosotros:'Quiénes somos',sec_mv_title:'MISIÓN &<br>VISIÓN',
+    mision_h:'MISIÓN',mision_p:'Unir y representar a los guías de la región en una sola organización, creando un estilo de vida e identidad asociada al patrimonio de Aysén. Promovemos la conservación y el turismo sostenible.',
+    vision_h:'VISIÓN',vision_p:'Ser un gremio líder de guías formalizados y acreditados por AGAP, valorando habilidades y conocimientos locales a través de un sistema de acreditación que incluye evaluaciones y capacitaciones.',
+    sec_val_lbl:'Nuestros valores',sec_val_title:'LO QUE<br>NOS MUEVE',
+    val_intro:'Guías locales, conocimiento profundo del territorio, compromiso con la naturaleza y las comunidades de Aysén.',
+    v1:'Territorio & Identidad',v1d:'Raíces en Aysén',v2:'Turismo Sostenible',v2d:'Cuidado del entorno',
+    v3:'Acreditación AGAP',v3d:'Calidad certificada',v4:'Comunidad',v4d:'Apoyo mutuo entre guías',
+    v5:'Seguridad',v5d:'Protocolos profesionales',v6:'Conocimiento Local',v6d:'Saberes del territorio',
+    sec_terr_lbl:'El Territorio',terr_title:'AYSÉN<br>PATAGONIA',
+    terr_p1:'La región más salvaje y menos conocida de la Patagonia chilena. Un territorio de fiordos, glaciares, bosques valdivos y pampas que solo los guías locales conocen a fondo.',
+    terr_p2:'108.494 km² de naturaleza casi intacta, con menos de 100.000 habitantes. El destino de los viajeros que buscan lo auténtico.',
+    f1:'km² de superficie',f2:'habitantes',f3:'parques nacionales',f4:'fiordos y glaciares',
+    sec_esp_lbl:'Especialidades',esp_title:'LO QUE<br>OFRECEMOS',
+    esp1_tag:'Trekking',esp1_h:'TREKKING & SENDERISMO',esp1_p:'Rutas para todos los niveles en parques, reservas y senderos vírgenes de Aysén.',
+    esp2_tag:'Kayak',esp2_h:'KAYAK & FIORDOS',esp2_p:'Expediciones en kayak por los fiordos, canales y estuarios patagónicos.',
+    esp3_tag:'Escalada',esp3_h:'ESCALADA & MONTAÑA',esp3_p:'Ascensos y rutas de escalada en la cordillera y formaciones volcánicas de Aysén.',
+    esp4_tag:'Fauna',esp4_h:'AVISTAMIENTO DE FAUNA',esp4_p:'Observación de huemul, puma, cóndor, delfín de Peale y otras especies endémicas.',
+    esp5_tag:'Pesca',esp5_h:'PESCA CON MOSCA',esp5_p:'Ríos y lagos de clase mundial para pesca deportiva de truchas y salmones.',
+    esp6_tag:'Glaciares',esp6_h:'GLACIARES & HIELOS',esp6_p:'Excursiones al Campo de Hielo Norte, ventisqueros y lagunas glaciales de Aysén.',
+    sec_guias_lbl:'Nuestros Guías',guias_title:'ENCUENTRA<br>TU GUÍA',
+    f_all:'Todos',guias_cta:'Ver todos los guías →',
+    sec_unete_lbl:'Para guías',unete_title:'ÚNETE A<br>AGAP',
+    unete_p:'Forma parte del gremio de guías de Aysén. Acreditación, visibilidad, comunidad y apoyo profesional.',
+    b1:'Perfil en el directorio público de guías',b2:'Acreditación AGAP por especialidad',
+    b3:'Formaciones y capacitaciones',b4:'Red profesional de guías de Aysén',
+    b5:'Visibilidad ante turistas nacionales e internacionales',b6:'Participación en las decisiones del gremio',
+    uform_title:'INSCRIPCIÓN DE GUÍA',
+    f_nom:'Nombre',f_ape:'Apellido',f_email:'Email',f_tel:'Teléfono / WhatsApp',
+    f_esp:'Especialidad principal',f_esp0:'Selecciona...',f_zona:'Zona de operación',f_sub:'Enviar solicitud',
+    sec_ctc_lbl:'Contacto',ctc_title:'PLANIFICA<br>TU VIAJE',
+    ctc_p:'¿Buscas un guía para tu aventura en Aysén? Contáctanos y te conectamos con el guía ideal.',
+    ci1:'Ubicación',ci4:'Redes',f_act:'Tipo de actividad',f_msg:'Mensaje',f_combo:'Combinado / Otro',ctc_sub:'Enviar consulta',
+    ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
+    ft_nav:'Navegación',ft_leg:'Legal',ft_est:'Estatutos AGAP',ft_cod:'Código de Conducta',ft_priv:'Privacidad',
+  },
+  en:{
+    nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activities',nav_unete:'Join',nav_contacto:'Contact',nav_unete_btn:'Join',
+    hero_tag:'Aysén · Patagonia · Chile',
+    hero_title_html:'GUIDES<br><em>AYSÉN</em><br>PATAGONIA',
+    hero_sub:'Association of certified guides connecting travelers with the soul of deep Patagonia',
+    hero_btn1:'Find a Guide',hero_btn2:'Join Us',
+    stat1:'Member Guides',stat2:'Specialties',stat3:'km² of territory',stat4:'Languages',
+    sec_nosotros:'About us',sec_mv_title:'MISSION &<br>VISION',
+    mision_h:'MISSION',mision_p:'Unite and represent the guides of the region in a single organization, creating an identity linked to the heritage of Aysén. We promote conservation and sustainable tourism.',
+    vision_h:'VISION',vision_p:'To be a leading guild of guides formalized and accredited by AGAP, valuing local skills and knowledge through an accreditation system that includes evaluations and training.',
+    sec_val_lbl:'Our values',sec_val_title:'WHAT<br>DRIVES US',
+    val_intro:'Local guides, deep knowledge of the territory, commitment to nature and the communities of Aysén.',
+    v1:'Territory & Identity',v1d:'Roots in Aysén',v2:'Sustainable Tourism',v2d:'Environmental care',
+    v3:'AGAP Accreditation',v3d:'Certified quality',v4:'Community',v4d:'Mutual support',
+    v5:'Safety',v5d:'Professional protocols',v6:'Local Knowledge',v6d:'Territory expertise',
+    sec_terr_lbl:'The Territory',terr_title:'AYSÉN<br>PATAGONIA',
+    terr_p1:'The wildest and least known region of Chilean Patagonia. A territory of fjords, glaciers, valdivian forests and pampas that only local guides know deeply.',
+    terr_p2:'108,494 km² of nearly pristine nature, with less than 100,000 inhabitants. The destination for travelers seeking the authentic.',
+    f1:'km² area',f2:'inhabitants',f3:'national parks',f4:'fjords and glaciers',
+    sec_esp_lbl:'Specialties',esp_title:'WHAT WE<br>OFFER',
+    esp1_tag:'Trekking',esp1_h:'TREKKING & HIKING',esp1_p:'Routes for all levels in parks, reserves and virgin trails of Aysén.',
+    esp2_tag:'Kayak',esp2_h:'KAYAK & FJORDS',esp2_p:'Kayak expeditions through Patagonian fjords, channels and estuaries.',
+    esp3_tag:'Climbing',esp3_h:'CLIMBING & MOUNTAINEERING',esp3_p:'Ascents and climbing routes in the cordillera and volcanic formations of Aysén.',
+    esp4_tag:'Wildlife',esp4_h:'WILDLIFE WATCHING',esp4_p:"Observation of huemul deer, puma, condor, Peale's dolphin and other endemic species.",
+    esp5_tag:'Fishing',esp5_h:'FLY FISHING',esp5_p:'World-class rivers and lakes for sport fishing for trout and salmon.',
+    esp6_tag:'Glaciers',esp6_h:'GLACIERS & ICE',esp6_p:'Excursions to the Northern Ice Field, glaciers and glacial lagoons of Aysén.',
+    sec_guias_lbl:'Our Guides',guias_title:'FIND YOUR<br>GUIDE',
+    f_all:'All',guias_cta:'View all guides →',
+    sec_unete_lbl:'For guides',unete_title:'JOIN<br>AGAP',
+    unete_p:'Be part of the Aysén guides guild. Accreditation, visibility, community and professional support.',
+    b1:'Profile in the public guide directory',b2:'AGAP accreditation by specialty',
+    b3:'Training and workshops',b4:'Professional network of Aysén guides',
+    b5:'Visibility to national and international tourists',b6:'Participation in guild decisions',
+    uform_title:'GUIDE REGISTRATION',
+    f_nom:'First Name',f_ape:'Last Name',f_email:'Email',f_tel:'Phone / WhatsApp',
+    f_esp:'Main specialty',f_esp0:'Select...',f_zona:'Operating zone',f_sub:'Submit application',
+    sec_ctc_lbl:'Contact',ctc_title:'PLAN YOUR<br>TRIP',
+    ctc_p:"Looking for a guide for your Aysén adventure? Contact us and we'll connect you with the ideal guide.",
+    ci1:'Location',ci4:'Social',f_act:'Type of activity',f_msg:'Message',f_combo:'Combined / Other',ctc_sub:'Send inquiry',
+    ft_txt:"Association of Aysén Patagonia Guides. Uniting the region's guides to promote sustainable tourism and local heritage.",
+    ft_nav:'Navigation',ft_leg:'Legal',ft_est:'AGAP Bylaws',ft_cod:'Code of Conduct',ft_priv:'Privacy',
+  },
+  fr:{
+    nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activités',nav_unete:'Rejoindre',nav_contacto:'Contact',nav_unete_btn:'Rejoindre',
+    hero_tag:'Aysén · Patagonie · Chili',
+    hero_title_html:'GUIDES<br><em>AYSÉN</em><br>PATAGONIE',
+    hero_sub:"Association de guides certifiés qui connectent les voyageurs avec l'âme de la Patagonie profonde",
+    hero_btn1:'Voir les Guides',hero_btn2:'Rejoindre',
+    stat1:'Guides Membres',stat2:'Spécialités',stat3:'km² de territoire',stat4:'Langues',
+    sec_nosotros:'Qui sommes-nous',sec_mv_title:'MISSION &<br>VISION',
+    mision_h:'MISSION',mision_p:"Unir et représenter les guides de la région dans une seule organisation, créant une identité liée au patrimoine d'Aysén. Nous promouvons la conservation et le tourisme durable.",
+    vision_h:'VISION',vision_p:"Devenir un syndicat leader de guides formalisés et accrédités par AGAP, valorisant les compétences et connaissances locales via un système d'accréditation.",
+    sec_val_lbl:'Nos valeurs',sec_val_title:'CE QUI<br>NOUS ANIME',
+    val_intro:"Guides locaux, connaissance profonde du territoire, engagement envers la nature et les communautés d'Aysén.",
+    v1:'Territoire & Identité',v1d:"Racines en Aysén",v2:'Tourisme Durable',v2d:"Respect de l'environnement",
+    v3:'Accréditation AGAP',v3d:'Qualité certifiée',v4:'Communauté',v4d:'Entraide entre guides',
+    v5:'Sécurité',v5d:'Protocoles professionnels',v6:'Savoir Local',v6d:'Expertise du territoire',
+    sec_terr_lbl:'Le Territoire',terr_title:'AYSÉN<br>PATAGONIE',
+    terr_p1:"La région la plus sauvage et la moins connue de la Patagonie chilienne. Un territoire de fjords, glaciers, forêts valdiviennes et pampas que seuls les guides locaux connaissent en profondeur.",
+    terr_p2:"108 494 km² de nature presque intacte, avec moins de 100 000 habitants. La destination pour les voyageurs qui cherchent l'authentique.",
+    f1:'km² de superficie',f2:'habitants',f3:'parcs nationaux',f4:'fjords et glaciers',
+    sec_esp_lbl:'Spécialités',esp_title:'CE QUE<br>NOUS OFFRONS',
+    esp1_tag:'Trekking',esp1_h:'TREKKING & RANDONNÉE',esp1_p:"Itinéraires pour tous niveaux dans les parcs, réserves et sentiers vierges d'Aysén.",
+    esp2_tag:'Kayak',esp2_h:'KAYAK & FJORDS',esp2_p:'Expéditions en kayak dans les fjords, canaux et estuaires patagoniens.',
+    esp3_tag:'Escalade',esp3_h:'ESCALADE & ALPINISME',esp3_p:"Ascensions et voies d'escalade dans la cordillère et les formations volcaniques d'Aysén.",
+    esp4_tag:'Faune',esp4_h:'OBSERVATION DE FAUNE',esp4_p:'Observation du cerf huemul, puma, condor, dauphin de Peale et autres espèces endémiques.',
+    esp5_tag:'Pêche',esp5_h:'PÊCHE À LA MOUCHE',esp5_p:'Rivières et lacs de classe mondiale pour la pêche sportive de truites et saumons.',
+    esp6_tag:'Glaciers',esp6_h:'GLACIERS & GLACES',esp6_p:"Excursions au Champ de Glace Nord, glaciers et lagunes glaciaires d'Aysén.",
+    sec_guias_lbl:'Nos Guides',guias_title:'TROUVEZ<br>VOTRE GUIDE',
+    f_all:'Tous',guias_cta:'Voir tous les guides →',
+    sec_unete_lbl:'Pour les guides',unete_title:'REJOIGNEZ<br>AGAP',
+    unete_p:"Faites partie du syndicat des guides d'Aysén. Accréditation, visibilité, communauté et soutien professionnel.",
+    b1:"Profil dans l'annuaire public des guides",b2:'Accréditation AGAP par spécialité',
+    b3:'Formations et ateliers',b4:"Réseau professionnel de guides d'Aysén",
+    b5:'Visibilité auprès des touristes nationaux et internationaux',b6:'Participation aux décisions du syndicat',
+    uform_title:'INSCRIPTION GUIDE',
+    f_nom:'Prénom',f_ape:'Nom',f_email:'Email',f_tel:'Téléphone / WhatsApp',
+    f_esp:'Spécialité principale',f_esp0:'Sélectionner...',f_zona:"Zone d'opération",f_sub:'Envoyer la demande',
+    sec_ctc_lbl:'Contact',ctc_title:'PLANIFIEZ<br>VOTRE VOYAGE',
+    ctc_p:"Vous cherchez un guide pour votre aventure en Aysén ? Contactez-nous et nous vous connectons avec le guide idéal.",
+    ci1:'Localisation',ci4:'Réseaux',f_act:"Type d'activité",f_msg:'Message',f_combo:'Combiné / Autre',ctc_sub:'Envoyer la demande',
+    ft_txt:"Association des Guides Aysén Patagonie. Unissant les guides de la région pour promouvoir le tourisme durable et le patrimoine local.",
+    ft_nav:'Navigation',ft_leg:'Légal',ft_est:'Statuts AGAP',ft_cod:'Code de Conduite',ft_priv:'Confidentialité',
+  }
+};
+
+let lang = localStorage.getItem('agap_lang') || 'es';
+function t(k){return T[lang][k]||T.es[k]||k;}
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const v=t(el.dataset.t);
+    if(v!==undefined) el.innerHTML=v;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
+}
+function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
+
+/* ─── MOCK GUIDES (à remplacer par Supabase) ────────────────── */
+const GUIDES=[
+  {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
+  {id:2,nombre:'Valentina Soto',zona:'Puerto Aysén / Fiordos',foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR',acred:'AGAP Nivel 3'},
+  {id:3,nombre:'Miguel Á. Vera',zona:'Cochrane / Río Baker',foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
+  {id:4,nombre:'Paula Henríquez',zona:'Chile Chico / LGC',foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Fotografía',c:'tf'}],idiomas:'ES · EN · PT',acred:'AGAP Nivel 1'},
+  {id:5,nombre:'Rodrigo Ojeda',zona:'Coyhaique / Simpson',foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN',acred:'AGAP Nivel 3'},
+  {id:6,nombre:'Claudia Neira',zona:'Lago Verde / Palena',foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR',acred:'AGAP Nivel 2'},
+];
+
+function renderGuias(list){
+  document.getElementById('guias-grid').innerHTML=list.map(g=>`
+    <div class="g-card fu">
+      <div class="g-photo" style="background-image:url('${g.foto}')">
+        <span class="g-badge">${g.acred}</span>
+      </div>
+      <div class="g-body">
+        <div class="g-name">${g.nombre}</div>
+        <div class="g-zone">📍 ${g.zona}</div>
+        <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
+        <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
+      </div>
+    </div>`).join('');
+  observeFU();
+}
+
+function filterGuias(esp,btn){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGuias(esp==='all'?GUIDES:GUIDES.filter(g=>g.esp.includes(esp)));
+}
+
+/* ─── SCROLL ANIMATIONS ─────────────────────────────────────── */
+function observeFU(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:.1});
+  document.querySelectorAll('.fu:not(.vis)').forEach(el=>io.observe(el));
+}
+
+/* ─── COUNTER ────────────────────────────────────────────────── */
+function counter(el,target){
+  let n=0;const s=Math.ceil(target/40);
+  const t=setInterval(()=>{n=Math.min(n+s,target);el.textContent=n;if(n>=target)clearInterval(t);},40);
+}
+
+/* ─── INIT ───────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  applyLang();
+  renderGuias(GUIDES);
+  observeFU();
+  new IntersectionObserver(e=>{
+    if(e[0].isIntersecting){counter(document.getElementById('stat-guias'),GUIDES.length);}
+  }).observe(document.getElementById('stats'));
+});
+</script>
+</body>
+</html>
