@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AGAP — Guías Aysén Patagonia</title>
   <meta name="description" content="Asociación de Guías Aysén Patagonia — Guías certificados para trekking, kayak, escalada, fauna y más en la Patagonia chilena.">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -383,26 +384,28 @@
       </div>
       <div class="u-form fu">
         <h3 data-t="uform_title">INSCRIPCIÓN DE GUÍA</h3>
+        <form id="form-inscription">
         <div class="f2">
-          <div class="fg"><label data-t="f_nom">Nombre</label><input type="text" placeholder="Tu nombre"></div>
-          <div class="fg"><label data-t="f_ape">Apellido</label><input type="text" placeholder="Tu apellido"></div>
+          <div class="fg"><label data-t="f_nom">Nombre</label><input name="prenom" type="text" placeholder="Tu nombre" required></div>
+          <div class="fg"><label data-t="f_ape">Apellido</label><input name="nom" type="text" placeholder="Tu apellido" required></div>
         </div>
-        <div class="fg"><label data-t="f_email">Email</label><input type="email" placeholder="tu@email.com"></div>
-        <div class="fg"><label data-t="f_tel">Teléfono / WhatsApp</label><input type="tel" placeholder="+56 9 xxxx xxxx"></div>
+        <div class="fg"><label data-t="f_email">Email</label><input name="email" type="email" placeholder="tu@email.com" required></div>
+        <div class="fg"><label data-t="f_tel">Teléfono / WhatsApp</label><input name="tel" type="tel" placeholder="+56 9 xxxx xxxx"></div>
         <div class="fg">
           <label data-t="f_esp">Especialidad principal</label>
-          <select>
-            <option data-t="f_esp0">Selecciona...</option>
-            <option>Trekking & Senderismo</option>
-            <option>Kayak & Fiordos</option>
-            <option>Escalada & Montaña</option>
-            <option>Avistamiento de Fauna</option>
-            <option>Pesca con Mosca</option>
-            <option>Glaciares & Hielos</option>
+          <select name="especialidad">
+            <option value="" data-t="f_esp0">Selecciona...</option>
+            <option value="trekking">Trekking & Senderismo</option>
+            <option value="kayak">Kayak & Fiordos</option>
+            <option value="escalada">Escalada & Montaña</option>
+            <option value="fauna">Avistamiento de Fauna</option>
+            <option value="pesca">Pesca con Mosca</option>
+            <option value="glaciares">Glaciares & Hielos</option>
           </select>
         </div>
-        <div class="fg"><label data-t="f_zona">Zona de operación</label><input type="text" placeholder="Ej: Coyhaique, Baker, Puerto Aysén..."></div>
-        <button class="btn-primary" style="width:100%;margin-top:.4rem;" data-t="f_sub">Enviar solicitud</button>
+        <div class="fg"><label data-t="f_zona">Zona de operación</label><input name="zona" type="text" placeholder="Ej: Coyhaique, Baker, Puerto Aysén..."></div>
+        <button type="submit" class="btn-primary" style="width:100%;margin-top:.4rem;" data-t="f_sub">Enviar solicitud</button>
+        </form>
       </div>
     </div>
   </div>
@@ -424,24 +427,26 @@
         </div>
       </div>
       <div class="c-form fu">
+        <form id="form-contacto">
         <div class="f2">
-          <div class="fg"><label data-t="f_nom">Nombre</label><input type="text" placeholder="Tu nombre"></div>
-          <div class="fg"><label data-t="f_email">Email</label><input type="email" placeholder="tu@email.com"></div>
+          <div class="fg"><label data-t="f_nom">Nombre</label><input name="nom" type="text" placeholder="Tu nombre" required></div>
+          <div class="fg"><label data-t="f_email">Email</label><input name="email" type="email" placeholder="tu@email.com" required></div>
         </div>
         <div class="fg">
           <label data-t="f_act">Tipo de actividad</label>
-          <select>
-            <option>Trekking & Senderismo</option>
-            <option>Kayak & Fiordos</option>
-            <option>Escalada & Montaña</option>
-            <option>Avistamiento de Fauna</option>
-            <option>Pesca con Mosca</option>
-            <option>Glaciares & Hielos</option>
-            <option data-t="f_combo">Combinado / Otro</option>
+          <select name="actividad">
+            <option value="trekking">Trekking & Senderismo</option>
+            <option value="kayak">Kayak & Fiordos</option>
+            <option value="escalada">Escalada & Montaña</option>
+            <option value="fauna">Avistamiento de Fauna</option>
+            <option value="pesca">Pesca con Mosca</option>
+            <option value="glaciares">Glaciares & Hielos</option>
+            <option value="otro" data-t="f_combo">Combinado / Otro</option>
           </select>
         </div>
-        <div class="fg"><label data-t="f_msg">Mensaje</label><textarea rows="4" placeholder="Cuéntanos sobre tu proyecto de viaje..."></textarea></div>
-        <button class="btn-primary" style="width:100%;" data-t="ctc_sub">Enviar consulta</button>
+        <div class="fg"><label data-t="f_msg">Mensaje</label><textarea name="mensaje" rows="4" placeholder="Cuéntanos sobre tu proyecto de viaje..."></textarea></div>
+        <button type="submit" class="btn-primary" style="width:100%;" data-t="ctc_sub">Enviar consulta</button>
+        </form>
       </div>
     </div>
   </div>
@@ -630,8 +635,72 @@ function applyLang(){
 }
 function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
 
-/* ─── MOCK GUIDES (à remplacer par Supabase) ────────────────── */
-const GUIDES=[
+/* ─── SUPABASE ───────────────────────────────────────────────── */
+const sb = supabase.createClient(
+  'https://ejutlkmzamjmwyaigisy.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE'
+);
+
+const ESP_TAG = {
+  trekking:{l:'Trekking',c:'tt'}, kayak:{l:'Kayak',c:'tk'},
+  escalada:{l:'Escalada',c:'te'}, fauna:{l:'Fauna',c:'tfa'},
+  pesca:{l:'Pesca',c:'tk'}, glaciares:{l:'Glaciares',c:'tt'}
+};
+const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
+
+let ALL_GUIDES = [];
+
+async function loadGuides(){
+  const {data,error} = await sb.from('agap_guides')
+    .select('*').eq('activo',true).order('orden');
+  if(error||!data||data.length===0){ renderGuias(GUIDES_MOCK); return; }
+  ALL_GUIDES = data.map(g=>({
+    id: g.id,
+    nombre: (g.prenom?g.prenom+' ':'')+g.nom,
+    zona: g.zona||'Aysén',
+    foto: g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+    esp: g.especialidades||[],
+    tags: (g.especialidades||[]).slice(0,3).map(e=>ESP_TAG[e]||{l:e,c:'tt'}),
+    idiomas: (g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
+    acred: (g.certificaciones||['AGAP'])[0]
+  }));
+  document.getElementById('stat-guias').textContent = ALL_GUIDES.length;
+  renderGuias(ALL_GUIDES);
+}
+
+async function submitInscription(e){
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.disabled=true; btn.textContent='Enviando...';
+  const f = e.target;
+  const {error} = await sb.from('agap_inscriptions').insert({
+    prenom: f.prenom.value, nom: f.nom.value,
+    email: f.email.value, telefono: f.tel.value,
+    especialidad: f.especialidad.value, zona: f.zona.value
+  });
+  btn.disabled=false;
+  if(error){ btn.textContent='Error — intenta de nuevo'; return; }
+  btn.textContent='✓ Solicitud enviada';
+  f.reset();
+}
+
+async function submitContacto(e){
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.disabled=true; btn.textContent='Enviando...';
+  const f = e.target;
+  const {error} = await sb.from('agap_demandes').insert({
+    nom: f.nom.value, email: f.email.value,
+    actividad: f.actividad.value, mensaje: f.mensaje.value
+  });
+  btn.disabled=false;
+  if(error){ btn.textContent='Error — intenta de nuevo'; return; }
+  btn.textContent='✓ Mensaje enviado';
+  f.reset();
+}
+
+/* ─── FALLBACK MOCK si Supabase vide ───────────────────────── */
+const GUIDES_MOCK=[
   {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
   {id:2,nombre:'Valentina Soto',zona:'Puerto Aysén / Fiordos',foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR',acred:'AGAP Nivel 3'},
   {id:3,nombre:'Miguel Á. Vera',zona:'Cochrane / Río Baker',foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
@@ -659,7 +728,8 @@ function renderGuias(list){
 function filterGuias(esp,btn){
   document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderGuias(esp==='all'?GUIDES:GUIDES.filter(g=>g.esp.includes(esp)));
+  const src = ALL_GUIDES.length ? ALL_GUIDES : GUIDES_MOCK;
+  renderGuias(esp==='all'?src:src.filter(g=>g.esp.includes(esp)));
 }
 
 /* ─── SCROLL ANIMATIONS ─────────────────────────────────────── */
@@ -679,11 +749,22 @@ function counter(el,target){
 /* ─── INIT ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
   applyLang();
-  renderGuias(GUIDES);
+  loadGuides();
   observeFU();
   new IntersectionObserver(e=>{
-    if(e[0].isIntersecting){counter(document.getElementById('stat-guias'),GUIDES.length);}
+    if(e[0].isIntersecting){
+      const n = ALL_GUIDES.length || GUIDES_MOCK.length;
+      counter(document.getElementById('stat-guias'), n);
+    }
   }).observe(document.getElementById('stats'));
+
+  // Formulaire inscriptions
+  const fi = document.getElementById('form-inscription');
+  if(fi) fi.addEventListener('submit', submitInscription);
+
+  // Formulaire contact
+  const fc = document.getElementById('form-contacto');
+  if(fc) fc.addEventListener('submit', submitContacto);
 });
 </script>
 </body>
