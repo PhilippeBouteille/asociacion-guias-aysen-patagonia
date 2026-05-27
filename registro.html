@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGAP — Registro de Guía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange:  #F5A623;
+    --orange-d:#D4891A;
+    --red:     #E8312A;
+    --blue:    #3AACE8;
+    --green:   #2EAA3F;
+    --brown:   #231F20;
+    --cream:   #F8F4EE;
+    --warm:    #FDFAF6;
+    --gray:    #888;
+    --fd: 'Bebas Neue', sans-serif;
+    --fb: 'Nunito', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--fb);
+    background: var(--warm);
+    color: var(--brown);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--brown);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  nav img { height: 36px; }
+  nav span {
+    font-family: var(--fd);
+    font-size: 1.4rem;
+    color: white;
+    letter-spacing: 1px;
+  }
+  nav .tagline {
+    font-family: var(--fb);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.55);
+    margin-left: auto;
+  }
+
+  /* HERO STRIP */
+  .hero-strip {
+    background: var(--orange);
+    padding: 48px 32px 40px;
+    text-align: center;
+  }
+  .hero-strip h1 {
+    font-family: var(--fd);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: white;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .hero-strip p {
+    color: rgba(255,255,255,0.88);
+    margin-top: 10px;
+    font-size: 1rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* SECTION BLOCK */
+  .section-block {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e8e0d6;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--brown);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-header .num {
+    background: var(--orange);
+    color: white;
+    font-family: var(--fd);
+    font-size: 1.1rem;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: var(--fd);
+    font-size: 1.2rem;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .section-body { padding: 24px; }
+
+  /* FIELDS */
+  .row { display: grid; gap: 16px; margin-bottom: 16px; }
+  .row.col2 { grid-template-columns: 1fr 1fr; }
+  .row.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 560px) {
+    .row.col2, .row.col3 { grid-template-columns: 1fr; }
+  }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brown);
+  }
+  .field label .req { color: var(--orange); margin-left: 2px; }
+  .field input, .field textarea, .field select {
+    border: 2px solid #e0d8ce;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--fb);
+    font-size: 0.95rem;
+    color: var(--brown);
+    background: var(--warm);
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: white;
+  }
+  .field textarea { resize: vertical; min-height: 100px; }
+  .field .hint {
+    font-size: 0.78rem;
+    color: var(--gray);
+    font-style: italic;
+  }
+
+  /* CHECKBOXES */
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 480px) { .checkbox-grid { grid-template-columns: 1fr 1fr; } }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 2px solid #e0d8ce;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--orange); }
+  .check-item input[type=checkbox] { display: none; }
+  .check-item .box {
+    width: 18px; height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .check-item input:checked ~ .box {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+  .check-item input:checked ~ .box::after {
+    content: '✓';
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .check-item.checked { border-color: var(--orange); background: #fff8ed; }
+  .check-item span { font-size: 0.9rem; font-weight: 600; }
+
+  /* CERTIFICACIONES DINÁMICAS */
+  .cert-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .cert-row { display: flex; gap: 8px; align-items: center; }
+  .cert-row input {
+    flex: 1;
+    border: 2px solid #e0d8ce;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: var(--fb);
+    font-size: 0.95rem;
+    background: var(--warm);
+  }
+  .cert-row input:focus { outline: none; border-color: var(--orange); background: white; }
+  .cert-row .del-btn {
+    background: none;
+    border: 2px solid #e0d8ce;
+    border-radius: 8px;
+    width: 38px; height: 38px;
+    cursor: pointer;
+    color: #bbb;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .cert-row .del-btn:hover { border-color: var(--red); color: var(--red); }
+  .add-btn {
+    background: none;
+    border: 2px dashed #e0d8ce;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-family: var(--fb);
+    font-size: 0.9rem;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .add-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* PHOTO UPLOAD */
+  .photo-zone {
+    border: 2px dashed #e0d8ce;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--cream);
+    position: relative;
+  }
+  .photo-zone:hover, .photo-zone.dragover { border-color: var(--orange); background: #fff8ed; }
+  .photo-zone input { display: none; }
+  .photo-zone .icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .photo-zone p { color: var(--gray); font-size: 0.9rem; }
+  .photo-zone p strong { color: var(--brown); }
+  .photo-preview {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--orange);
+    margin: 0 auto 12px;
+    display: block;
+  }
+
+  /* PROGRESS */
+  .upload-progress {
+    display: none;
+    margin-top: 8px;
+    height: 4px;
+    background: #e0d8ce;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .upload-progress .bar {
+    height: 100%;
+    background: var(--orange);
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  /* SUBMIT */
+  .submit-wrap { text-align: center; margin-top: 12px; }
+  .btn-submit {
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 48px;
+    font-family: var(--fd);
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-submit:hover { background: var(--orange-d); transform: translateY(-1px); }
+  .btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+  /* MESSAGES */
+  .msg {
+    display: none;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .msg.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+  .msg.error   { background: #fdecea; color: #c62828; border: 1px solid #ef9a9a; }
+
+  /* FOOTER */
+  footer {
+    background: var(--brown);
+    text-align: center;
+    padding: 24px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.82rem;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  /* NOTA MODERACION */
+  .nota-mod {
+    background: #fff8ed;
+    border: 1px solid #f5dfa0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 0.88rem;
+    color: #7a5c00;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .nota-mod .ico { font-size: 1.2rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <img src="Logos/agap-icon.png" alt="AGAP" onerror="this.style.display='none'">
+  <span>AGAP</span>
+  <span class="tagline">Región de Aysén, Chile — Reserva de Vida</span>
+</nav>
+
+<div class="hero-strip">
+  <h1>REGISTRO DE GUÍA</h1>
+  <p>Completa tu perfil para aparecer en el directorio oficial de guías AGAP.</p>
+</div>
+
+<div class="container">
+
+  <div class="nota-mod">
+    <span class="ico">ℹ️</span>
+    <span>Tu perfil será revisado por la directiva antes de publicarse en el sitio. Recibirás confirmación una vez activado.</span>
+  </div>
+
+  <div id="msg-success" class="msg success">
+    ✅ ¡Registro enviado! Tu perfil está en revisión. La directiva te contactará pronto.
+  </div>
+  <div id="msg-error" class="msg error">
+    ❌ <span id="error-text">Error al enviar. Por favor intenta nuevamente.</span>
+  </div>
+
+  <form id="form-registro" novalidate>
+
+    <!-- 1. DATOS PERSONALES -->
+    <div class="section-block">
+      <div class="section-header">
+        <div class="num">1</div>
+        <h2>Datos Personales</h2>
+      </div>
+      <div class="section-body">
+        <div class="row col2">
+          <div class="field">
+            <label>Nombre <span class="req">*</span></label>
+            <input type="text" id="prenom" placeholder="Ej. Diego" required>
+          </div>
+          <div class="field">
+            <label>Apellido <span class="req">*</span></label>
+            <input type="text" id="nom" placeholder="Ej. Gallardo Mera" required>
+          </div>
+        </div>
+        <div class="row col2">
+          <div class="field">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="correo@ejemplo.cl" required>
+          </div>
+          <div class="field">
+            <label>Teléfono</label>
+            <input type="tel" id="telefono" placeholder="+56 9 XXXX XXXX">
+          </div>
+        </div>
+        <div class="row col3">
+          <div class="field">
+            <label>WhatsApp</label>
+            <input type="tel" id="whatsapp" placeholder="+56 9 XXXX XXXX">
+          </div>
+          <div class="field">
+            <label>Instagram</label>
+            <input type="text" id="instagram" placeholder="@usuario">
+          </div>
+          <div class="field">
+            <label>Sitio web</label>
+            <input type="url" id="sitio_web" placeholder="www.miempresa.cl">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Zona de operación <span class="req">*</span></label>
+            <input type="text" id="zona" placeholder="Ej. Coyhaique, Lago General Carrera, Cochrane…" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Presentación / Bio <span class="req">*</span></label>
+            <textarea id="bio" placeholder="3 a 4 líneas sobre tu experiencia y lo que ofreces como guía…" required></textarea>
+            <span class="hint">Esta descripción aparecerá en el directorio de guías del sitio AGAP.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FOTO -->
+    <div class="section-block">
+      <div class="section-header">
+        <div class="num">2</div>
+        <h2>Foto de Perfil</h2>
+      </div>
+      <div class="section-body">
+        <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-input').click()">
+          <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp">
+          <div id="photo-placeholder">
+            <div class="icon">📷</div>
+            <p><strong>Haz clic o arrastra tu foto aquí</strong></p>
+            <p>JPG, PNG o WEBP — mínimo 400×400 px</p>
+          </div>
+          <img id="photo-preview" class="photo-preview" style="display:none" alt="preview">
+          <p id="photo-name" style="display:none;margin-top:8px;font-size:0.85rem;color:var(--gray)"></p>
+        </div>
+        <div class="upload-progress" id="upload-progress">
+          <div class="bar" id="upload-bar"></div>
+        </div>
+        <span class="hint" style="display:block;margin-top:8px">Una foto profesional genera más confianza con los clientes.</span>
+      </div>
+    </div>
+
+    <!-- 3. ESPECIALIDADES -->
+    <div class="section-block">
+      <div class="section-header">
+        <div class="num">3</div>
+        <h2>Especialidades</h2>
+      </div>
+      <div class="section-body">
+        <p style="margin-bottom:16px;font-size:0.9rem;color:var(--gray)">Marca todas las que apliquen:</p>
+        <div class="checkbox-grid" id="esp-grid">
+          <label class="check-item"><input type="checkbox" value="Trekking"><div class="box"></div><span>🥾 Trekking</span></label>
+          <label class="check-item"><input type="checkbox" value="Kayak"><div class="box"></div><span>🛶 Kayak</span></label>
+          <label class="check-item"><input type="checkbox" value="Escalada"><div class="box"></div><span>🧗 Escalada</span></label>
+          <label class="check-item"><input type="checkbox" value="Fauna"><div class="box"></div><span>🦅 Observación Fauna</span></label>
+          <label class="check-item"><input type="checkbox" value="Pesca"><div class="box"></div><span>🎣 Pesca</span></label>
+          <label class="check-item"><input type="checkbox" value="Cabalgatas"><div class="box"></div><span>🐴 Cabalgatas</span></label>
+        </div>
+        <div class="field">
+          <label>Otras actividades</label>
+          <input type="text" id="otras-esp" placeholder="Ej. Snowshoeing, ski de travesía, fotografía naturaleza, navegación…">
+          <span class="hint">Separa con comas si son varias.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. IDIOMAS -->
+    <div class="section-block">
+      <div class="section-header">
+        <div class="num">4</div>
+        <h2>Idiomas</h2>
+      </div>
+      <div class="section-body">
+        <p style="margin-bottom:16px;font-size:0.9rem;color:var(--gray)">Nivel conversacional mínimo:</p>
+        <div class="checkbox-grid" id="idiomas-grid">
+          <label class="check-item"><input type="checkbox" value="Español"><div class="box"></div><span>🇨🇱 Español</span></label>
+          <label class="check-item"><input type="checkbox" value="Inglés"><div class="box"></div><span>🇬🇧 Inglés</span></label>
+          <label class="check-item"><input type="checkbox" value="Francés"><div class="box"></div><span>🇫🇷 Francés</span></label>
+          <label class="check-item"><input type="checkbox" value="Portugués"><div class="box"></div><span>🇧🇷 Portugués</span></label>
+          <label class="check-item"><input type="checkbox" value="Alemán"><div class="box"></div><span>🇩🇪 Alemán</span></label>
+          <label class="check-item"><input type="checkbox" value="Otro"><div class="box"></div><span>🌐 Otro</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. CERTIFICACIONES -->
+    <div class="section-block">
+      <div class="section-header">
+        <div class="num">5</div>
+        <h2>Certificaciones y Formación</h2>
+      </div>
+      <div class="section-body">
+        <p style="margin-bottom:16px;font-size:0.9rem;color:var(--gray)">Agrega tus certificaciones, cursos o formación relevante:</p>
+        <div class="cert-list" id="cert-list">
+          <div class="cert-row">
+            <input type="text" placeholder="Ej. Guía de Alta Montaña — UIAGM 2019">
+            <button type="button" class="del-btn" onclick="delCert(this)" title="Eliminar">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addCert()">+ Agregar certificación</button>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-wrap">
+      <button type="submit" class="btn-submit" id="btn-submit">ENVIAR MI REGISTRO</button>
+      <p style="margin-top:12px;font-size:0.8rem;color:var(--gray)">Los campos marcados con <span style="color:var(--orange)">*</span> son obligatorios.</p>
+    </div>
+
+  </form>
+</div>
+
+<footer>
+  <strong>AGAP</strong> — Asociación de Guías Aysén Patagonia<br>
+  contacto@agapguias.cl · @agapguias
+</footer>
+
+<script>
+const SUPA_URL  = 'https://ejutlkmzamjmwyaigisy.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE';
+const BUCKET    = 'guide-photos';
+
+// ── Checkboxes ──────────────────────────────────────────────
+document.querySelectorAll('.check-item').forEach(label => {
+  label.addEventListener('click', () => {
+    const cb = label.querySelector('input[type=checkbox]');
+    setTimeout(() => label.classList.toggle('checked', cb.checked), 0);
+  });
+});
+
+// ── Photo preview ────────────────────────────────────────────
+let photoFile = null;
+const photoInput = document.getElementById('photo-input');
+const photoZone  = document.getElementById('photo-zone');
+
+photoInput.addEventListener('change', e => handlePhoto(e.target.files[0]));
+
+photoZone.addEventListener('dragover', e => { e.preventDefault(); photoZone.classList.add('dragover'); });
+photoZone.addEventListener('dragleave', () => photoZone.classList.remove('dragover'));
+photoZone.addEventListener('drop', e => {
+  e.preventDefault();
+  photoZone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handlePhoto(f);
+});
+
+function handlePhoto(file) {
+  if (!file) return;
+  photoFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const preview = document.getElementById('photo-preview');
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+    document.getElementById('photo-placeholder').style.display = 'none';
+    document.getElementById('photo-name').textContent = file.name;
+    document.getElementById('photo-name').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Certificaciones dinámicas ────────────────────────────────
+function addCert() {
+  const list = document.getElementById('cert-list');
+  const row = document.createElement('div');
+  row.className = 'cert-row';
+  row.innerHTML = `<input type="text" placeholder="Ej. Primeros Auxilios — Cruz Roja 2022">
+    <button type="button" class="del-btn" onclick="delCert(this)" title="Eliminar">×</button>`;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function delCert(btn) {
+  const list = document.getElementById('cert-list');
+  if (list.children.length > 1) btn.closest('.cert-row').remove();
+  else btn.closest('.cert-row').querySelector('input').value = '';
+}
+
+// ── Helpers ──────────────────────────────────────────────────
+function getChecked(gridId) {
+  return [...document.querySelectorAll(`#${gridId} input:checked`)].map(cb => cb.value);
+}
+
+function showMsg(type, text) {
+  ['success','error'].forEach(t => {
+    const el = document.getElementById(`msg-${t}`);
+    el.style.display = t === type ? 'block' : 'none';
+  });
+  if (type === 'error' && text) document.getElementById('error-text').textContent = text;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Upload photo ─────────────────────────────────────────────
+async function uploadPhoto(prenom, nom) {
+  if (!photoFile) return null;
+  const ext  = photoFile.name.split('.').pop().toLowerCase();
+  const slug = `${prenom}-${nom}-${Date.now()}`.toLowerCase()
+               .replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+  const path = `${slug}.${ext}`;
+
+  const progressWrap = document.getElementById('upload-progress');
+  const bar = document.getElementById('upload-bar');
+  progressWrap.style.display = 'block';
+  bar.style.width = '30%';
+
+  const res = await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'Content-Type': photoFile.type
+    },
+    body: photoFile
+  });
+
+  bar.style.width = '100%';
+  setTimeout(() => { progressWrap.style.display = 'none'; bar.style.width = '0%'; }, 600);
+
+  if (!res.ok) throw new Error('Error al subir la foto');
+  return `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+}
+
+// ── Submit ───────────────────────────────────────────────────
+document.getElementById('form-registro').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const prenom = document.getElementById('prenom').value.trim();
+  const nom    = document.getElementById('nom').value.trim();
+  const email  = document.getElementById('email').value.trim();
+  const zona   = document.getElementById('zona').value.trim();
+  const bio    = document.getElementById('bio').value.trim();
+
+  if (!prenom || !nom || !email || !zona || !bio) {
+    showMsg('error', 'Por favor completa todos los campos obligatorios.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'ENVIANDO…';
+
+  try {
+    // Photo upload
+    let photo_url = null;
+    try { photo_url = await uploadPhoto(prenom, nom); }
+    catch(err) { console.warn('Photo upload failed:', err); }
+
+    // Especialidades — checkboxes + campo libre
+    const espChecked = getChecked('esp-grid');
+    const otrasRaw   = document.getElementById('otras-esp').value.trim();
+    const otras      = otrasRaw ? otrasRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const especialidades = [...espChecked, ...otras];
+
+    // Idiomas
+    const idiomas = getChecked('idiomas-grid');
+
+    // Certificaciones
+    const certificaciones = [...document.querySelectorAll('#cert-list input')]
+      .map(i => i.value.trim()).filter(Boolean);
+
+    const payload = {
+      nom,
+      prenom,
+      email,
+      telefono:  document.getElementById('telefono').value.trim()  || null,
+      whatsapp:  document.getElementById('whatsapp').value.trim()   || null,
+      instagram: document.getElementById('instagram').value.trim()  || null,
+      sitio_web: document.getElementById('sitio_web').value.trim()  || null,
+      zona,
+      bio,
+      especialidades,
+      idiomas,
+      certificaciones,
+      photo_url,
+      activo: false,
+      orden: 99
+    };
+
+    const res = await fetch(`${SUPA_URL}/rest/v1/agap_guides`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+
+    showMsg('success');
+    document.getElementById('form-registro').reset();
+    document.getElementById('photo-preview').style.display = 'none';
+    document.getElementById('photo-placeholder').style.display = 'block';
+    document.getElementById('photo-name').style.display = 'none';
+    document.querySelectorAll('.check-item').forEach(l => l.classList.remove('checked'));
+    photoFile = null;
+
+  } catch(err) {
+    showMsg('error', err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ENVIAR MI REGISTRO';
+  }
+});
+</script>
+</body>
+</html>
