@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AGAP — Misión & Directiva</title>
+ <link rel="icon" href="Logos/agap-favicon.png" type="image/png">
+ <meta name="description" content="Misión, visión y directiva 2025–2027 de la Asociación de Guías Aysén Patagonia.">
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --orange:#F5A623; --orange-d:#D4891A;
+ --red:#E8312A; --blue:#3AACE8; --blue-d:#1A6A9A; --green:#2EAA3F; --green-d:#1A6B28;
+ --brown:#231F20; --cream:#F8F4EE; --warm:#FDFAF6; --muted:#6B6860;
+ --fd:'Bebas Neue',sans-serif; --fb:'Nunito',sans-serif;
+ }
+ *{margin:0;padding:0;box-sizing:border-box;}
+ html{scroll-behavior:smooth;}
+ body{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--brown);background:var(--warm);overflow-x:hidden;}
+
+ /* ── NAV ── */
+ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(35,31,32,0.93);backdrop-filter:blur(14px);border-bottom:2px solid rgba(245,166,35,0.25);}
+ .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+ .nav-logo-img{height:36px;width:auto;}
+ .nav-brand-text{font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:.05em;line-height:1.1;}
+ .nav-brand-text span{display:block;font-weight:300;font-size:.68rem;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;}
+ .nav-links{display:flex;gap:2rem;list-style:none;}
+ .nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+ .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+ .nav-right{display:flex;align-items:center;gap:.9rem;}
+ .lang-sw{display:flex;gap:.3rem;}
+ .lang-btn{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:3px 8px;font-size:.7rem;font-weight:700;letter-spacing:.05em;cursor:pointer;border-radius:3px;transition:all .2s;font-family:var(--fb);}
+ .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+ .nav-cta{background:var(--orange);color:var(--brown);border:none;padding:8px 18px;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);text-decoration:none;display:inline-block;}
+ .nav-cta:hover{background:var(--orange-d);}
+
+ /* ── PAGE HEADER ── */
+ .page-header{padding-top:64px;background:var(--brown);position:relative;overflow:hidden;}
+ .page-header-bg{position:absolute;inset:0;background:url('assets/images/hero.jpeg') center/cover no-repeat;opacity:.12;}
+ .page-header-content{position:relative;z-index:2;padding:64px 0 52px;text-align:center;}
+ .page-header-content .sec-label{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem;}
+ .page-header-content h1{font-family:var(--fd);font-size:clamp(3rem,7vw,6rem);color:white;line-height:.9;letter-spacing:.02em;}
+ .page-header-content h1 em{font-style:normal;color:var(--orange);}
+
+ /* ── BASE ── */
+ section{padding:84px 0;}
+ .container{max-width:1180px;margin:0 auto;padding:0 2rem;}
+ .sec-label{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;}
+ .sec-title{font-family:var(--fd);font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:.9;color:var(--brown);margin-bottom:.9rem;}
+ .sec-text{max-width:620px;color:var(--muted);font-size:.97rem;line-height:1.82;}
+
+ /* ── MISIÓN ── */
+ #mision{background:var(--warm);}
+ .mision-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+ .mc{background:var(--cream);padding:2.2rem;border-radius:8px;border-left:4px solid var(--orange);margin-top:.9rem;}
+ .mc+.mc{border-left-color:var(--blue);}
+ .mc h3{font-family:var(--fd);font-size:1.8rem;color:var(--brown);margin-bottom:.8rem;}
+ .mc p{color:var(--muted);line-height:1.82;font-size:.94rem;}
+ .val-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2rem;}
+ .val-item{display:flex;align-items:flex-start;gap:.75rem;}
+ .val-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-top:2px;}
+ .val-name{font-size:.9rem;font-weight:700;color:var(--brown);}
+ .val-desc{font-size:.78rem;color:var(--muted);}
+
+ /* ── DIRECTIVA ── */
+ #directiva{background:var(--cream);}
+ .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;margin-top:3rem;}
+ .dir-card{background:white;border-radius:12px;padding:2rem 1.5rem;text-align:center;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
+ .dir-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
+ .dir-avatar{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:2rem;color:white;margin:0 auto 1.1rem;flex-shrink:0;border:3px solid rgba(0,0,0,.06);}
+ .dir-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:top;margin:0 auto 1.1rem;display:block;border:3px solid rgba(0,0,0,.06);}
+ .dir-name{font-family:var(--fd);font-size:1.35rem;color:var(--brown);line-height:1.1;margin-bottom:.3rem;}
+ .dir-cargo{font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+ /* ── FOOTER ── */
+ footer{background:var(--brown);padding:60px 0 28px;color:rgba(255,255,255,.48);}
+ .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:2rem;}
+ .ft-brand-txt{font-size:.9rem;line-height:1.8;margin-top:1rem;max-width:280px;}
+ .ft-col h4{font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:white;margin-bottom:1rem;}
+ .ft-links{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+ .ft-links a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.88rem;transition:color .2s;}
+ .ft-links a:hover{color:var(--orange);}
+ .ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.78rem;}
+ .ft-social{display:flex;gap:.9rem;}
+ .soc{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);text-decoration:none;font-size:.82rem;transition:all .2s;}
+ .soc:hover{background:var(--orange);color:var(--brown);}
+
+ /* ── DIVIDER ── */
+ .logo-divider{background:var(--warm);text-align:center;padding:2.5rem 0;}
+ .logo-divider img{height:60px;opacity:0.18;}
+
+ /* ── ANIMATIONS ── */
+ .fu{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+ .fu.vis{opacity:1;transform:translateY(0);}
+
+ /* ── RESPONSIVE ── */
+ @media(max-width:900px){
+ .nav-links{display:none;}
+ .mision-grid,.ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+ .dir-grid{grid-template-columns:repeat(2,1fr);}
+ section{padding:60px 0;}
+ }
+ @media(max-width:520px){
+ .dir-grid{grid-template-columns:1fr;}
+ .val-grid{grid-template-columns:1fr;}
+ }
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <a href="index.html" class="nav-brand">
+ <img src="Logos/agap-icon.png" alt="AGAP" class="nav-logo-img" onerror="this.style.display='none'">
+ <div class="nav-brand-text">AGAP<span>Guías Aysén Patagonia</span></div>
+ </a>
+ <ul class="nav-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" class="active" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#unete" data-t="nav_unete">Únete</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="nav-right">
+ <div class="lang-sw">
+ <button class="lang-btn" onclick="setLang('es')">ES</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
+ <a href="index.html#unete" class="nav-cta" data-t="nav_unete_btn">Únete</a>
+ </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+ <div class="page-header-bg"></div>
+ <div class="container">
+ <div class="page-header-content">
+ <img src="Logos/agap-logo.png" alt="AGAP" style="height:90px;margin-bottom:1.4rem;filter:brightness(0) invert(1);opacity:.92;" onerror="this.style.display='none'">
+ <div class="sec-label" data-t="ph_label">Asociación de Guías Aysén Patagonia</div>
+ <h1 data-t="ph_title">MISIÓN &<br><em>DIRECTIVA</em></h1>
+ </div>
+ </div>
+</div>
+
+<!-- MISIÓN -->
+<section id="mision">
+ <div class="container">
+ <div class="mision-grid">
+ <div class="fu">
+ <div class="sec-label" data-t="sec_nosotros">Quiénes somos</div>
+ <h2 class="sec-title" data-t="sec_mv_title">MISIÓN &<br>VISIÓN</h2>
+ <div class="mc">
+ <h3><span data-t="mision_h">MISIÓN</span></h3>
+ <p data-t="mision_p">Unir y representar a los guías de la región en una sola organización, creando un estilo de vida e identidad asociada al patrimonio de Aysén. Promovemos la conservación y el turismo sostenible.</p>
+ </div>
+ <div class="mc">
+ <h3><span data-t="vision_h">VISIÓN</span></h3>
+ <p data-t="vision_p">Ser un gremio líder de guías formalizados y acreditados por AGAP, valorando habilidades y conocimientos locales a través de un sistema de acreditación que incluye evaluaciones y capacitaciones.</p>
+ </div>
+ </div>
+ <div class="fu">
+ <div class="sec-label" data-t="sec_val_lbl">Nuestros valores</div>
+ <h2 class="sec-title" data-t="sec_val_title">LO QUE<br>NOS MUEVE</h2>
+ <p class="sec-text" data-t="val_intro">Guías locales, conocimiento profundo del territorio, compromiso con la naturaleza y las comunidades de Aysén.</p>
+ <div class="val-grid">
+ <div class="val-item"><div class="val-icon" style="background:rgba(245,166,35,.15)"></div><div><div class="val-name" data-t="v1">Territorio & Identidad</div><div class="val-desc" data-t="v1d">Raíces en Aysén</div></div></div>
+ <div class="val-item"><div class="val-icon" style="background:rgba(61,175,74,.15)"></div><div><div class="val-name" data-t="v2">Turismo Sostenible</div><div class="val-desc" data-t="v2d">Cuidado del entorno</div></div></div>
+ <div class="val-item"><div class="val-icon" style="background:rgba(77,189,232,.15)"></div><div><div class="val-name" data-t="v3">Acreditación AGAP</div><div class="val-desc" data-t="v3d">Calidad certificada</div></div></div>
+ <div class="val-item"><div class="val-icon" style="background:rgba(224,48,48,.15)"></div><div><div class="val-name" data-t="v4">Comunidad</div><div class="val-desc" data-t="v4d">Apoyo mutuo entre guías</div></div></div>
+ <div class="val-item"><div class="val-icon" style="background:rgba(245,166,35,.15)"></div><div><div class="val-name" data-t="v5">Seguridad</div><div class="val-desc" data-t="v5d">Protocolos profesionales</div></div></div>
+ <div class="val-item"><div class="val-icon" style="background:rgba(61,175,74,.15)"></div><div><div class="val-name" data-t="v6">Conocimiento Local</div><div class="val-desc" data-t="v6d">Saberes del territorio</div></div></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- LOGO DIVIDER -->
+<div class="logo-divider">
+ <img src="Logos/agap-icon.png" alt="AGAP" onerror="this.style.display='none'">
+</div>
+
+<!-- DIRECTIVA -->
+<section id="directiva">
+ <div class="container">
+ <div class="fu" style="text-align:center;max-width:640px;margin:0 auto;">
+ <div class="sec-label" data-t="sec_dir_lbl">La asociación</div>
+ <h2 class="sec-title" data-t="dir_title">DIRECTIVA</h2>
+ <p class="sec-text" style="margin:0 auto;" data-t="dir_intro">El equipo que representa y lidera la Asociación de Guías Aysén Patagonia.</p>
+ </div>
+ <div class="dir-grid" id="dir-grid"></div>
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+ <div class="container">
+ <div class="ft-grid">
+ <div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <img src="Logos/agap-logo.png" alt="AGAP" style="height:64px;" onerror="this.style.display='none'">
+ <div style="font-family:var(--fb);font-weight:800;font-size:1.2rem;color:white;">AGAP</div>
+ </div>
+ <p class="ft-brand-txt" data-t="ft_txt">Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+ </div>
+ <div class="ft-col">
+ <h4 data-t="ft_nav">Navegación</h4>
+ <ul class="ft-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#unete" data-t="nav_unete">Únete</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ </div>
+ <div class="ft-col">
+ <h4 data-t="ft_leg">Legal</h4>
+ <ul class="ft-links">
+ <li><a href="#" data-t="ft_est">Estatutos AGAP</a></li>
+ <li><a href="#" data-t="ft_cod">Código de Conducta</a></li>
+ <li><a href="#" data-t="ft_priv">Privacidad</a></li>
+ </ul>
+ </div>
+ </div>
+ <div class="ft-bottom">
+ <span>© 2025 AGAP — Asociación de Guías Aysén Patagonia</span>
+ <div class="ft-social">
+ <a href="#" class="soc" title="Instagram">IG</a>
+ <a href="#" class="soc" title="Facebook">FB</a>
+ <a href="#" class="soc" title="WhatsApp">WA</a>
+ </div>
+ </div>
+ </div>
+</footer>
+
+<script>
+/* ─── i18n (clés nécessaires pour cette page) ─── */
+const T = {
+ es:{
+ nav_mision:'Misión',nav_guias:'Guías',nav_esp:'Especialidades',nav_unete:'Únete',nav_contacto:'Contacto',nav_unete_btn:'Únete',nav_directiva:'Directiva',
+ ph_label:'Asociación de Guías Aysén Patagonia',ph_title:'MISIÓN &<br><em>DIRECTIVA</em>',
+ sec_nosotros:'Quiénes somos',sec_mv_title:'MISIÓN &<br>VISIÓN',
+ mision_h:'MISIÓN',mision_p:'Unir y representar a los guías de la región en una sola organización, creando un estilo de vida e identidad asociada al patrimonio de Aysén. Promovemos la conservación y el turismo sostenible.',
+ vision_h:'VISIÓN',vision_p:'Ser un gremio líder de guías formalizados y acreditados por AGAP, valorando habilidades y conocimientos locales a través de un sistema de acreditación que incluye evaluaciones y capacitaciones.',
+ sec_val_lbl:'Nuestros valores',sec_val_title:'LO QUE<br>NOS MUEVE',
+ val_intro:'Guías locales, conocimiento profundo del territorio, compromiso con la naturaleza y las comunidades de Aysén.',
+ v1:'Territorio & Identidad',v1d:'Raíces en Aysén',v2:'Turismo Sostenible',v2d:'Cuidado del entorno',
+ v3:'Acreditación AGAP',v3d:'Calidad certificada',v4:'Comunidad',v4d:'Apoyo mutuo entre guías',
+ v5:'Seguridad',v5d:'Protocolos profesionales',v6:'Conocimiento Local',v6d:'Saberes del territorio',
+ sec_dir_lbl:'La asociación',dir_title:'DIRECTIVA',dir_intro:'El equipo que representa y lidera la Asociación de Guías Aysén Patagonia.',
+ ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
+ ft_nav:'Navegación',ft_leg:'Legal',ft_est:'Estatutos AGAP',ft_cod:'Código de Conducta',ft_priv:'Privacidad',
+ },
+ en:{
+ nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activities',nav_unete:'Join',nav_contacto:'Contact',nav_unete_btn:'Join',nav_directiva:'Board',
+ ph_label:'Aysén Patagonia Guides Association',ph_title:'MISSION &<br><em>BOARD</em>',
+ sec_nosotros:'About us',sec_mv_title:'MISSION &<br>VISION',
+ mision_h:'MISSION',mision_p:'Unite and represent the guides of the region in a single organization, creating an identity linked to the heritage of Aysén. We promote conservation and sustainable tourism.',
+ vision_h:'VISION',vision_p:'To be a leading guild of guides formalized and accredited by AGAP, valuing local skills and knowledge through an accreditation system that includes evaluations and training.',
+ sec_val_lbl:'Our values',sec_val_title:'WHAT<br>DRIVES US',
+ val_intro:'Local guides, deep knowledge of the territory, commitment to nature and the communities of Aysén.',
+ v1:'Territory & Identity',v1d:'Roots in Aysén',v2:'Sustainable Tourism',v2d:'Environmental care',
+ v3:'AGAP Accreditation',v3d:'Certified quality',v4:'Community',v4d:'Mutual support',
+ v5:'Safety',v5d:'Professional protocols',v6:'Local Knowledge',v6d:'Territory expertise',
+ sec_dir_lbl:'The association',dir_title:'BOARD',dir_intro:'The team that represents and leads the Aysén Patagonia Guides Association.',
+ ft_txt:"Association of Aysén Patagonia Guides. Uniting the region's guides to promote sustainable tourism and local heritage.",
+ ft_nav:'Navigation',ft_leg:'Legal',ft_est:'AGAP Bylaws',ft_cod:'Code of Conduct',ft_priv:'Privacy',
+ },
+ fr:{
+ nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activités',nav_unete:'Rejoindre',nav_contacto:'Contact',nav_unete_btn:'Rejoindre',nav_directiva:'Direction',
+ ph_label:'Association des Guides Aysén Patagonie',ph_title:'MISSION &<br><em>DIRECTION</em>',
+ sec_nosotros:'Qui sommes-nous',sec_mv_title:'MISSION &<br>VISION',
+ mision_h:'MISSION',mision_p:"Unir et représenter les guides de la région dans une seule organisation, créant une identité liée au patrimoine d'Aysén. Nous promouvons la conservation et le tourisme durable.",
+ vision_h:'VISION',vision_p:"Devenir un syndicat leader de guides formalisés et accrédités par AGAP, valorisant les compétences et connaissances locales via un système d'accréditation.",
+ sec_val_lbl:'Nos valeurs',sec_val_title:'CE QUI<br>NOUS ANIME',
+ val_intro:"Guides locaux, connaissance profonde du territoire, engagement envers la nature et les communautés d'Aysén.",
+ v1:'Territoire & Identité',v1d:"Racines en Aysén",v2:'Tourisme Durable',v2d:"Respect de l'environnement",
+ v3:'Accréditation AGAP',v3d:'Qualité certifiée',v4:'Communauté',v4d:'Entraide entre guides',
+ v5:'Sécurité',v5d:'Protocoles professionnels',v6:'Savoir Local',v6d:'Expertise du territoire',
+ sec_dir_lbl:"L'association",dir_title:'DIRECTION',dir_intro:"L'équipe qui représente et dirige l'Association des Guides Aysén Patagonie.",
+ ft_txt:"Association des Guides Aysén Patagonie. Unissant les guides de la région pour promouvoir le tourisme durable et le patrimoine local.",
+ ft_nav:'Navigation',ft_leg:'Légal',ft_est:'Statuts AGAP',ft_cod:'Code de Conduite',ft_priv:'Confidentialité',
+ }
+};
+
+let lang = localStorage.getItem('agap_lang') || 'es';
+function t(k){return T[lang][k]||T.es[k]||k;}
+function applyLang(){
+ document.querySelectorAll('[data-t]').forEach(el=>{
+ const v=t(el.dataset.t);
+ if(v!==undefined) el.innerHTML=v;
+ });
+ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
+}
+function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
+
+/* ─── SUPABASE ─── */
+const sb = supabase.createClient(
+ 'https://ejutlkmzamjmwyaigisy.supabase.co',
+ 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE'
+);
+
+/* ─── DIRECTIVA ─── */
+const DIRECTIVA_MOCK = [
+ {prenom:'Diego',   nom:'Gallardo Mera', cargo:'Presidente',    iniciales:'DG', color:'#F5A623', foto:null},
+ {prenom:'Matías',  nom:'Lazo',          cargo:'Vicepresidente',iniciales:'ML', color:'#3AACE8', foto:null},
+ {prenom:'Belén',   nom:'Retamales',     cargo:'Secretaria',    iniciales:'BR', color:'#E8312A', foto:null},
+ {prenom:'Rodrigo', nom:'Mansilla',      cargo:'Tesorero',      iniciales:'RM', color:'#2EAA3F', foto:null},
+ {prenom:'Hernán',  nom:'Vega',          cargo:'Director',      iniciales:'HV', color:'#F5A623', foto:null},
+ {prenom:'Antonino',nom:'Elzo',          cargo:'Director',      iniciales:'AE', color:'#3AACE8', foto:null},
+];
+
+function renderDirectiva(list) {
+ document.getElementById('dir-grid').innerHTML = list.map(m => {
+ const media = m.foto
+ ? `<img src="${m.foto}" alt="${m.prenom} ${m.nom}" class="dir-photo fu">`
+ : `<div class="dir-avatar fu" style="background:${m.color}">${m.iniciales}</div>`;
+ return `<div class="dir-card fu">${media}<div class="dir-name">${m.prenom} ${m.nom}</div><div class="dir-cargo">${m.cargo}</div></div>`;
+ }).join('');
+ observeFU();
+}
+
+async function loadDirectiva() {
+ try {
+ const {data,error} = await sb.from('agap_directiva').select('*').eq('activo',true).order('orden');
+ if(error||!data||!data.length){renderDirectiva(DIRECTIVA_MOCK);return;}
+ renderDirectiva(data.map(m=>({
+ prenom:m.prenom||'',nom:m.nom||'',cargo:m.cargo||'',
+ iniciales:m.iniciales||((m.prenom||'').charAt(0)+(m.nom||'').charAt(0)).toUpperCase(),
+ color:m.color||'#F5A623',foto:m.photo_url||null
+ })));
+ } catch(e){renderDirectiva(DIRECTIVA_MOCK);}
+}
+
+/* ─── ANIMATIONS ─── */
+function observeFU(){
+ const io=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+ },{threshold:.1});
+ document.querySelectorAll('.fu:not(.vis)').forEach(el=>io.observe(el));
+}
+
+/* ─── INIT ─── */
+document.addEventListener('DOMContentLoaded',()=>{
+ applyLang();
+ loadDirectiva();
+ observeFU();
+});
+</script>
+</body>
+</html>

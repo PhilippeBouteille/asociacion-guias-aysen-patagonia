@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AGAP — Guías</title>
+ <link rel="icon" href="Logos/agap-favicon.png" type="image/png">
+ <meta name="description" content="Directorio completo de los guías certificados de la Asociación AGAP — Aysén Patagonia.">
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --orange:#F5A623; --orange-d:#D4891A;
+ --red:#E8312A; --blue:#3AACE8; --blue-d:#1A6A9A; --green:#2EAA3F; --green-d:#1A6B28;
+ --brown:#231F20; --cream:#F8F4EE; --warm:#FDFAF6; --muted:#6B6860;
+ --fd:'Bebas Neue',sans-serif; --fb:'Nunito',sans-serif;
+ }
+ *{margin:0;padding:0;box-sizing:border-box;}
+ html{scroll-behavior:smooth;}
+ body{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--brown);background:var(--warm);overflow-x:hidden;}
+
+ /* ── NAV ── */
+ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(35,31,32,0.93);backdrop-filter:blur(14px);border-bottom:2px solid rgba(245,166,35,0.25);}
+ .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+ .nav-logo-img{height:36px;width:auto;}
+ .nav-brand-text{font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:.05em;line-height:1.1;}
+ .nav-brand-text span{display:block;font-weight:300;font-size:.68rem;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;}
+ .nav-links{display:flex;gap:2rem;list-style:none;}
+ .nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+ .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+ .nav-right{display:flex;align-items:center;gap:.9rem;}
+ .lang-sw{display:flex;gap:.3rem;}
+ .lang-btn{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:3px 8px;font-size:.7rem;font-weight:700;letter-spacing:.05em;cursor:pointer;border-radius:3px;transition:all .2s;font-family:var(--fb);}
+ .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+ .nav-cta{background:var(--orange);color:var(--brown);border:none;padding:8px 18px;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);text-decoration:none;display:inline-block;}
+ .nav-cta:hover{background:var(--orange-d);}
+
+ /* ── PAGE HEADER ── */
+ .page-header{padding-top:64px;background:var(--brown);position:relative;overflow:hidden;}
+ .page-header-bg{position:absolute;inset:0;background:url('assets/images/hero.jpeg') center/cover no-repeat;opacity:.12;}
+ .page-header-content{position:relative;z-index:2;padding:64px 0 52px;text-align:center;}
+ .page-header-content .sec-label{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem;}
+ .page-header-content h1{font-family:var(--fd);font-size:clamp(3rem,7vw,6rem);color:white;line-height:.9;letter-spacing:.02em;}
+ .page-header-content h1 em{font-style:normal;color:var(--orange);}
+ .page-header-content p{color:rgba(255,255,255,.65);font-size:1rem;margin-top:1.1rem;max-width:540px;margin-left:auto;margin-right:auto;}
+
+ /* ── DIRECTORIO ── */
+ #directorio{padding:64px 0 84px;}
+ .container{max-width:1240px;margin:0 auto;padding:0 2rem;}
+ .dir-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+ .dir-count{font-size:.82rem;color:var(--muted);font-weight:600;}
+ .dir-count strong{color:var(--brown);}
+
+ /* ── SEARCH ── */
+ .search-wrap{margin-bottom:1.8rem;}
+ .search-input{width:100%;max-width:480px;padding:11px 18px;border:2px solid #e5e1db;border-radius:8px;font-family:var(--fb);font-size:.95rem;background:white;color:var(--brown);transition:border-color .2s;}
+ .search-input:focus{outline:none;border-color:var(--orange);}
+
+ /* ── FILTERS ── */
+ .filters{display:flex;gap:.45rem;flex-wrap:wrap;}
+ .fbtn{background:none;border:1px solid #ddd;padding:6px 16px;font-size:.78rem;font-weight:700;cursor:pointer;border-radius:20px;transition:all .2s;font-family:var(--fb);color:var(--muted);}
+ .fbtn:hover,.fbtn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+
+ /* ── GUIDES GRID ── */
+ .guias-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
+ .g-card{background:white;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
+ .g-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
+ .g-photo{height:200px;background-size:cover;background-position:center top;}
+ .g-body{padding:1.2rem;}
+ .g-name{font-family:var(--fd);font-size:1.45rem;color:var(--brown);}
+ .g-zone{font-size:.78rem;color:var(--muted);margin-bottom:.7rem;}
+ .g-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.9rem;}
+ .tag{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
+ .tt{background:rgba(61,175,74,.12);color:var(--green);}
+ .tk{background:rgba(77,189,232,.12);color:#2A9DC4;}
+ .te{background:rgba(224,48,48,.12);color:var(--red);}
+ .tf{background:rgba(245,166,35,.12);color:var(--orange-d);}
+ .tfa{background:rgba(61,175,74,.18);color:#2A8C38);}
+ .tp{background:rgba(77,189,232,.12);color:#2A9DC4;}
+ .g-langs{font-size:.8rem;color:var(--muted);}
+ .g-langs strong{color:var(--brown);}
+
+ /* ── EMPTY ── */
+ .empty-state{text-align:center;padding:80px 20px;color:var(--muted);}
+ .empty-state .ico{font-size:3.5rem;margin-bottom:1rem;}
+ .empty-state p{font-size:1rem;}
+
+ /* ── FOOTER ── */
+ footer{background:var(--brown);padding:60px 0 28px;color:rgba(255,255,255,.48);}
+ .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:2rem;}
+ .ft-brand-txt{font-size:.9rem;line-height:1.8;margin-top:1rem;max-width:280px;}
+ .ft-col h4{font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:white;margin-bottom:1rem;}
+ .ft-links{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
+ .ft-links a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.88rem;transition:color .2s;}
+ .ft-links a:hover{color:var(--orange);}
+ .ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.78rem;}
+ .ft-social{display:flex;gap:.9rem;}
+ .soc{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);text-decoration:none;font-size:.82rem;transition:all .2s;}
+ .soc:hover{background:var(--orange);color:var(--brown);}
+
+ /* ── ANIMATIONS ── */
+ .fu{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+ .fu.vis{opacity:1;transform:translateY(0);}
+
+ /* ── RESPONSIVE ── */
+ @media(max-width:1100px){.guias-grid{grid-template-columns:repeat(3,1fr);}}
+ @media(max-width:900px){
+ .nav-links{display:none;}
+ .guias-grid{grid-template-columns:repeat(2,1fr);}
+ .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+ }
+ @media(max-width:520px){.guias-grid{grid-template-columns:1fr;}}
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <a href="index.html" class="nav-brand">
+ <img src="Logos/agap-icon.png" alt="AGAP" class="nav-logo-img" onerror="this.style.display='none'">
+ <div class="nav-brand-text">AGAP<span>Guías Aysén Patagonia</span></div>
+ </a>
+ <ul class="nav-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" class="active" data-t="nav_guias">Guías</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#unete" data-t="nav_unete">Únete</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="nav-right">
+ <div class="lang-sw">
+ <button class="lang-btn" onclick="setLang('es')">ES</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
+ <a href="index.html#unete" class="nav-cta" data-t="nav_unete_btn">Únete</a>
+ </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+ <div class="page-header-bg"></div>
+ <div class="container">
+ <div class="page-header-content">
+ <img src="Logos/agap-logo.png" alt="AGAP" style="height:90px;margin-bottom:1.4rem;filter:brightness(0) invert(1);opacity:.92;" onerror="this.style.display='none'">
+ <div class="sec-label" data-t="ph_label">Guías certificados</div>
+ <h1 data-t="ph_title">GUÍAS<br><em>AYSÉN PATAGONIA</em></h1>
+ <p data-t="ph_sub">Conoce al equipo de guías profesionales asociados a AGAP, expertos en los territorios de Aysén Patagonia.</p>
+ </div>
+ </div>
+</div>
+
+<!-- DIRECTORIO -->
+<section id="directorio">
+ <div class="container">
+ <div class="search-wrap">
+ <input type="text" class="search-input" id="search-input" placeholder="Buscar por nombre, zona…" oninput="applyFilters()" data-t-placeholder="search_ph">
+ </div>
+ <div class="dir-controls">
+ <div class="filters" id="filters">
+ <button class="fbtn active" onclick="setFilter('all',this)" data-t="f_all">Todos</button>
+ <button class="fbtn" onclick="setFilter('trekking',this)">Trekking</button>
+ <button class="fbtn" onclick="setFilter('kayak',this)">Kayak</button>
+ <button class="fbtn" onclick="setFilter('escalada',this)">Escalada</button>
+ <button class="fbtn" onclick="setFilter('fauna',this)">Fauna</button>
+ <button class="fbtn" onclick="setFilter('pesca',this)">Pesca</button>
+ <button class="fbtn" onclick="setFilter('cabalgatas',this)">Cabalgatas</button>
+ </div>
+ <div class="dir-count"><span id="count-label">Cargando…</span></div>
+ </div>
+ <div class="guias-grid" id="guias-grid"></div>
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+ <div class="container">
+ <div class="ft-grid">
+ <div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <img src="Logos/agap-logo.png" alt="AGAP" style="height:64px;" onerror="this.style.display='none'">
+ <div style="font-family:var(--fb);font-weight:800;font-size:1.2rem;color:white;">AGAP</div>
+ </div>
+ <p class="ft-brand-txt" data-t="ft_txt">Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+ </div>
+ <div class="ft-col">
+ <h4 data-t="ft_nav">Navegación</h4>
+ <ul class="ft-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#unete" data-t="nav_unete">Únete</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ </div>
+ <div class="ft-col">
+ <h4 data-t="ft_leg">Legal</h4>
+ <ul class="ft-links">
+ <li><a href="#" data-t="ft_est">Estatutos AGAP</a></li>
+ <li><a href="#" data-t="ft_cod">Código de Conducta</a></li>
+ <li><a href="#" data-t="ft_priv">Privacidad</a></li>
+ </ul>
+ </div>
+ </div>
+ <div class="ft-bottom">
+ <span>© 2025 AGAP — Asociación de Guías Aysén Patagonia</span>
+ <div class="ft-social">
+ <a href="#" class="soc" title="Instagram">IG</a>
+ <a href="#" class="soc" title="Facebook">FB</a>
+ <a href="#" class="soc" title="WhatsApp">WA</a>
+ </div>
+ </div>
+ </div>
+</footer>
+
+<script>
+/* ─── i18n ─── */
+const T = {
+ es:{
+ nav_mision:'Misión',nav_guias:'Guías',nav_esp:'Especialidades',nav_unete:'Únete',nav_contacto:'Contacto',nav_unete_btn:'Únete',nav_directiva:'Directiva',
+ ph_label:'Guías certificados',ph_title:'GUÍAS<br><em>AYSÉN PATAGONIA</em>',
+ ph_sub:'Conoce al equipo de guías profesionales asociados a AGAP, expertos en los territorios de Aysén Patagonia.',
+ f_all:'Todos',search_ph:'Buscar por nombre, zona…',
+ count_tmpl:'<strong>{n}</strong> guías',
+ ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
+ ft_nav:'Navegación',ft_leg:'Legal',ft_est:'Estatutos AGAP',ft_cod:'Código de Conducta',ft_priv:'Privacidad',
+ },
+ en:{
+ nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activities',nav_unete:'Join',nav_contacto:'Contact',nav_unete_btn:'Join',nav_directiva:'Board',
+ ph_label:'Certified guides',ph_title:'GUIDES<br><em>AYSÉN PATAGONIA</em>',
+ ph_sub:'Meet the professional guides associated with AGAP, experts in the territories of Aysén Patagonia.',
+ f_all:'All',search_ph:'Search by name, zone…',
+ count_tmpl:'<strong>{n}</strong> guides',
+ ft_txt:"Association of Aysén Patagonia Guides. Uniting the region's guides to promote sustainable tourism and local heritage.",
+ ft_nav:'Navigation',ft_leg:'Legal',ft_est:'AGAP Bylaws',ft_cod:'Code of Conduct',ft_priv:'Privacy',
+ },
+ fr:{
+ nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activités',nav_unete:'Rejoindre',nav_contacto:'Contact',nav_unete_btn:'Rejoindre',nav_directiva:'Direction',
+ ph_label:'Guides certifiés',ph_title:'GUIDES<br><em>AYSÉN PATAGONIE</em>',
+ ph_sub:"Découvrez l'équipe de guides professionnels membres d'AGAP, experts des territoires d'Aysén Patagonie.",
+ f_all:'Tous',search_ph:'Rechercher par nom, zone…',
+ count_tmpl:'<strong>{n}</strong> guides',
+ ft_txt:"Association des Guides Aysén Patagonie. Unissant les guides de la région pour promouvoir le tourisme durable et le patrimoine local.",
+ ft_nav:'Navigation',ft_leg:'Légal',ft_est:'Statuts AGAP',ft_cod:'Code de Conduite',ft_priv:'Confidentialité',
+ }
+};
+
+let lang = localStorage.getItem('agap_lang') || 'es';
+function t(k){return T[lang][k]||T.es[k]||k;}
+function applyLang(){
+ document.querySelectorAll('[data-t]').forEach(el=>{
+ const v=t(el.dataset.t);
+ if(v!==undefined) el.innerHTML=v;
+ });
+ document.querySelectorAll('[data-t-placeholder]').forEach(el=>{
+ el.placeholder=t(el.dataset.tPlaceholder);
+ });
+ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
+}
+function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();updateCount();}
+
+/* ─── SUPABASE ─── */
+const sb = supabase.createClient(
+ 'https://ejutlkmzamjmwyaigisy.supabase.co',
+ 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE'
+);
+
+const ESP_TAG = {
+ trekking:{l:'Trekking',c:'tt'}, kayak:{l:'Kayak',c:'tk'},
+ escalada:{l:'Escalada',c:'te'}, fauna:{l:'Fauna',c:'tfa'},
+ pesca:{l:'Pesca',c:'tp'}, cabalgatas:{l:'Cabalgatas',c:'tt'}
+};
+const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
+
+let ALL_GUIDES = [];
+let activeFilter = 'all';
+
+const GUIDES_MOCK = [
+ {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN'},
+ {id:2,nombre:'Valentina Soto',zona:'Puerto Aysén / Fiordos',foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR'},
+ {id:3,nombre:'Miguel Á. Vera',zona:'Cochrane / Río Baker',foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN'},
+ {id:4,nombre:'Paula Henríquez',zona:'Chile Chico / LGC',foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN · PT'},
+ {id:5,nombre:'Rodrigo Ojeda',zona:'Coyhaique / Simpson',foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN'},
+ {id:6,nombre:'Claudia Neira',zona:'Lago Verde / Palena',foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR'},
+];
+
+async function loadGuides(){
+ try {
+ const {data,error} = await sb.from('agap_guides')
+ .select('*').eq('activo',true).eq('cotisation',true).order('orden');
+ if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderGuides(ALL_GUIDES);return;}
+ ALL_GUIDES = data.map(g=>({
+ id:g.id,
+ nombre:(g.prenom?g.prenom+' ':'')+g.nom,
+ zona:g.zona||'Aysén',
+ foto:g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+ esp:g.especialidades||[],
+ tags:(g.especialidades||[]).slice(0,3).map(e=>ESP_TAG[e]||{l:e,c:'tt'}),
+ idiomas:(g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
+ }));
+ renderGuides(ALL_GUIDES);
+ } catch(e){ALL_GUIDES=GUIDES_MOCK;renderGuides(ALL_GUIDES);}
+}
+
+function setFilter(esp,btn){
+ document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ activeFilter = esp;
+ applyFilters();
+}
+
+function applyFilters(){
+ const q = (document.getElementById('search-input').value||'').toLowerCase().trim();
+ let list = activeFilter==='all' ? ALL_GUIDES : ALL_GUIDES.filter(g=>g.esp.includes(activeFilter));
+ if(q) list = list.filter(g=>g.nombre.toLowerCase().includes(q)||g.zona.toLowerCase().includes(q));
+ renderGuides(list);
+}
+
+function renderGuides(list){
+ const grid = document.getElementById('guias-grid');
+ if(!list.length){
+ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="ico">🔍</div><p>No se encontraron guías con ese criterio.</p></div>`;
+ updateCount(0);return;
+ }
+ grid.innerHTML = list.map(g=>`
+ <div class="g-card fu">
+ <div class="g-photo" style="background-image:url('${g.foto}')"></div>
+ <div class="g-body">
+ <div class="g-name">${g.nombre}</div>
+ <div class="g-zone">📍 ${g.zona}</div>
+ <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
+ <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
+ </div>
+ </div>`).join('');
+ updateCount(list.length);
+ observeFU();
+}
+
+function updateCount(n){
+ const count = n !== undefined ? n : ALL_GUIDES.length;
+ document.getElementById('count-label').innerHTML = t('count_tmpl').replace('{n}',count);
+}
+
+/* ─── ANIMATIONS ─── */
+function observeFU(){
+ const io=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+ },{threshold:.1});
+ document.querySelectorAll('.fu:not(.vis)').forEach(el=>io.observe(el));
+}
+
+/* ─── INIT ─── */
+document.addEventListener('DOMContentLoaded',()=>{
+ applyLang();
+ loadGuides();
+ observeFU();
+});
+</script>
+</body>
+</html>

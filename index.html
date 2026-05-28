@@ -140,20 +140,6 @@
  .g-langs strong{color:var(--brown);}
  .guias-cta{text-align:center;margin-top:2.8rem;}
 
- /* ── DIRECTIVA ── */
- #directiva{background:var(--cream);}
- .dir-intro{max-width:640px;margin:0 auto 3rem;text-align:center;}
- .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
- .dir-card{background:white;border-radius:12px;padding:2rem 1.5rem;text-align:center;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
- .dir-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
- .dir-avatar{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:2rem;color:white;margin:0 auto 1.1rem;flex-shrink:0;border:3px solid rgba(0,0,0,.06);}
- .dir-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:top;margin:0 auto 1.1rem;display:block;border:3px solid rgba(0,0,0,.06);}
- .dir-name{font-family:var(--fd);font-size:1.35rem;color:var(--brown);line-height:1.1;margin-bottom:.3rem;}
- .dir-cargo{font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
- .dir-periodo{font-size:.72rem;color:var(--muted);margin-top:.2rem;opacity:.7;}
- @media(max-width:900px){.dir-grid{grid-template-columns:repeat(2,1fr);}}
- @media(max-width:520px){.dir-grid{grid-template-columns:1fr;}}
-
  /* ── ÚNETE ── */
  #unete{background:var(--green-d);}
  .unete-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center;}
@@ -225,8 +211,8 @@
  </a>
  <ul class="nav-links">
  <li><a href="#mision" data-t="nav_mision">Misión</a></li>
- <li><a href="#directiva" data-t="nav_directiva">Directiva</a></li>
- <li><a href="#guias" data-t="nav_guias">Guías</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
  <li><a href="#especialidades" data-t="nav_esp">Especialidades</a></li>
  <li><a href="#unete" data-t="nav_unete">Únete</a></li>
  <li><a href="#contacto" data-t="nav_contacto">Contacto</a></li>
@@ -300,23 +286,6 @@
  </div>
  </div>
  </div>
- </div>
-</section>
-
-<!-- LOGO DIVIDER -->
-<div style="background:var(--cream);text-align:center;padding:2.5rem 0;">
- <img src="Logos/agap-icon.png" alt="AGAP" style="height:60px;opacity:0.18;" onerror="this.style.display='none'">
-</div>
-
-<!-- DIRECTIVA -->
-<section id="directiva">
- <div class="container">
- <div class="fu" style="text-align:center;max-width:640px;margin:0 auto 3rem;">
- <div class="sec-label" data-t="sec_dir_lbl">La asociación</div>
- <h2 class="sec-title" data-t="dir_title">DIRECTIVA<br>2025–2027</h2>
- <p class="sec-text" style="margin:0 auto;" data-t="dir_intro">El equipo que representa y lidera la Asociación de Guías Aysén Patagonia durante el periodo 2025–2027.</p>
- </div>
- <div class="dir-grid" id="dir-grid"></div>
  </div>
 </section>
 
@@ -399,7 +368,9 @@
  </div>
  </div>
  <div class="guias-grid" id="guias-grid"></div>
-
+ <div class="guias-cta fu">
+ <a href="guias.html" class="btn-primary" data-t="guias_cta_link">Ver directorio completo →</a>
+ </div>
  </div>
 </section>
 
@@ -505,8 +476,8 @@
  <h4 data-t="ft_nav">Navegación</h4>
  <ul class="ft-links">
  <li><a href="#mision" data-t="nav_mision">Misión</a></li>
- <li><a href="#directiva" data-t="nav_directiva">Directiva</a></li>
- <li><a href="#guias" data-t="nav_guias">Guías</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
  <li><a href="#especialidades" data-t="nav_esp">Especialidades</a></li>
  <li><a href="#unete" data-t="nav_unete">Únete</a></li>
  <li><a href="#contacto" data-t="nav_contacto">Contacto</a></li>
@@ -562,7 +533,7 @@ const T={
  esp5_tag:'Pesca',esp5_h:'PESCA CON MOSCA',esp5_p:'Ríos y lagos de clase mundial para pesca deportiva de truchas y salmones.',
  esp6_tag:'Cabalgatas',esp6_h:'CABALGATAS',esp6_p:'Recorridos a caballo por valles, estepas y senderos del interior de Aysén.',
  sec_guias_lbl:'Nuestros Guías',guias_title:'ENCUENTRA<br>TU GUÍA',
- sec_dir_lbl:'La asociación',dir_title:'DIRECTIVA<br>2025–2027',dir_intro:'El equipo que representa y lidera la Asociación de Guías Aysén Patagonia durante el periodo 2025–2027.',
+ guias_cta_link:'Ver directorio completo →',
  nav_directiva:'Directiva',
  f_all:'Todos',guias_cta:'Ver todos los guías →',
  sec_unete_lbl:'Para guías',unete_title:'ÚNETE A<br>AGAP',
@@ -606,7 +577,7 @@ const T={
  esp5_tag:'Fishing',esp5_h:'FLY FISHING',esp5_p:'World-class rivers and lakes for sport fishing for trout and salmon.',
  esp6_tag:'Cabalgatas',esp6_h:'HORSE RIDING',esp6_p:'Horseback rides through valleys, steppes and backcountry trails of Aysén.',
  sec_guias_lbl:'Our Guides',guias_title:'FIND YOUR<br>GUIDE',
- sec_dir_lbl:'The association',dir_title:'BOARD<br>2025–2027',dir_intro:'The team that represents and leads the Aysén Patagonia Guides Association during the 2025–2027 period.',
+ guias_cta_link:'View full directory →',
  nav_directiva:'Board',
  f_all:'All',guias_cta:'View all guides →',
  sec_unete_lbl:'For guides',unete_title:'JOIN<br>AGAP',
@@ -650,7 +621,7 @@ const T={
  esp5_tag:'Pêche',esp5_h:'PÊCHE À LA MOUCHE',esp5_p:'Rivières et lacs de classe mondiale pour la pêche sportive de truites et saumons.',
  esp6_tag:'Cabalgatas',esp6_h:'RANDONNÉE ÉQUESTRE',esp6_p:"Randonnées à cheval dans les vallées et steppes de l'intérieur d'Aysén.",
  sec_guias_lbl:'Nos Guides',guias_title:'TROUVEZ<br>VOTRE GUIDE',
- sec_dir_lbl:"L'association",dir_title:'DIRECTION<br>2025–2027',dir_intro:"L'équipe qui représente et dirige l'Association des Guides Aysén Patagonie pour la période 2025–2027.",
+ guias_cta_link:'Voir le répertoire complet →',
  nav_directiva:'Direction',
  f_all:'Tous',guias_cta:'Voir tous les guides →',
  sec_unete_lbl:'Pour les guides',unete_title:'REJOIGNEZ<br>AGAP',
@@ -711,44 +682,6 @@ async function loadGuides(){
  }));
  document.getElementById('stat-guias').textContent = ALL_GUIDES.length;
  renderGuias(ALL_GUIDES);
-}
-
-/* ─── DIRECTIVA ──────────────────────────────────────────────── */
-const DIRECTIVA_MOCK = [
- {id:1, prenom:'Diego', nom:'Gallardo Mera', cargo:'Presidente',    iniciales:'DG', color:'#F5A623', foto:null, orden:1},
- {id:2, prenom:'Matías', nom:'Lazo',          cargo:'Vicepresidente',iniciales:'ML', color:'#3AACE8', foto:null, orden:2},
- {id:3, prenom:'Belén', nom:'Retamales',      cargo:'Secretaria',   iniciales:'BR', color:'#E8312A', foto:null, orden:3},
- {id:4, prenom:'Rodrigo', nom:'Mansilla',     cargo:'Tesorero',     iniciales:'RM', color:'#2EAA3F', foto:null, orden:4},
- {id:5, prenom:'Hernán', nom:'Vega',          cargo:'Director',     iniciales:'HV', color:'#F5A623', foto:null, orden:5},
- {id:6, prenom:'Antonino', nom:'Elzo',        cargo:'Director',     iniciales:'AE', color:'#3AACE8', foto:null, orden:6},
-];
-
-function renderDirectiva(list) {
- document.getElementById('dir-grid').innerHTML = list.map(m => {
- const media = m.foto
- ? `<img src="${m.foto}" alt="${m.prenom} ${m.nom}" class="dir-photo fu">`
- : `<div class="dir-avatar fu" style="background:${m.color}">${m.iniciales}</div>`;
- return `<div class="dir-card fu">
- ${media}
- <div class="dir-name">${m.prenom} ${m.nom}</div>
- <div class="dir-cargo">${m.cargo}</div>
- <div class="dir-periodo">2025 – 2027</div>
- </div>`;
- }).join('');
- observeFU();
-}
-
-async function loadDirectiva() {
- try {
- const {data, error} = await sb.from('agap_directiva')
- .select('*').eq('activo', true).order('orden');
- if (error || !data || data.length === 0) { renderDirectiva(DIRECTIVA_MOCK); return; }
- renderDirectiva(data.map(m => ({
- id: m.id, prenom: m.prenom||'', nom: m.nom||'', cargo: m.cargo||'',
- iniciales: m.iniciales||((m.prenom||'').charAt(0)+(m.nom||'').charAt(0)).toUpperCase(),
- color: m.color||'#F5A623', foto: m.photo_url||null, orden: m.orden
- })));
- } catch(e) { renderDirectiva(DIRECTIVA_MOCK); }
 }
 
 async function loadParametres() {
@@ -853,7 +786,6 @@ function counter(el,target){
 document.addEventListener('DOMContentLoaded',()=>{
  applyLang();
  loadParametres();
- loadDirectiva();
  loadGuides();
  observeFU();
  new IntersectionObserver(e=>{

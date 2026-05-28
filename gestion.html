@@ -318,6 +318,9 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
 .hamburger{display:none;position:fixed;top:14px;left:14px;z-index:200;
   background:var(--brown);border:none;border-radius:8px;padding:8px 10px;cursor:pointer;color:white;font-size:1.2rem}
 
+/* NAV DOTS */
+.nav-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;}
+
 /* LOADING */
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid #e0d8ce;border-top-color:var(--orange);border-radius:50%;animation:spin .6s linear infinite;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -329,7 +332,8 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
 <!-- ── LOGIN ─────────────────────────────────────────────── -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="logo">AGAP</div>
+    <img src="Logos/agap-logo.png" alt="AGAP" style="height:100px;margin-bottom:8px;" onerror="this.style.display='none';document.getElementById('login-fallback').style.display='block'">
+    <div id="login-fallback" style="display:none;font-family:var(--fd);font-size:3rem;color:var(--orange);line-height:1">AGAP</div>
     <div class="sub">Panel de gestión — acceso restringido</div>
     <div class="login-error" id="login-error"></div>
     <input type="email" id="login-email" placeholder="Email" autocomplete="email">
@@ -350,11 +354,11 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         <div class="role">Panel de gestión</div>
       </div>
       <nav class="sidebar-nav">
-        <a onclick="showView('dashboard')" class="active" id="nav-dashboard"><span class="ico">📊</span>Dashboard</a>
-        <a onclick="showView('guides')"    id="nav-guides"><span class="ico">🧑‍🦺</span>Guías</a>
-        <a onclick="showView('directiva')" id="nav-directiva"><span class="ico">🏔️</span>Directiva</a>
-        <a onclick="showView('inscriptions')" id="nav-inscriptions"><span class="ico">📋</span>Inscripciones</a>
-        <a onclick="showView('params')"    id="nav-params"><span class="ico">⚙️</span>Parámetros</a>
+        <a onclick="showView('dashboard')" class="active" id="nav-dashboard"><span class="nav-dot" style="background:var(--orange)"></span>Dashboard</a>
+        <a onclick="showView('guides')"    id="nav-guides"><span class="nav-dot" style="background:var(--green)"></span>Guías</a>
+        <a onclick="showView('directiva')" id="nav-directiva"><span class="nav-dot" style="background:var(--blue)"></span>Directiva</a>
+        <a onclick="showView('inscriptions')" id="nav-inscriptions"><span class="nav-dot" style="background:var(--red)"></span>Inscripciones</a>
+        <a onclick="showView('params')"    id="nav-params"><span class="nav-dot" style="background:var(--orange-d)"></span>Parámetros</a>
       </nav>
       <div class="sidebar-user">
         <div class="email" id="user-email">—</div>
