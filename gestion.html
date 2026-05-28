@@ -352,6 +352,7 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
       <nav class="sidebar-nav">
         <a onclick="showView('dashboard')" class="active" id="nav-dashboard"><span class="ico">📊</span>Dashboard</a>
         <a onclick="showView('guides')"    id="nav-guides"><span class="ico">🧑‍🦺</span>Guías</a>
+        <a onclick="showView('directiva')" id="nav-directiva"><span class="ico">🏔️</span>Directiva</a>
         <a onclick="showView('inscriptions')" id="nav-inscriptions"><span class="ico">📋</span>Inscripciones</a>
         <a onclick="showView('params')"    id="nav-params"><span class="ico">⚙️</span>Parámetros</a>
       </nav>
@@ -420,6 +421,23 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         </div>
       </div>
 
+      <!-- DIRECTIVA -->
+      <div id="view-directiva" style="display:none">
+        <div class="topbar">
+          <h1>DIRECTIVA</h1>
+          <button class="btn btn-primary" onclick="openDirectivaMember(null)">+ Agregar miembro</button>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>DIRECTIVA 2025–2027</h2>
+            <span class="badge" id="dir-count">6</span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div id="directiva-table-wrap"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- INSCRIPTIONS -->
       <div id="view-inscriptions" style="display:none">
         <div class="topbar"><h1>INSCRIPCIONES</h1></div>
@@ -442,6 +460,21 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
       </div>
 
     </main>
+  </div>
+</div>
+
+<!-- ── MODAL DIRECTIVA ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-directiva">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-dir-title">MIEMBRO DIRECTIVA</h3>
+      <button class="modal-close" onclick="closeModal('modal-directiva')">×</button>
+    </div>
+    <div class="modal-body" id="modal-dir-body"><!-- filled by JS --></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-directiva')">Cancelar</button>
+      <button class="btn btn-primary" id="btn-save-dir" onclick="saveDirectivaMember()">GUARDAR</button>
+    </div>
   </div>
 </div>
 
@@ -559,15 +592,148 @@ if (saved) {
 
 // ── VIEWS ─────────────────────────────────────────────────
 function showView(name) {
-  ['dashboard','guides','inscriptions','params'].forEach(v => {
+  ['dashboard','guides','directiva','inscriptions','params'].forEach(v => {
     document.getElementById(`view-${v}`).style.display = v === name ? 'block' : 'none';
     document.getElementById(`nav-${v}`).classList.toggle('active', v === name);
   });
   if (name === 'guides')       loadGuides();
+  if (name === 'directiva')    loadDirectiva();
   if (name === 'inscriptions') loadInscriptions();
   if (name === 'params')       loadParams();
   if (window.innerWidth < 640) document.getElementById('sidebar').classList.remove('open');
 }
+
+// ── DIRECTIVA ─────────────────────────────────────────────
+const DIRECTIVA_DEFAULT = [
+  {id:null, prenom:'Diego',   nom:'Gallardo Mera', cargo:'Presidente',    iniciales:'DG', color:'#F5A623', photo_url:null, orden:1, activo:true},
+  {id:null, prenom:'Matías',  nom:'Lazo',          cargo:'Vicepresidente',iniciales:'ML', color:'#3AACE8', photo_url:null, orden:2, activo:true},
+  {id:null, prenom:'Belén',   nom:'Retamales',     cargo:'Secretaria',    iniciales:'BR', color:'#E8312A', photo_url:null, orden:3, activo:true},
+  {id:null, prenom:'Rodrigo', nom:'Mansilla',      cargo:'Tesorero',      iniciales:'RM', color:'#2EAA3F', photo_url:null, orden:4, activo:true},
+  {id:null, prenom:'Hernán',  nom:'Vega',          cargo:'Director',      iniciales:'HV', color:'#F5A623', photo_url:null, orden:5, activo:true},
+  {id:null, prenom:'Antonino',nom:'Elzo',          cargo:'Director',      iniciales:'AE', color:'#3AACE8', photo_url:null, orden:6, activo:true},
+];
+
+let ALL_DIRECTIVA = [];
+
+async function loadDirectiva() {
+  const wrap = document.getElementById('directiva-table-wrap');
+  wrap.innerHTML = '<div class="empty"><p>Cargando…</p></div>';
+  try {
+    const res  = await fetch(`${SUPA_URL}/rest/v1/agap_directiva?select=*&order=orden`, { headers: authHeaders() });
+    const data = await res.json();
+    ALL_DIRECTIVA = Array.isArray(data) && data.length ? data : DIRECTIVA_DEFAULT;
+  } catch(e) {
+    ALL_DIRECTIVA = DIRECTIVA_DEFAULT;
+  }
+  document.getElementById('dir-count').textContent = ALL_DIRECTIVA.length;
+  renderDirectivaTable(ALL_DIRECTIVA);
+}
+
+function renderDirectivaTable(list) {
+  const wrap = document.getElementById('directiva-table-wrap');
+  if (!list.length) { wrap.innerHTML = '<div class="empty"><div class="ico">🏔️</div><p>Sin miembros</p></div>'; return; }
+  wrap.innerHTML = `<table class="tbl">
+    <thead><tr><th>Avatar</th><th>Nombre</th><th>Cargo</th><th>Orden</th><th>Acciones</th></tr></thead>
+    <tbody>${list.map(m => {
+      const initials = m.iniciales || ((m.prenom||'').charAt(0)+(m.nom||'').charAt(0)).toUpperCase();
+      const avatar = m.photo_url
+        ? `<img src="${esc(m.photo_url)}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid ${esc(m.color||'#F5A623')}">`
+        : `<div style="width:40px;height:40px;border-radius:50%;background:${esc(m.color||'#F5A623')};display:flex;align-items:center;justify-content:center;color:white;font-family:var(--fd);font-size:1rem;">${esc(initials)}</div>`;
+      return `<tr>
+        <td>${avatar}</td>
+        <td><strong>${esc(m.prenom||'')} ${esc(m.nom||'')}</strong></td>
+        <td><span class="tag">${esc(m.cargo||'')}</span></td>
+        <td style="color:var(--gray)">${m.orden||'—'}</td>
+        <td>
+          <button class="btn btn-ghost btn-sm" onclick='openDirectivaMember(${JSON.stringify(m)})'>Editar</button>
+          ${m.id ? `<button class="btn btn-danger btn-sm" style="margin-left:6px" onclick="deleteDirectivaMember('${m.id}','${esc(m.prenom+' '+m.nom)}')">Eliminar</button>` : ''}
+        </td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+}
+
+let editingDirMember = null;
+
+function openDirectivaMember(member) {
+  editingDirMember = member;
+  document.getElementById('modal-dir-title').textContent = member ? 'EDITAR MIEMBRO' : 'NUEVO MIEMBRO';
+  const m = member || {prenom:'',nom:'',cargo:'',iniciales:'',color:'#F5A623',photo_url:'',orden:99};
+  document.getElementById('modal-dir-body').innerHTML = `
+    <div class="f-row c2">
+      <div class="f"><label>Nombre</label><input id="dir-prenom" value="${esc(m.prenom||'')}" placeholder="Nombre"></div>
+      <div class="f"><label>Apellido</label><input id="dir-nom" value="${esc(m.nom||'')}" placeholder="Apellido"></div>
+    </div>
+    <div class="f-row c2">
+      <div class="f"><label>Cargo</label>
+        <select id="dir-cargo">
+          ${['Presidente','Vicepresidente','Secretaria','Tesorero','Director'].map(c=>`<option value="${c}" ${m.cargo===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="f"><label>Iniciales</label><input id="dir-iniciales" value="${esc(m.iniciales||'')}" placeholder="Ej. DG" maxlength="3"></div>
+    </div>
+    <div class="f-row c2">
+      <div class="f"><label>Color avatar</label>
+        <select id="dir-color">
+          <option value="#F5A623" ${(m.color||'')==='#F5A623'?'selected':''}>🟠 Naranja</option>
+          <option value="#3AACE8" ${(m.color||'')==='#3AACE8'?'selected':''}>🔵 Azul</option>
+          <option value="#E8312A" ${(m.color||'')==='#E8312A'?'selected':''}>🔴 Rojo</option>
+          <option value="#2EAA3F" ${(m.color||'')==='#2EAA3F'?'selected':''}>🟢 Verde</option>
+        </select>
+      </div>
+      <div class="f"><label>Orden</label><input id="dir-orden" type="number" value="${m.orden||99}" min="1" max="20"></div>
+    </div>
+    <div class="f-row">
+      <div class="f"><label>URL Foto (opcional)</label><input id="dir-photo" value="${esc(m.photo_url||'')}" placeholder="https://..."></div>
+    </div>`;
+  document.getElementById('modal-directiva').classList.add('open');
+}
+
+async function saveDirectivaMember() {
+  const payload = {
+    prenom:    document.getElementById('dir-prenom').value.trim(),
+    nom:       document.getElementById('dir-nom').value.trim(),
+    cargo:     document.getElementById('dir-cargo').value,
+    iniciales: document.getElementById('dir-iniciales').value.trim().toUpperCase(),
+    color:     document.getElementById('dir-color').value,
+    orden:     parseInt(document.getElementById('dir-orden').value)||99,
+    photo_url: document.getElementById('dir-photo').value.trim()||null,
+    activo:    true,
+    periodo:   '2025-2027'
+  };
+  if (!payload.prenom||!payload.nom||!payload.cargo) { toast('Completa nombre, apellido y cargo','err'); return; }
+  const btn = document.getElementById('btn-save-dir');
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    if (editingDirMember?.id) {
+      await fetch(`${SUPA_URL}/rest/v1/agap_directiva?id=eq.${editingDirMember.id}`, {
+        method:'PATCH', headers:authHeaders(), body:JSON.stringify(payload)
+      });
+      toast('✅ Miembro actualizado','ok');
+    } else {
+      await fetch(`${SUPA_URL}/rest/v1/agap_directiva`, {
+        method:'POST', headers:{...authHeaders(),'Prefer':'return=minimal'}, body:JSON.stringify(payload)
+      });
+      toast('✅ Miembro agregado','ok');
+    }
+    closeModal('modal-directiva');
+    loadDirectiva();
+  } catch(e) { toast('Error al guardar','err'); }
+  finally { btn.disabled=false; btn.textContent='GUARDAR'; }
+}
+
+async function deleteDirectivaMember(id, name) {
+  if (!confirm(`¿Eliminar a ${name} de la directiva?`)) return;
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_directiva?id=eq.${id}`, { method:'DELETE', headers:authHeaders() });
+    toast('🗑️ Miembro eliminado','ok');
+    loadDirectiva();
+  } catch(e) { toast('Error al eliminar','err'); }
+}
+
+document.getElementById('modal-directiva').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal('modal-directiva');
+});
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
