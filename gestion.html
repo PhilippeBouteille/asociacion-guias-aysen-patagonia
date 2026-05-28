@@ -322,6 +322,7 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid #e0d8ce;border-top-color:var(--orange);border-radius:50%;animation:spin .6s linear infinite;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -372,12 +373,21 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         <div class="stats-grid">
           <div class="stat-card"><div class="val" id="stat-activos">—</div><div class="lbl">Guías activos</div></div>
           <div class="stat-card"><div class="val" id="stat-pendientes">—</div><div class="lbl">Por activar</div></div>
+          <div class="stat-card"><div class="val" id="stat-cot-ok" style="color:var(--green)">—</div><div class="lbl">Cotización al día</div></div>
+          <div class="stat-card"><div class="val" id="stat-cot-nok" style="color:var(--red)">—</div><div class="lbl">Cotización pendiente</div></div>
           <div class="stat-card"><div class="val" id="stat-inscripciones">—</div><div class="lbl">Inscripciones</div></div>
           <div class="stat-card"><div class="val" id="stat-no-tratadas">—</div><div class="lbl">Sin tratar</div></div>
         </div>
-        <div class="card">
+        <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>GUÍAS POR ACTIVAR</h2></div>
           <div class="card-body" id="pending-list"><div class="empty"><div class="ico">✅</div><p>Ningún guía pendiente</p></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>💸 COTIZACIÓN PENDIENTE</h2>
+            <span class="badge" id="badge-cot-nok" style="background:var(--red)">0</span>
+          </div>
+          <div class="card-body" id="cotisation-list"><div class="empty"><div class="ico">✅</div><p>Todos al día</p></div></div>
         </div>
       </div>
 
@@ -385,7 +395,10 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
       <div id="view-guides" style="display:none">
         <div class="topbar">
           <h1>GUÍAS</h1>
-          <button class="btn btn-primary" onclick="openGuide(null)">+ Nuevo guía</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" onclick="exportXLS()" title="Exportar lista de miembros activos">📥 Exportar .xlsx</button>
+            <button class="btn btn-primary" onclick="openGuide(null)">+ Nuevo guía</button>
+          </div>
         </div>
         <div class="search-bar">
           <input type="text" id="guide-search" placeholder="Buscar por nombre, zona…" oninput="filterGuides()">
@@ -393,6 +406,11 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
             <option value="">Todos</option>
             <option value="true">Activos</option>
             <option value="false">Pendientes</option>
+          </select>
+          <select id="guide-filter-cot" onchange="filterGuides()" style="border:2px solid #e0d8ce;border-radius:8px;padding:9px 14px;font-family:var(--fb);font-size:0.9rem;background:white;cursor:pointer">
+            <option value="">Cotización: todos</option>
+            <option value="true">✅ Al día</option>
+            <option value="false">⚠️ Pendiente</option>
           </select>
         </div>
         <div class="card">
@@ -567,34 +585,60 @@ async function loadDashboard() {
 
     const activos    = guides.filter(g => g.activo).length;
     const pendientes = guides.filter(g => !g.activo).length;
+    const cotOk      = guides.filter(g => g.cotisation).length;
+    const cotNok     = guides.filter(g => !g.cotisation).length;
     const totalInsc  = insc.length;
     const noTratadas = insc.filter(i => !i.tratado).length;
 
     document.getElementById('stat-activos').textContent      = activos;
     document.getElementById('stat-pendientes').textContent   = pendientes;
+    document.getElementById('stat-cot-ok').textContent       = cotOk;
+    document.getElementById('stat-cot-nok').textContent      = cotNok;
     document.getElementById('stat-inscripciones').textContent= totalInsc;
     document.getElementById('stat-no-tratadas').textContent  = noTratadas;
+    document.getElementById('badge-cot-nok').textContent     = cotNok;
 
+    // Tableau guides par activar
     const pending = guides.filter(g => !g.activo);
     const wrap = document.getElementById('pending-list');
     if (!pending.length) {
       wrap.innerHTML = '<div class="empty"><div class="ico">✅</div><p>Ningún guía pendiente de activación</p></div>';
-      return;
+    } else {
+      wrap.innerHTML = `<table class="tbl">
+        <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Activar</th><th></th></tr></thead>
+        <tbody>${pending.map(g => `
+          <tr>
+            <td>${avatarCell(g)}</td>
+            <td><strong>${g.prenom} ${g.nom}</strong></td>
+            <td style="color:var(--gray)">${g.zona||'—'}</td>
+            <td><label class="toggle" title="Activar">
+              <input type="checkbox" ${g.activo?'checked':''} onchange="toggleActivo('${g.id}', this.checked)">
+              <div class="track"></div><div class="thumb"></div>
+            </label></td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openGuide('${g.id}')">Editar</button></td>
+          </tr>`).join('')}
+        </tbody></table>`;
     }
-    wrap.innerHTML = `<table class="tbl">
-      <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Activar</th><th></th></tr></thead>
-      <tbody>${pending.map(g => `
-        <tr>
-          <td>${avatarCell(g)}</td>
-          <td><strong>${g.prenom} ${g.nom}</strong></td>
-          <td style="color:var(--gray)">${g.zona||'—'}</td>
-          <td><label class="toggle" title="Activar">
-            <input type="checkbox" ${g.activo?'checked':''} onchange="toggleActivo('${g.id}', this.checked)">
-            <div class="track"></div><div class="thumb"></div>
-          </label></td>
-          <td><button class="btn btn-ghost btn-sm" onclick="openGuide('${g.id}')">Editar</button></td>
-        </tr>`).join('')}
-      </tbody></table>`;
+
+    // Tableau cotisation impayée
+    const unpaid = guides.filter(g => !g.cotisation);
+    const cwrap  = document.getElementById('cotisation-list');
+    if (!unpaid.length) {
+      cwrap.innerHTML = '<div class="empty"><div class="ico">✅</div><p>Todos al día con la cotización</p></div>';
+    } else {
+      cwrap.innerHTML = `<table class="tbl">
+        <thead><tr><th></th><th>Nombre</th><th>Email</th><th>Zona</th><th>Activo</th><th>Marcar pagado</th></tr></thead>
+        <tbody>${unpaid.map(g => `
+          <tr>
+            <td>${avatarCell(g)}</td>
+            <td><strong>${g.prenom} ${g.nom}</strong></td>
+            <td style="font-size:0.82rem;color:var(--gray)">${g.email||'—'}</td>
+            <td style="color:var(--gray);font-size:0.85rem">${g.zona||'—'}</td>
+            <td><span class="status-badge ${g.activo?'status-active':'status-inactive'}">${g.activo?'Activo':'Pendiente'}</span></td>
+            <td><button class="btn btn-success btn-sm" onclick="toggleCotisation('${g.id}', true)">✅ Pagado</button></td>
+          </tr>`).join('')}
+        </tbody></table>`;
+    }
   } catch(e) { console.error(e); }
 }
 
@@ -612,10 +656,12 @@ async function loadGuides() {
 function filterGuides() {
   const q      = document.getElementById('guide-search').value.toLowerCase();
   const activo = document.getElementById('guide-filter-activo').value;
+  const cot    = document.getElementById('guide-filter-cot')?.value ?? '';
   let filtered = ALL_GUIDES;
   if (q) filtered = filtered.filter(g =>
     (g.prenom+' '+g.nom+' '+(g.zona||'')).toLowerCase().includes(q));
   if (activo !== '') filtered = filtered.filter(g => String(g.activo) === activo);
+  if (cot    !== '') filtered = filtered.filter(g => String(g.cotisation) === cot);
   renderGuidesTable(filtered);
 }
 
@@ -626,7 +672,7 @@ function renderGuidesTable(guides) {
     return;
   }
   wrap.innerHTML = `<table class="tbl">
-    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Especialidades</th><th>Activo</th><th>Orden</th><th></th></tr></thead>
+    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Especialidades</th><th>Activo</th><th>Cotización</th><th>Orden</th><th></th></tr></thead>
     <tbody>${guides.map(g => `
       <tr>
         <td>${avatarCell(g)}</td>
@@ -635,6 +681,10 @@ function renderGuidesTable(guides) {
         <td><div class="tags">${(g.especialidades||[]).slice(0,3).map(e=>`<span class="tag">${e}</span>`).join('')}${(g.especialidades||[]).length>3?`<span class="tag">+${(g.especialidades||[]).length-3}</span>`:''}</div></td>
         <td><label class="toggle">
           <input type="checkbox" ${g.activo?'checked':''} onchange="toggleActivo('${g.id}', this.checked)">
+          <div class="track"></div><div class="thumb"></div>
+        </label></td>
+        <td><label class="toggle">
+          <input type="checkbox" ${g.cotisation?'checked':''} onchange="toggleCotisation('${g.id}', this.checked)">
           <div class="track"></div><div class="thumb"></div>
         </label></td>
         <td><input type="number" value="${g.orden||99}" min="1" max="999" style="width:56px;border:1px solid #e0d8ce;border-radius:6px;padding:4px 6px;font-family:var(--fb);font-size:0.85rem;text-align:center" onchange="updateOrden('${g.id}', this.value)"></td>
@@ -660,6 +710,19 @@ async function toggleActivo(id, val) {
     });
     toast(val ? '✅ Guía activado' : '⏸ Guía desactivado', 'ok');
     ALL_GUIDES = ALL_GUIDES.map(g => g.id === id ? {...g, activo: val} : g);
+    if (document.getElementById('view-dashboard').style.display !== 'none') loadDashboard();
+  } catch(e) { toast('Error al actualizar', 'err'); }
+}
+
+async function toggleCotisation(id, val) {
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_guides?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ cotisation: val })
+    });
+    toast(val ? '✅ Cotización pagada' : '⚠️ Cotización pendiente', val ? 'ok' : 'err');
+    ALL_GUIDES = ALL_GUIDES.map(g => g.id === id ? {...g, cotisation: val} : g);
     if (document.getElementById('view-dashboard').style.display !== 'none') loadDashboard();
   } catch(e) { toast('Error al actualizar', 'err'); }
 }
@@ -757,11 +820,17 @@ function openGuide(idOrNull) {
     <button type="button" class="add-btn" onclick="addCertM()">+ Agregar certificación</button>
 
     <div class="f-section">ESTADO</div>
-    <div class="f-row c2">
+    <div class="f-row c3">
       <div class="f"><label>Activo</label>
         <select id="m-activo" style="border:2px solid #e0d8ce;border-radius:8px;padding:9px 12px;font-family:var(--fb);font-size:0.9rem;background:var(--warm);cursor:pointer">
           <option value="false"${!g.activo?' selected':''}>⏸ Pendiente</option>
           <option value="true"${g.activo?' selected':''}>✅ Activo</option>
+        </select>
+      </div>
+      <div class="f"><label>Cotización</label>
+        <select id="m-cotisation" style="border:2px solid #e0d8ce;border-radius:8px;padding:9px 12px;font-family:var(--fb);font-size:0.9rem;background:var(--warm);cursor:pointer">
+          <option value="false"${!g.cotisation?' selected':''}>⚠️ Pendiente</option>
+          <option value="true"${g.cotisation?' selected':''}>✅ Pagada</option>
         </select>
       </div>
       <div class="f"><label>Orden</label><input type="number" id="m-orden" value="${g.orden||99}" min="1"></div>
@@ -833,8 +902,9 @@ async function saveGuide() {
       instagram:document.getElementById('m-instagram').value.trim() || null,
       sitio_web:document.getElementById('m-sitio_web').value.trim() || null,
       especialidades, idiomas, certificaciones, photo_url,
-      activo: document.getElementById('m-activo').value === 'true',
-      orden:  parseInt(document.getElementById('m-orden').value) || 99
+      activo:     document.getElementById('m-activo').value === 'true',
+      cotisation: document.getElementById('m-cotisation').value === 'true',
+      orden:      parseInt(document.getElementById('m-orden').value) || 99
     };
 
     if (editingGuide) {
@@ -927,17 +997,133 @@ async function toggleTratado(id, val) {
 }
 
 // ── PARAMS ────────────────────────────────────────────────
+const PARAM_LABELS = {
+  email_contacto: '📧 Email de contacto',
+  whatsapp:       '📱 WhatsApp',
+  instagram:      '📸 Instagram',
+  ubicacion:      '📍 Ubicación',
+  nom_asso:       '🏔️ Nombre de la asociación'
+};
+
 async function loadParams() {
   const body = document.getElementById('params-body');
   try {
-    const res  = await fetch(`${SUPA_URL}/rest/v1/agap_parametres?select=*`, { headers: authHeaders() });
+    const res  = await fetch(`${SUPA_URL}/rest/v1/agap_parametres?select=*&order=cle`, { headers: authHeaders() });
     const data = await res.json();
-    if (!data.length) { body.innerHTML = '<div class="empty"><p>Sin parámetros configurados.</p></div>'; return; }
-    body.innerHTML = `<table class="tbl">
-      <thead><tr><th>Clave</th><th>Valor</th></tr></thead>
-      <tbody>${data.map(p=>`<tr><td><strong>${esc(p.cle||'')}</strong></td><td>${esc(p.valeur||'')}</td></tr>`).join('')}
-      </tbody></table>`;
+
+    const known   = data.filter(p => PARAM_LABELS[p.cle]);
+    const unknown = data.filter(p => !PARAM_LABELS[p.cle]);
+
+    body.innerHTML = `
+      <div style="margin-bottom:20px">
+        <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px">
+          Estos valores se muestran en tiempo real en el sitio público. Guarda después de cada cambio.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:14px" id="params-fields">
+          ${known.map(p => `
+            <div style="display:flex;align-items:center;gap:12px;background:var(--cream);border-radius:10px;padding:14px 16px;border:1px solid #e8e0d6">
+              <label style="font-weight:700;font-size:0.82rem;min-width:180px;color:var(--brown)">${PARAM_LABELS[p.cle]}</label>
+              <input id="param-${esc(p.cle)}" value="${esc(p.valeur||'')}"
+                style="flex:1;border:2px solid #e0d8ce;border-radius:7px;padding:8px 12px;font-family:var(--fb);font-size:0.9rem;background:white"
+                onkeydown="if(event.key==='Enter') saveParam('${esc(p.cle)}')">
+              <button class="btn btn-primary btn-sm" onclick="saveParam('${esc(p.cle)}')">Guardar</button>
+            </div>`).join('')}
+        </div>
+        ${unknown.length ? `
+          <div style="margin-top:24px">
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:8px">Otros parámetros</p>
+            <table class="tbl">
+              <thead><tr><th>Clave</th><th>Valor</th></tr></thead>
+              <tbody>${unknown.map(p=>`<tr><td><code>${esc(p.cle)}</code></td><td>${esc(p.valeur||'')}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>` : ''}
+        <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e8e0d6">
+          <p style="font-size:0.82rem;font-weight:700;margin-bottom:10px">Agregar parámetro</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input id="new-param-cle" placeholder="clave (ej. telefono_fijo)" style="flex:1;min-width:150px;border:2px solid #e0d8ce;border-radius:7px;padding:8px 12px;font-family:var(--fb);font-size:0.9rem">
+            <input id="new-param-val" placeholder="valor" style="flex:2;min-width:180px;border:2px solid #e0d8ce;border-radius:7px;padding:8px 12px;font-family:var(--fb);font-size:0.9rem">
+            <button class="btn btn-primary btn-sm" onclick="addParam()">+ Agregar</button>
+          </div>
+        </div>
+      </div>`;
   } catch(e) { body.innerHTML = '<div class="empty"><p>Error al cargar parámetros.</p></div>'; }
+}
+
+async function saveParam(cle) {
+  const val = document.getElementById(`param-${cle}`)?.value?.trim();
+  if (val === undefined) return;
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_parametres?cle=eq.${cle}`, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ valeur: val })
+    });
+    toast(`✅ ${PARAM_LABELS[cle] || cle} guardado`, 'ok');
+  } catch(e) { toast('Error al guardar', 'err'); }
+}
+
+async function addParam() {
+  const cle = document.getElementById('new-param-cle')?.value?.trim();
+  const val = document.getElementById('new-param-val')?.value?.trim();
+  if (!cle || !val) { toast('Completa clave y valor', 'err'); return; }
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_parametres`, {
+      method: 'POST',
+      headers: { ...authHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ cle, valeur: val })
+    });
+    toast('✅ Parámetro agregado', 'ok');
+    loadParams();
+  } catch(e) { toast('Error al agregar', 'err'); }
+}
+
+// ── EXPORT XLS ───────────────────────────────────────────
+function exportXLS() {
+  if (!ALL_GUIDES.length) { toast('No hay guías cargados', 'err'); return; }
+
+  const rows = ALL_GUIDES.map(g => ({
+    'Nombre':          g.prenom || '',
+    'Apellido':        g.nom || '',
+    'Email':           g.email || '',
+    'Teléfono':        g.telefono || '',
+    'WhatsApp':        g.whatsapp || '',
+    'Instagram':       g.instagram || '',
+    'Sitio web':       g.sitio_web || '',
+    'Zona':            g.zona || '',
+    'Especialidades':  (g.especialidades || []).join(', '),
+    'Idiomas':         (g.idiomas || []).join(', '),
+    'Certificaciones': (g.certificaciones || []).join(' | '),
+    'Activo':          g.activo ? 'Sí' : 'No',
+    'Cotización':      g.cotisation ? 'Pagada' : 'Pendiente',
+    'Orden':           g.orden || 99,
+    'Fecha registro':  g.created_at ? new Date(g.created_at).toLocaleDateString('es-CL') : ''
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // Anchos de columna
+  ws['!cols'] = [
+    {wch:14},{wch:18},{wch:28},{wch:16},{wch:16},
+    {wch:16},{wch:24},{wch:22},{wch:30},{wch:20},
+    {wch:35},{wch:8},{wch:12},{wch:7},{wch:14}
+  ];
+
+  // Style header (fond orange AGAP)
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for (let C = range.s.c; C <= range.e.c; C++) {
+    const addr = XLSX.utils.encode_cell({ r: 0, c: C });
+    if (!ws[addr]) continue;
+    ws[addr].s = {
+      font:    { bold: true, color: { rgb: '231F20' } },
+      fill:    { fgColor: { rgb: 'F5A623' }, patternType: 'solid' },
+      alignment: { horizontal: 'center' }
+    };
+  }
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Guías AGAP');
+
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `AGAP-Guias-${date}.xlsx`);
+  toast('📥 Export téléchargé', 'ok');
 }
 
 // ── UTILS ─────────────────────────────────────────────────

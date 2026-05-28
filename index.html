@@ -432,9 +432,9 @@
  <p class="sec-text" data-t="ctc_p">¿Buscas un guía para tu aventura en Aysén? Contáctanos y te conectamos con el guía ideal.</p>
  <div class="ctc-items">
  <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong data-t="ci1">Ubicación</strong>Coyhaique, Región de Aysén, Chile</div></div>
- <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong>Email</strong>contacto@agapguias.cl</div></div>
- <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong>WhatsApp</strong>+56 9 xxxx xxxx</div></div>
- <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong data-t="ci4">Redes</strong>@agapguias</div></div>
+ <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong>Email</strong><span id="ctc-email-val">aguiasaysenpatagonia@gmail.com</span></div></div>
+ <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong>WhatsApp</strong><span id="ctc-whatsapp-val">+56 9 xxxx xxxx</span></div></div>
+ <div class="ctc-item"><div class="ctc-icon"></div><div class="ctc-txt"><strong data-t="ci4">Redes</strong><span id="ctc-instagram-val">@agapguias</span></div></div>
  </div>
  </div>
  <div class="c-form fu">
@@ -663,7 +663,7 @@ let ALL_GUIDES = [];
 
 async function loadGuides(){
  const {data,error} = await sb.from('agap_guides')
- .select('*').eq('activo',true).order('orden');
+ .select('*').eq('activo',true).eq('cotisation',true).order('orden');
  if(error||!data||data.length===0){ renderGuias(GUIDES_MOCK); return; }
  ALL_GUIDES = data.map(g=>({
  id: g.id,
@@ -677,6 +677,26 @@ async function loadGuides(){
  }));
  document.getElementById('stat-guias').textContent = ALL_GUIDES.length;
  renderGuias(ALL_GUIDES);
+}
+
+async function loadParametres() {
+  try {
+    const { data } = await sb.from('agap_parametres').select('cle,valeur');
+    if (!data) return;
+    const p = Object.fromEntries(data.map(r => [r.cle, r.valeur]));
+    if (p.email_contacto) {
+      const el = document.getElementById('ctc-email-val');
+      if (el) el.textContent = p.email_contacto;
+    }
+    if (p.whatsapp) {
+      const el = document.getElementById('ctc-whatsapp-val');
+      if (el) el.textContent = p.whatsapp;
+    }
+    if (p.instagram) {
+      const el = document.getElementById('ctc-instagram-val');
+      if (el) el.textContent = p.instagram;
+    }
+  } catch(e) { console.warn('Params:', e); }
 }
 
 async function submitInscription(e){
@@ -760,6 +780,7 @@ function counter(el,target){
 /* ─── INIT ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
  applyLang();
+ loadParametres();
  loadGuides();
  observeFU();
  new IntersectionObserver(e=>{
