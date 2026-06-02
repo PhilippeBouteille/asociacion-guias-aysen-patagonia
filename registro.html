@@ -24,7 +24,7 @@
 
   body {
     font-family: var(--fb);
-    background: var(--warm);
+    background: var(--cream);
     color: var(--brown);
     font-size: 17px;
     line-height: 1.6;
@@ -65,7 +65,7 @@
 
   /* HERO STRIP */
   .hero-strip {
-    background: var(--brown);
+    background: linear-gradient(135deg, #2a2426 0%, var(--brown) 50%, #1a2520 100%);
     padding: 52px 32px 44px;
     text-align: center;
     position: relative;
@@ -104,6 +104,8 @@
     flex-wrap: wrap;
   }
   .step-pill {
+    text-decoration: none;
+    cursor: pointer;
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 20px;
@@ -116,11 +118,11 @@
     letter-spacing: 0.5px;
     transition: all 0.3s;
   }
-  .step-pill.active {
-    background: var(--orange);
-    border-color: var(--orange);
-    color: white;
-  }
+  .step-pill.active { background: var(--orange); border-color: var(--orange); color: white; }
+  a[href="#sec-2"].step-pill.active { background: var(--green); border-color: var(--green); }
+  a[href="#sec-3"].step-pill.active { background: var(--blue); border-color: var(--blue); }
+  a[href="#sec-4"].step-pill.active { background: var(--red); border-color: var(--red); }
+  a[href="#sec-5"].step-pill.active { background: var(--orange-d); border-color: var(--orange-d); }
 
   /* LAYOUT */
   .container {
@@ -131,9 +133,10 @@
 
   /* NOTA */
   .nota-mod {
-    background: #fff8ed;
-    border: 1px solid #f5dfa0;
+    background: var(--brown);
+    border: none;
     border-left: 4px solid var(--orange);
+    color: rgba(255,255,255,0.85);
     border-radius: 10px;
     padding: 14px 18px;
     margin-bottom: 32px;
@@ -151,6 +154,27 @@
     transition: box-shadow 0.2s;
   }
   .section-block:focus-within { box-shadow: 0 4px 20px rgba(245,166,35,0.12); }
+
+  /* Couleurs par section */
+  #sec-1 .section-header { background: var(--brown); }
+  #sec-2 .section-header { background: var(--green); }
+  #sec-3 .section-header { background: var(--blue); }
+  #sec-3 .section-header .num { background: white; color: var(--blue); }
+  #sec-4 .section-header { background: var(--red); }
+  #sec-4 .section-header .num { background: white; color: var(--red); }
+  #sec-5 .section-header { background: var(--orange-d); }
+  #sec-5 .section-header .num { background: white; color: var(--orange-d); }
+
+  /* Fond léger teinté par section */
+  #sec-1 { background: white; }
+  #sec-2 { background: #f0faf1; border-color: #b8e4bc; }
+  #sec-3 { background: #f0f8fd; border-color: #b3dff2; }
+  #sec-4 { background: #fdf2f2; border-color: #f5bcbc; }
+  #sec-5 { background: #fdf7ed; border-color: #f5dfa0; }
+
+  /* Numéros section 2 en vert */
+  #sec-2 .section-header .num { background: white; color: var(--green); }
+
   .section-header {
     background: var(--brown);
     padding: 14px 24px;
@@ -481,8 +505,7 @@
 <body>
 
 <nav>
-  <img src="Logos/agap-icon.png" alt="AGAP" onerror="this.style.display='none'">
-  <span>AGAP</span>
+  <img src="Logos/agap-logo.png" alt="AGAP" onerror="this.style.display='none'" style="height:44px;">
   <a href="index.html" class="back">← Volver al sitio</a>
 </nav>
 
@@ -490,11 +513,11 @@
   <h1>FICHA DE <span>INSCRIPCIÓN</span></h1>
   <p>Solicitud de ingreso como socio activo a la Asociación de Guías Aysén Patagonia A.G.</p>
   <div class="steps-bar">
-    <span class="step-pill active">1. Datos personales</span>
-    <span class="step-pill">2. Perfil guía</span>
-    <span class="step-pill">3. Datos laborales</span>
-    <span class="step-pill">4. Emergencias</span>
-    <span class="step-pill">5. Documentos</span>
+    <a class="step-pill active" href="#sec-1" onclick="scrollTo(this,event)">1. Datos personales</a>
+    <a class="step-pill" href="#sec-2" onclick="scrollTo(this,event)">2. Perfil guía</a>
+    <a class="step-pill" href="#sec-3" onclick="scrollTo(this,event)">3. Datos laborales</a>
+    <a class="step-pill" href="#sec-4" onclick="scrollTo(this,event)">4. Emergencias</a>
+    <a class="step-pill" href="#sec-5" onclick="scrollTo(this,event)">5. Documentos</a>
   </div>
 </div>
 
@@ -510,7 +533,7 @@
   <form id="form-registro" novalidate>
 
     <!-- ═══ 1. DATOS PERSONALES ═══ -->
-    <div class="section-block">
+    <div class="section-block" id="sec-1">
       <div class="section-header">
         <div class="num">1</div>
         <h2>Datos Personales</h2>
@@ -596,7 +619,7 @@
     </div>
 
     <!-- ═══ 2. PERFIL GUIA ═══ -->
-    <div class="section-block">
+    <div class="section-block" id="sec-2">
       <div class="section-header">
         <div class="num">2</div>
         <h2>Perfil de Guia</h2>
@@ -681,7 +704,7 @@
     </div>
 
     <!-- ═══ 3. DATOS LABORALES ═══ -->
-    <div class="section-block">
+    <div class="section-block" id="sec-3">
       <div class="section-header">
         <div class="num">3</div>
         <h2>Datos Laborales</h2>
@@ -758,7 +781,7 @@
     </div>
 
     <!-- ═══ 4. CONTACTO DE EMERGENCIAS ═══ -->
-    <div class="section-block">
+    <div class="section-block" id="sec-4">
       <div class="section-header">
         <div class="num">4</div>
         <h2>Emergencias e Informacion Medica</h2>
@@ -846,7 +869,7 @@
     </div>
 
     <!-- ═══ 5. DOCUMENTOS Y PAGO ═══ -->
-    <div class="section-block">
+    <div class="section-block" id="sec-5">
       <div class="section-header">
         <div class="num">5</div>
         <h2>Documentos y Pago</h2>
@@ -1199,6 +1222,26 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
     btn.textContent = 'ENVIAR FICHA';
   }
 });
+
+// Pills navigation
+function scrollTo(el, e) {
+  e.preventDefault();
+  const target = document.querySelector(el.getAttribute('href'));
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Active pill on scroll
+const secEls = document.querySelectorAll('.section-block[id]');
+const pillEls = document.querySelectorAll('.step-pill');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = [...secEls].indexOf(entry.target);
+      pillEls.forEach((p,i) => p.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.25 });
+secEls.forEach(s => obs.observe(s));
 </script>
 </body>
 </html>

@@ -147,6 +147,9 @@
  .benefits li{display:flex;align-items:center;gap:1rem;font-size:.94rem;color:rgba(255,255,255,.8);}
  .bdot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;}
  .u-form{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:2.4rem;}
+  .u-cta{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:2.4rem;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;}
+  .u-cta h3{font-family:var(--fd);font-size:2rem;color:white;margin-bottom:1rem;}
+  .u-cta p{color:rgba(255,255,255,.65);font-size:.95rem;line-height:1.6;}
  .u-form h3{font-family:var(--fd);font-size:2rem;color:white;margin-bottom:1.4rem;}
  .fg{margin-bottom:.9rem;}
  .fg label{display:block;font-size:.75rem;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem;}
@@ -374,49 +377,30 @@
  </div>
 </section>
 
+
 <!-- ÚNETE -->
 <section id="unete">
  <div class="container">
- <div class="unete-grid">
- <div class="fu">
- <div class="sec-label" data-t="sec_unete_lbl">Para guías</div>
- <h2 class="sec-title light" data-t="unete_title">ÚNETE A<br>AGAP</h2>
- <p class="sec-text" style="color:rgba(255,255,255,.65);" data-t="unete_p">Forma parte del gremio de guías de Aysén. Acreditación, visibilidad, comunidad y apoyo profesional.</p>
- <ul class="benefits">
- <li><div class="bdot"></div><span data-t="b1">Perfil en el directorio público de guías</span></li>
- <li><div class="bdot"></div><span data-t="b2">Acreditación AGAP por especialidad</span></li>
- <li><div class="bdot"></div><span data-t="b3">Formaciones y capacitaciones</span></li>
- <li><div class="bdot"></div><span data-t="b4">Red profesional de guías de Aysén</span></li>
- <li><div class="bdot"></div><span data-t="b5">Visibilidad ante turistas nacionales e internacionales</span></li>
- <li><div class="bdot"></div><span data-t="b6">Participación en las decisiones del gremio</span></li>
- </ul>
- </div>
- <div class="u-form fu">
- <h3 data-t="uform_title">INSCRIPCIÓN DE GUÍA</h3>
- <form id="form-inscription">
- <div class="f2">
- <div class="fg"><label data-t="f_nom">Nombre</label><input name="prenom" type="text" placeholder="Tu nombre" required></div>
- <div class="fg"><label data-t="f_ape">Apellido</label><input name="nom" type="text" placeholder="Tu apellido" required></div>
- </div>
- <div class="fg"><label data-t="f_email">Email</label><input name="email" type="email" placeholder="tu@email.com" required></div>
- <div class="fg"><label data-t="f_tel">Teléfono / WhatsApp</label><input name="tel" type="tel" placeholder="+56 9 xxxx xxxx"></div>
- <div class="fg">
- <label data-t="f_esp">Especialidad principal</label>
- <select name="especialidad">
- <option value="" data-t="f_esp0">Selecciona...</option>
- <option value="trekking">Trekking & Senderismo</option>
- <option value="kayak">Kayak & Fiordos</option>
- <option value="escalada">Escalada & Montaña</option>
- <option value="fauna">Avistamiento de Fauna</option>
- <option value="pesca">Pesca con Mosca</option>
- <option value="cabalgatas">Cabalgatas</option>
- </select>
- </div>
- <div class="fg"><label data-t="f_zona">Zona de operación</label><input name="zona" type="text" placeholder="Ej: Coyhaique, Baker, Puerto Aysén..."></div>
- <button type="submit" class="btn-primary" style="width:100%;margin-top:.4rem;" data-t="f_sub">Enviar solicitud</button>
- </form>
- </div>
- </div>
+  <div class="unete-grid">
+   <div class="fu">
+    <div class="sec-label" data-t="sec_unete_lbl">Para guías</div>
+    <h2 class="sec-title light" data-t="unete_title">ÚNETE A<br>AGAP</h2>
+    <p class="sec-text" style="color:rgba(255,255,255,.65);" data-t="unete_p">Forma parte del gremio de guías de Aysén. Acreditación, visibilidad, comunidad y apoyo profesional.</p>
+    <ul class="benefits">
+     <li><div class="bdot"></div><span data-t="b1">Perfil en el directorio público de guías</span></li>
+     <li><div class="bdot"></div><span data-t="b2">Acreditación AGAP por especialidad</span></li>
+     <li><div class="bdot"></div><span data-t="b3">Formaciones y capacitaciones</span></li>
+     <li><div class="bdot"></div><span data-t="b4">Red profesional de guías de Aysén</span></li>
+     <li><div class="bdot"></div><span data-t="b5">Visibilidad ante turistas nacionales e internacionales</span></li>
+     <li><div class="bdot"></div><span data-t="b6">Participación en las decisiones del gremio</span></li>
+    </ul>
+   </div>
+   <div class="u-cta fu">
+    <h3 data-t="uform_title">INSCRIPCIÓN DE GUÍA</h3>
+    <p data-t="unete_cta_p">Completa la ficha de inscripción para solicitar tu ingreso como socio activo.</p>
+    <a href="registro.html" class="btn-primary" style="display:inline-block;margin-top:1.6rem;font-family:var(--fd);font-size:1.4rem;letter-spacing:1px;padding:18px 48px;text-decoration:none;" data-t="unete_cta_btn">COMPLETAR FICHA</a>
+   </div>
+  </div>
  </div>
 </section>
 
@@ -529,7 +513,7 @@ const T={
  b1:'Perfil en el directorio público de guías',b2:'Acreditación AGAP por especialidad',
  b3:'Formaciones y capacitaciones',b4:'Red profesional de guías de Aysén',
  b5:'Visibilidad ante turistas nacionales e internacionales',b6:'Participación en las decisiones del gremio',
- uform_title:'INSCRIPCIÓN DE GUÍA',
+ uform_title:'INSCRIPCIÓN DE GUÍA',unete_cta_p:'Completa la ficha de inscripción para solicitar tu ingreso como socio activo.',unete_cta_btn:'COMPLETAR FICHA',
  f_nom:'Nombre',f_ape:'Apellido',f_email:'Email',f_tel:'Teléfono / WhatsApp',
  f_esp:'Especialidad principal',f_esp0:'Selecciona...',f_zona:'Zona de operación',f_sub:'Enviar solicitud',
  sec_ctc_lbl:'Contacto',ctc_title:'CONTACTO',
@@ -573,7 +557,7 @@ const T={
  b1:'Profile in the public guide directory',b2:'AGAP accreditation by specialty',
  b3:'Training and workshops',b4:'Professional network of Aysén guides',
  b5:'Visibility to national and international tourists',b6:'Participation in guild decisions',
- uform_title:'GUIDE REGISTRATION',
+ uform_title:'GUIDE REGISTRATION',unete_cta_p:'Fill in the registration form to apply for active membership.',unete_cta_btn:'COMPLETE FORM',
  f_nom:'First Name',f_ape:'Last Name',f_email:'Email',f_tel:'Phone / WhatsApp',
  f_esp:'Main specialty',f_esp0:'Select...',f_zona:'Operating zone',f_sub:'Submit application',
  sec_ctc_lbl:'Contact',ctc_title:'CONTACT',
@@ -617,7 +601,7 @@ const T={
  b1:"Profil dans l'annuaire public des guides",b2:'Accréditation AGAP par spécialité',
  b3:'Formations et ateliers',b4:"Réseau professionnel de guides d'Aysén",
  b5:'Visibilité auprès des touristes nationaux et internationaux',b6:'Participation aux décisions du syndicat',
- uform_title:'INSCRIPTION GUIDE',
+ uform_title:'INSCRIPTION GUIDE',unete_cta_p:"Remplissez la fiche d'inscription pour demander votre adhésion.",unete_cta_btn:'REMPLIR LA FICHE',
  f_nom:'Prénom',f_ape:'Nom',f_email:'Email',f_tel:'Téléphone / WhatsApp',
  f_esp:'Spécialité principale',f_esp0:'Sélectionner...',f_zona:"Zone d'opération",f_sub:'Envoyer la demande',
  sec_ctc_lbl:'Contact',ctc_title:'CONTACT',
@@ -782,10 +766,6 @@ document.addEventListener('DOMContentLoaded',()=>{
  counter(document.getElementById('stat-guias'), n);
  }
  }).observe(document.getElementById('stats'));
-
- // Formulaire inscriptions
- const fi = document.getElementById('form-inscription');
- if(fi) fi.addEventListener('submit', submitInscription);
 
  // Formulaire contact
  const fc = document.getElementById('form-contacto');
