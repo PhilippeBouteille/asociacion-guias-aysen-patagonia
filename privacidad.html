@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AGAP — Política de Privacidad</title>
+ <link rel="icon" href="Logos/agap-favicon.png" type="image/png">
+ <meta name="description" content="Política de privacidad de la Asociación de Guías Aysén Patagonia.">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+ <style>
+  :root {
+   --orange:#F5A623; --orange-d:#D4891A;
+   --red:#E8312A; --blue:#3AACE8; --blue-d:#1A6A9A; --green:#2EAA3F; --green-d:#1A6B28;
+   --brown:#231F20; --cream:#F8F4EE; --warm:#FDFAF6; --muted:#6B6860;
+   --fd:'Bebas Neue',sans-serif; --fb:'Nunito',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--brown);background:var(--warm);overflow-x:hidden;}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(35,31,32,0.93);backdrop-filter:blur(14px);border-bottom:2px solid rgba(245,166,35,0.25);}
+  .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-logo-img{height:36px;width:auto;}
+  .nav-brand-text{font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:.05em;line-height:1.1;}
+  .nav-brand-text span{display:block;font-weight:300;font-size:.68rem;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+  .nav-right{display:flex;align-items:center;gap:1rem;}
+  .lang-sw{display:flex;gap:.3rem;}
+  .lang-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-family:var(--fb);font-size:.72rem;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .2s;}
+  .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+  .nav-cta{background:var(--orange);color:var(--brown)!important;font-family:var(--fb);font-weight:800;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;text-decoration:none;transition:background .2s;}
+  .nav-cta:hover{background:var(--orange-d);}
+
+  /* ── PAGE HEADER ── */
+  .page-header{position:relative;padding:130px 0 64px;text-align:center;background:var(--brown);overflow:hidden;}
+  .page-header-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(35,31,32,0.92) 0%,rgba(26,106,154,0.25) 100%);}
+  .container{max-width:900px;margin:0 auto;padding:0 2rem;position:relative;}
+  .page-header-content{position:relative;z-index:1;}
+  .sec-label{font-size:.78rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:.8rem;}
+  h1{font-family:var(--fd);font-size:clamp(2.6rem,6vw,4.2rem);line-height:.95;color:white;margin-bottom:1.2rem;}
+  h1 em{color:var(--orange);font-style:normal;}
+  .ph-sub{color:rgba(255,255,255,.6);font-size:1rem;max-width:520px;margin:0 auto;}
+
+  /* ── CONTENT ── */
+  .priv-section{padding:70px 0;}
+  .priv-section:nth-child(even){background:var(--cream);}
+  .priv-block{margin-bottom:2.8rem;}
+  .priv-block:last-child{margin-bottom:0;}
+  .priv-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--orange);color:var(--brown);font-family:var(--fd);font-size:1.2rem;border-radius:50%;margin-bottom:.8rem;flex-shrink:0;}
+  .priv-h{font-family:var(--fd);font-size:1.5rem;letter-spacing:.04em;color:var(--brown);margin-bottom:.6rem;display:flex;align-items:center;gap:.7rem;}
+  .priv-p{color:#4a4540;max-width:780px;}
+  .priv-p + .priv-p{margin-top:.8rem;}
+  .priv-highlight{background:rgba(245,166,35,0.1);border-left:3px solid var(--orange);padding:.9rem 1.2rem;border-radius:0 6px 6px 0;margin-top:1rem;}
+  .priv-highlight strong{color:var(--brown);}
+  .contact-card{display:inline-flex;align-items:center;gap:.7rem;background:var(--warm);border:1px solid rgba(35,31,32,.1);border-radius:8px;padding:.8rem 1.2rem;margin-top:1rem;}
+  .contact-card a{color:var(--orange-d);font-weight:700;text-decoration:none;}
+  .contact-card a:hover{text-decoration:underline;}
+  .last-update{font-size:.82rem;color:var(--muted);margin-top:3rem;padding-top:1.5rem;border-top:1px solid rgba(35,31,32,.08);}
+
+  /* ── FOOTER ── */
+  footer{background:var(--brown);padding:60px 0 28px;color:rgba(255,255,255,.48);}
+  .ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem;}
+  .ft-brand-txt{font-size:.88rem;line-height:1.6;margin-top:1rem;max-width:280px;}
+  .ft-col h4{font-family:var(--fd);font-size:1.1rem;letter-spacing:.08em;color:white;margin-bottom:1rem;}
+  .ft-links{list-style:none;}
+  .ft-links li{margin-bottom:.45rem;}
+  .ft-links a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.88rem;transition:color .2s;}
+  .ft-links a:hover{color:var(--orange);}
+  .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.08);font-size:.82rem;}
+  .ft-social{display:flex;gap:.9rem;}
+  .soc{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);text-decoration:none;font-size:.82rem;transition:all .2s;}
+  .soc:hover{background:var(--orange);color:var(--brown);}
+
+  @media(max-width:768px){
+   .nav-links{display:none;}
+   .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+  }
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <a href="index.html" class="nav-brand">
+  <img src="Logos/agap-icon.png" alt="AGAP" class="nav-logo-img" onerror="this.style.display='none'">
+  <div class="nav-brand-text">AGAP<span>Guías Aysén Patagonia</span></div>
+ </a>
+ <ul class="nav-links">
+  <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+  <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+  <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+  <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+  <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="nav-right">
+  <div class="lang-sw">
+   <button class="lang-btn" onclick="setLang('es')">ES</button>
+   <button class="lang-btn" onclick="setLang('en')">EN</button>
+   <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+  <a href="registro.html" class="nav-cta" data-t="nav_unete_btn">Asociarse</a>
+ </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+ <div class="page-header-bg"></div>
+ <div class="container">
+  <div class="page-header-content">
+   <img src="Logos/agap-icon.png" alt="AGAP" style="height:90px;margin-bottom:1.4rem;" onerror="this.style.display='none'">
+   <div class="sec-label" data-t="ph_label">Asociación de Guías Aysén Patagonia</div>
+   <h1 data-t="ph_title">POLÍTICA DE<br><em data-t="ph_title_em">PRIVACIDAD</em></h1>
+   <p class="ph-sub" data-t="ph_sub">AREGTUCPA A.G. — Ley N°19.628, Chile</p>
+  </div>
+ </div>
+</div>
+
+<!-- CONTENT -->
+<section class="priv-section">
+ <div class="container">
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">1</div><span data-t="p1_h">Responsable del tratamiento</span></div>
+   <p class="priv-p" data-t="p1_p">La responsable del tratamiento de datos personales es la <strong>Asociación Regional de Guías de Turismo y Cultura de la Patagonia Aysén A.G. (AREGTUCPA A.G.)</strong>, también conocida como AGAP — Asociación de Guías Aysén Patagonia, con sede en Coyhaique, Región de Aysén, Chile.</p>
+   <div class="contact-card">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--orange)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    <span data-t="p1_contact">Contacto:</span> <a href="mailto:aguiasaysenpatagonia@gmail.com">aguiasaysenpatagonia@gmail.com</a>
+   </div>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">2</div><span data-t="p2_h">Datos que recopilamos</span></div>
+   <p class="priv-p" data-t="p2_p1">Al completar la ficha de inscripción como socio AGAP, recopilamos los siguientes datos:</p>
+   <p class="priv-p" data-t="p2_p2"><strong data-t="p2_pers">Datos personales:</strong> nombre completo, RUT, fecha de nacimiento, género, nacionalidad, domicilio, teléfono, WhatsApp, email, Instagram, sitio web.</p>
+   <p class="priv-p" data-t="p2_p3"><strong data-t="p2_prof">Perfil profesional:</strong> zona de trabajo, biografía, especialidades, idiomas, certificaciones, registro Sernatur, datos de empresa si corresponde.</p>
+   <p class="priv-p" data-t="p2_p4"><strong data-t="p2_salud">Datos de salud y seguridad:</strong> grupo sanguíneo, condición de donante, alergias, reacciones a medicamentos, enfermedades crónicas.</p>
+   <p class="priv-p" data-t="p2_p5"><strong data-t="p2_docs">Documentos:</strong> foto de perfil, cédula de identidad, licencias, CV y comprobante de pago de cuota.</p>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">3</div><span data-t="p3_h">Finalidad del tratamiento</span></div>
+   <p class="priv-p" data-t="p3_p1">Los datos recopilados se utilizan exclusivamente para:</p>
+   <p class="priv-p" data-t="p3_p2">Registro y gestión de socios activos de la asociación; validación de la acreditación AGAP por parte de la directiva; publicación del perfil en el directorio público de guías (solo con autorización del socio); comunicaciones internas sobre actividades, reuniones y beneficios asociativos; gestión de emergencias en terreno (datos de salud y contacto de emergencia).</p>
+   <div class="priv-highlight">
+    <strong data-t="p3_note_title">Nota importante:</strong> <span data-t="p3_note">Los datos de salud y antecedentes se recopilan únicamente con fines operacionales de seguridad y no son compartidos con terceros bajo ninguna circunstancia.</span>
+   </div>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">4</div><span data-t="p4_h">Almacenamiento y seguridad</span></div>
+   <p class="priv-p" data-t="p4_p1">Los datos se almacenan en servidores seguros de <strong>Supabase</strong> (infraestructura en la nube con cifrado en tránsito y en reposo). El acceso a los datos está restringido a los miembros de la directiva AGAP mediante autenticación.</p>
+   <p class="priv-p" data-t="p4_p2">Los documentos (cédula, licencias, CV) se almacenan en un bucket privado sin acceso público. Las fotos de perfil publicadas en el directorio se almacenan en un bucket con acceso controlado.</p>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">5</div><span data-t="p5_h">Derechos del titular</span></div>
+   <p class="priv-p" data-t="p5_p1">En conformidad con la Ley N°19.628 sobre Protección de la Vida Privada (Chile), usted tiene derecho a:</p>
+   <p class="priv-p" data-t="p5_p2"><strong data-t="p5_a">Acceso:</strong> solicitar una copia de los datos que conservamos sobre usted.<br>
+   <strong data-t="p5_b">Rectificación:</strong> solicitar la corrección de datos inexactos o incompletos.<br>
+   <strong data-t="p5_c">Eliminación:</strong> solicitar la supresión de sus datos cuando ya no sean necesarios para los fines descritos o cuando usted deje de ser socio activo.<br>
+   <strong data-t="p5_d">Oposición:</strong> oponerse al tratamiento de sus datos en casos justificados.</p>
+   <p class="priv-p" data-t="p5_p3">Para ejercer cualquiera de estos derechos, escriba a:</p>
+   <div class="contact-card">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--orange)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    <a href="mailto:aguiasaysenpatagonia@gmail.com">aguiasaysenpatagonia@gmail.com</a>
+   </div>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">6</div><span data-t="p6_h">Conservación de los datos</span></div>
+   <p class="priv-p" data-t="p6_p">Los datos se conservan mientras usted sea socio activo de AGAP y durante el período que exija la normativa legal aplicable. Al término de la relación asociativa, los datos serán eliminados o anonimizados, salvo obligación legal contraria.</p>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">7</div><span data-t="p7_h">Compartición con terceros</span></div>
+   <p class="priv-p" data-t="p7_p">AGAP no vende, cede ni transfiere sus datos personales a terceros con fines comerciales. Los datos pueden ser compartidos únicamente con autoridades competentes cuando exista obligación legal expresa, o con proveedores de servicios técnicos que operen bajo contrato de confidencialidad (Supabase, Vercel).</p>
+  </div>
+
+  <div class="priv-block">
+   <div class="priv-h"><div class="priv-num">8</div><span data-t="p8_h">Modificaciones</span></div>
+   <p class="priv-p" data-t="p8_p">AGAP se reserva el derecho de actualizar esta política cuando sea necesario. Cualquier modificación sustancial será comunicada a los socios por correo electrónico con al menos 15 días de anticipación.</p>
+   <p class="last-update" data-t="last_update">Última actualización: junio 2025</p>
+  </div>
+
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+ <div class="container" style="max-width:1200px;">
+  <div class="ft-grid">
+   <div>
+    <div style="display:flex;align-items:center;gap:10px;">
+     <img src="Logos/agap-logo.png" alt="AGAP" style="height:64px;" onerror="this.style.display='none'">
+     <div style="font-family:var(--fb);font-weight:800;font-size:1.2rem;color:white;">AGAP</div>
+    </div>
+    <p class="ft-brand-txt" data-t="ft_txt">Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+   </div>
+   <div class="ft-col">
+    <h4 data-t="ft_nav">Navegación</h4>
+    <ul class="ft-links">
+     <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+     <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+     <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+     <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+     <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+    </ul>
+   </div>
+   <div class="ft-col">
+    <h4 data-t="ft_leg">Legal</h4>
+    <ul class="ft-links">
+     <li><a href="#" data-t="ft_est">Estatutos AGAP</a></li>
+     <li><a href="directiva.html#conducta" data-t="ft_cod">Código de Conducta</a></li>
+     <li><a href="privacidad.html" class="active" data-t="ft_priv">Privacidad</a></li>
+    </ul>
+   </div>
+  </div>
+  <div class="ft-bottom">
+   <span>© 2025 AGAP — Asociación de Guías Aysén Patagonia</span>
+   <div class="ft-social">
+    <a href="https://www.instagram.com/agap______________/" target="_blank" rel="noopener" class="soc" title="Instagram">IG</a>
+    <a href="#" class="soc" title="Facebook">FB</a>
+    <a href="https://wa.me/56952237462" target="_blank" rel="noopener" class="soc" title="WhatsApp">WA</a>
+   </div>
+  </div>
+ </div>
+</footer>
+
+<script>
+/* ─── i18n ─── */
+const T = {
+ es:{
+  nav_mision:'Misión', nav_directiva:'Directiva', nav_guias:'Guías',
+  nav_esp:'Especialidades', nav_contacto:'Contacto', nav_unete_btn:'Asociarse',
+  ph_label:'Asociación de Guías Aysén Patagonia',
+  ph_title:'POLÍTICA DE', ph_title_em:'PRIVACIDAD',
+  ph_sub:'AREGTUCPA A.G. — Ley N°19.628, Chile',
+  p1_h:'Responsable del tratamiento',
+  p1_p:'La responsable del tratamiento de datos personales es la <strong>Asociación Regional de Guías de Turismo y Cultura de la Patagonia Aysén A.G. (AREGTUCPA A.G.)</strong>, también conocida como AGAP — Asociación de Guías Aysén Patagonia, con sede en Coyhaique, Región de Aysén, Chile.',
+  p1_contact:'Contacto:',
+  p2_h:'Datos que recopilamos',
+  p2_p1:'Al completar la ficha de inscripción como socio AGAP, recopilamos los siguientes datos:',
+  p2_p2:'<strong>Datos personales:</strong> nombre completo, RUT, fecha de nacimiento, género, nacionalidad, domicilio, teléfono, WhatsApp, email, Instagram, sitio web.',
+  p2_p3:'<strong>Perfil profesional:</strong> zona de trabajo, biografía, especialidades, idiomas, certificaciones, registro Sernatur, datos de empresa si corresponde.',
+  p2_p4:'<strong>Datos de salud y seguridad:</strong> grupo sanguíneo, condición de donante, alergias, reacciones a medicamentos, enfermedades crónicas.',
+  p2_p5:'<strong>Documentos:</strong> foto de perfil, cédula de identidad, licencias, CV y comprobante de pago de cuota.',
+  p3_h:'Finalidad del tratamiento',
+  p3_p1:'Los datos recopilados se utilizan exclusivamente para:',
+  p3_p2:'Registro y gestión de socios activos de la asociación; validación de la acreditación AGAP por parte de la directiva; publicación del perfil en el directorio público de guías (solo con autorización del socio); comunicaciones internas sobre actividades, reuniones y beneficios asociativos; gestión de emergencias en terreno (datos de salud y contacto de emergencia).',
+  p3_note_title:'Nota importante:',
+  p3_note:'Los datos de salud y antecedentes se recopilan únicamente con fines operacionales de seguridad y no son compartidos con terceros bajo ninguna circunstancia.',
+  p4_h:'Almacenamiento y seguridad',
+  p4_p1:'Los datos se almacenan en servidores seguros de <strong>Supabase</strong> (infraestructura en la nube con cifrado en tránsito y en reposo). El acceso a los datos está restringido a los miembros de la directiva AGAP mediante autenticación.',
+  p4_p2:'Los documentos (cédula, licencias, CV) se almacenan en un bucket privado sin acceso público. Las fotos de perfil publicadas en el directorio se almacenan en un bucket con acceso controlado.',
+  p5_h:'Derechos del titular',
+  p5_p1:'En conformidad con la Ley N°19.628 sobre Protección de la Vida Privada (Chile), usted tiene derecho a:',
+  p5_p2:'<strong>Acceso:</strong> solicitar una copia de los datos que conservamos sobre usted.<br><strong>Rectificación:</strong> solicitar la corrección de datos inexactos o incompletos.<br><strong>Eliminación:</strong> solicitar la supresión de sus datos cuando ya no sean necesarios para los fines descritos o cuando usted deje de ser socio activo.<br><strong>Oposición:</strong> oponerse al tratamiento de sus datos en casos justificados.',
+  p5_p3:'Para ejercer cualquiera de estos derechos, escriba a:',
+  p6_h:'Conservación de los datos',
+  p6_p:'Los datos se conservan mientras usted sea socio activo de AGAP y durante el período que exija la normativa legal aplicable. Al término de la relación asociativa, los datos serán eliminados o anonimizados, salvo obligación legal contraria.',
+  p7_h:'Compartición con terceros',
+  p7_p:'AGAP no vende, cede ni transfiere sus datos personales a terceros con fines comerciales. Los datos pueden ser compartidos únicamente con autoridades competentes cuando exista obligación legal expresa, o con proveedores de servicios técnicos que operen bajo contrato de confidencialidad (Supabase, Vercel).',
+  p8_h:'Modificaciones',
+  p8_p:'AGAP se reserva el derecho de actualizar esta política cuando sea necesario. Cualquier modificación sustancial será comunicada a los socios por correo electrónico con al menos 15 días de anticipación.',
+  last_update:'Última actualización: junio 2025',
+  ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
+  ft_nav:'Navegación', ft_leg:'Legal', ft_est:'Estatutos AGAP',
+  ft_cod:'Código de Conducta', ft_priv:'Privacidad',
+ },
+ en:{
+  nav_mision:'Mission', nav_directiva:'Board', nav_guias:'Guides',
+  nav_esp:'Specialties', nav_contacto:'Contact', nav_unete_btn:'Join',
+  ph_label:'Association of Guides Aysén Patagonia',
+  ph_title:'PRIVACY', ph_title_em:'POLICY',
+  ph_sub:'AREGTUCPA A.G. — Chilean Law N°19.628',
+  p1_h:'Data Controller',
+  p1_p:'The data controller is the <strong>Asociación Regional de Guías de Turismo y Cultura de la Patagonia Aysén A.G. (AREGTUCPA A.G.)</strong>, also known as AGAP — Asociación de Guías Aysén Patagonia, headquartered in Coyhaique, Aysén Region, Chile.',
+  p1_contact:'Contact:',
+  p2_h:'Data We Collect',
+  p2_p1:'When completing the AGAP membership registration form, we collect the following data:',
+  p2_p2:'<strong>Personal data:</strong> full name, national ID (RUT), date of birth, gender, nationality, address, phone, WhatsApp, email, Instagram, website.',
+  p2_p3:'<strong>Professional profile:</strong> work area, biography, specialties, languages, certifications, Sernatur registration, company data if applicable.',
+  p2_p4:'<strong>Health and safety data:</strong> blood type, donor status, allergies, medication reactions, chronic conditions.',
+  p2_p5:'<strong>Documents:</strong> profile photo, national ID, licenses, CV and payment receipt.',
+  p3_h:'Purpose of Processing',
+  p3_p1:'The collected data is used exclusively for:',
+  p3_p2:'Registration and management of active members; validation of AGAP accreditation by the board; publication of the profile in the public guide directory (only with member authorization); internal communications about activities, meetings and membership benefits; emergency management in the field (health data and emergency contact).',
+  p3_note_title:'Important note:',
+  p3_note:'Health and background data is collected solely for operational safety purposes and is never shared with third parties under any circumstances.',
+  p4_h:'Storage and Security',
+  p4_p1:'Data is stored on secure <strong>Supabase</strong> servers (cloud infrastructure with encryption in transit and at rest). Access is restricted to AGAP board members through authentication.',
+  p4_p2:'Documents (ID, licenses, CV) are stored in a private bucket with no public access. Profile photos published in the directory are stored in a controlled-access bucket.',
+  p5_h:'Your Rights',
+  p5_p1:'In accordance with Chilean Law N°19.628 on Privacy Protection, you have the right to:',
+  p5_p2:'<strong>Access:</strong> request a copy of the data we hold about you.<br><strong>Rectification:</strong> request correction of inaccurate or incomplete data.<br><strong>Deletion:</strong> request deletion of your data when no longer needed or when you cease to be an active member.<br><strong>Opposition:</strong> object to the processing of your data in justified cases.',
+  p5_p3:'To exercise any of these rights, write to:',
+  p6_h:'Data Retention',
+  p6_p:'Data is retained while you are an active AGAP member and for the period required by applicable law. Upon termination of the membership, data will be deleted or anonymized, unless legally required otherwise.',
+  p7_h:'Sharing with Third Parties',
+  p7_p:'AGAP does not sell, assign or transfer your personal data to third parties for commercial purposes. Data may only be shared with competent authorities when legally required, or with technical service providers operating under a confidentiality agreement (Supabase, Vercel).',
+  p8_h:'Amendments',
+  p8_p:'AGAP reserves the right to update this policy as needed. Any material changes will be communicated to members by email at least 15 days in advance.',
+  last_update:'Last updated: June 2025',
+  ft_txt:'Association of Guides Aysén Patagonia. Uniting regional guides to promote sustainable tourism and local heritage.',
+  ft_nav:'Navigation', ft_leg:'Legal', ft_est:'AGAP Bylaws',
+  ft_cod:'Code of Conduct', ft_priv:'Privacy',
+ },
+ fr:{
+  nav_mision:'Mission', nav_directiva:'Direction', nav_guias:'Guides',
+  nav_esp:'Spécialités', nav_contacto:'Contact', nav_unete_btn:'Adhérer',
+  ph_label:'Association de Guides Aysén Patagonie',
+  ph_title:'POLITIQUE DE', ph_title_em:'CONFIDENTIALITÉ',
+  ph_sub:'AREGTUCPA A.G. — Loi N°19.628, Chili',
+  p1_h:'Responsable du traitement',
+  p1_p:'Le responsable du traitement des données personnelles est la <strong>Asociación Regional de Guías de Turismo y Cultura de la Patagonia Aysén A.G. (AREGTUCPA A.G.)</strong>, également connue sous le nom d\'AGAP — Asociación de Guías Aysén Patagonia, dont le siège est à Coyhaique, Région d\'Aysén, Chili.',
+  p1_contact:'Contact&nbsp;:',
+  p2_h:'Données collectées',
+  p2_p1:'Lors de la complétion du dossier d\'inscription comme membre AGAP, nous collectons les données suivantes&nbsp;:',
+  p2_p2:'<strong>Données personnelles&nbsp;:</strong> nom complet, RUT, date de naissance, genre, nationalité, domicile, téléphone, WhatsApp, email, Instagram, site web.',
+  p2_p3:'<strong>Profil professionnel&nbsp;:</strong> zone de travail, biographie, spécialités, langues, certifications, inscription Sernatur, données d\'entreprise le cas échéant.',
+  p2_p4:'<strong>Données de santé et sécurité&nbsp;:</strong> groupe sanguin, statut de donneur, allergies, réactions médicamenteuses, maladies chroniques.',
+  p2_p5:'<strong>Documents&nbsp;:</strong> photo de profil, carte d\'identité, licences, CV et justificatif de paiement de cotisation.',
+  p3_h:'Finalité du traitement',
+  p3_p1:'Les données collectées sont utilisées exclusivement pour&nbsp;:',
+  p3_p2:'Enregistrement et gestion des membres actifs de l\'association&nbsp;; validation de l\'accréditation AGAP par la direction&nbsp;; publication du profil dans le répertoire public des guides (uniquement avec l\'autorisation du membre)&nbsp;; communications internes sur les activités, réunions et avantages associatifs&nbsp;; gestion des urgences sur le terrain (données de santé et contact d\'urgence).',
+  p3_note_title:'Note importante&nbsp;:',
+  p3_note:'Les données de santé et d\'antécédents sont collectées uniquement à des fins opérationnelles de sécurité et ne sont partagées avec aucun tiers en aucune circonstance.',
+  p4_h:'Stockage et sécurité',
+  p4_p1:'Les données sont stockées sur des serveurs sécurisés <strong>Supabase</strong> (infrastructure cloud avec chiffrement en transit et au repos). L\'accès est restreint aux membres de la direction AGAP via authentification.',
+  p4_p2:'Les documents (carte d\'identité, licences, CV) sont stockés dans un compartiment privé sans accès public. Les photos de profil publiées dans le répertoire sont dans un compartiment à accès contrôlé.',
+  p5_h:'Droits du titulaire',
+  p5_p1:'Conformément à la Loi N°19.628 sur la protection de la vie privée (Chili), vous avez le droit de&nbsp;:',
+  p5_p2:'<strong>Accès&nbsp;:</strong> demander une copie des données que nous conservons sur vous.<br><strong>Rectification&nbsp;:</strong> demander la correction de données inexactes ou incomplètes.<br><strong>Suppression&nbsp;:</strong> demander la suppression de vos données lorsqu\'elles ne sont plus nécessaires ou lorsque vous cessez d\'être membre actif.<br><strong>Opposition&nbsp;:</strong> vous opposer au traitement de vos données pour des raisons justifiées.',
+  p5_p3:'Pour exercer l\'un de ces droits, écrivez à&nbsp;:',
+  p6_h:'Conservation des données',
+  p6_p:'Les données sont conservées tant que vous êtes membre actif d\'AGAP et pendant la durée requise par la réglementation légale applicable. À la fin de la relation associative, les données seront supprimées ou anonymisées, sauf obligation légale contraire.',
+  p7_h:'Partage avec des tiers',
+  p7_p:'AGAP ne vend, ne cède ni ne transfère vos données personnelles à des tiers à des fins commerciales. Les données peuvent uniquement être partagées avec les autorités compétentes lorsqu\'une obligation légale l\'exige, ou avec des prestataires techniques opérant sous accord de confidentialité (Supabase, Vercel).',
+  p8_h:'Modifications',
+  p8_p:'AGAP se réserve le droit de mettre à jour cette politique si nécessaire. Toute modification substantielle sera communiquée aux membres par email avec au moins 15 jours de préavis.',
+  last_update:'Dernière mise à jour : juin 2025',
+  ft_txt:'Association de Guides Aysén Patagonie. Unir les guides de la région pour promouvoir le tourisme durable et le patrimoine local.',
+  ft_nav:'Navigation', ft_leg:'Légal', ft_est:'Statuts AGAP',
+  ft_cod:'Code de Conduite', ft_priv:'Confidentialité',
+ }
+};
+
+function setLang(l){
+ localStorage.setItem('agap_lang',l);
+ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+ const d=T[l]||T.es;
+ document.querySelectorAll('[data-t]').forEach(el=>{
+  const k=el.dataset.t;
+  if(d[k]!==undefined) el.innerHTML=d[k];
+ });
+ document.documentElement.lang=l;
+}
+
+(function(){
+ const l=localStorage.getItem('agap_lang')||'es';
+ setLang(l);
+})();
+</script>
+</body>
+</html>
