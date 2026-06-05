@@ -37,9 +37,11 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
+    left: 0;
+    right: 0;
+    z-index: 200;
   }
   nav img { height: 36px; }
   nav span {
@@ -67,6 +69,7 @@
   .hero-strip {
     background: linear-gradient(135deg, #2a2426 0%, var(--brown) 50%, #1a2520 100%);
     padding: 52px 32px 44px;
+    padding-top: calc(52px + 64px);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -123,6 +126,7 @@
   a[href="#sec-3"].step-pill.active { background: var(--blue); border-color: var(--blue); }
   a[href="#sec-4"].step-pill.active { background: var(--red); border-color: var(--red); }
   a[href="#sec-5"].step-pill.active { background: var(--orange-d); border-color: var(--orange-d); }
+  a[href="#sec-6"].step-pill.active { background: var(--blue); border-color: var(--blue); }
 
   /* LAYOUT */
   .container {
@@ -165,12 +169,8 @@
   #sec-5 .section-header { background: var(--orange-d); }
   #sec-5 .section-header .num { background: white; color: var(--orange-d); }
 
-  /* Fond léger teinté par section */
-  #sec-1 { background: white; }
-  #sec-2 { background: #f0faf1; border-color: #b8e4bc; }
-  #sec-3 { background: #f0f8fd; border-color: #b3dff2; }
-  #sec-4 { background: #fdf2f2; border-color: #f5bcbc; }
-  #sec-5 { background: #fdf7ed; border-color: #f5dfa0; }
+  /* Toutes les sections sur fond beige uniforme */
+  #sec-1, #sec-2, #sec-3, #sec-4, #sec-5, #sec-6 { background: var(--cream); border-color: #e0d8ce; }
 
   /* Numéros section 2 en vert */
   #sec-2 .section-header .num { background: white; color: var(--green); }
@@ -491,11 +491,47 @@
   .cuota-box .cuenta-row:last-child { border-bottom: none; }
   .cuota-box .cuenta-row strong { color: white; }
 
-  /* FOOTER */
+  #sec-6 .section-header { background: var(--blue); }
+  #sec-6 .section-header .num { background: white; color: var(--blue); }
+
+  .gform-wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #b3dff2;
+    background: white;
+  }
+  .gform-wrap iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+  .gform-fallback {
+    display: none;
+    text-align: center;
+    padding: 28px 20px;
+    background: #f0f8fd;
+    border-radius: 10px;
+    border: 2px dashed #b3dff2;
+  }
+  .gform-fallback p { color: var(--muted, #888); font-size: 0.9rem; margin-bottom: 16px; }
+  .btn-gform {
+    display: inline-block;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: var(--fd);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-gform:hover { background: var(--blue-d); }
+
   footer {
     background: var(--brown);
-    text-align: center;
-    padding: 24px;
     color: rgba(255,255,255,0.5);
     font-size: 0.82rem;
   }
@@ -505,7 +541,12 @@
 <body>
 
 <nav>
-  <img src="Logos/agap-logo.png" alt="AGAP" onerror="this.style.display='none'" style="height:44px;">
+  <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="Logos/agap-icon.png" alt="AGAP" onerror="this.style.display='none'" style="height:36px;width:auto;">
+    <div style="font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:0.05em;line-height:1.1;">
+      AGAP<span style="display:block;font-weight:300;font-size:0.68rem;color:var(--orange);letter-spacing:0.18em;text-transform:uppercase;">Guías Aysén Patagonia</span>
+    </div>
+  </a>
   <a href="index.html" class="back">← Volver al sitio</a>
 </nav>
 
@@ -518,6 +559,7 @@
     <a class="step-pill" href="#sec-3" onclick="scrollTo(this,event)">3. Datos laborales</a>
     <a class="step-pill" href="#sec-4" onclick="scrollTo(this,event)">4. Emergencias</a>
     <a class="step-pill" href="#sec-5" onclick="scrollTo(this,event)">5. Documentos</a>
+    <a class="step-pill" href="#sec-6" onclick="scrollTo(this,event)">6. Encuesta</a>
   </div>
 </div>
 
@@ -960,6 +1002,37 @@
       </div>
     </div>
 
+    <!-- ═══ 6. ENCUESTA ═══ -->
+    <div class="section-block" id="sec-6">
+      <div class="section-header">
+        <div class="num">6</div>
+        <h2>Encuesta AGAP</h2>
+        <span class="sec-sub">Datos para el registro de la asociación</span>
+      </div>
+      <div class="section-body">
+        <p style="font-size:0.88rem;color:var(--gray);margin-bottom:20px">
+          Completa este cuestionario para que AGAP pueda conocer mejor a sus socios y fortalecer la asociación.
+        </p>
+        <div class="gform-wrap" id="gform-wrap">
+          <iframe
+            id="gform-iframe"
+            src="https://forms.gle/tQw9SPJbJifx8E4AA"
+            height="900"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            onload="onIframeLoad()"
+            onerror="showFormFallback()">
+            Cargando…
+          </iframe>
+        </div>
+        <div class="gform-fallback" id="gform-fallback">
+          <p>Si el formulario no carga correctamente, puedes acceder directamente desde el siguiente botón.</p>
+          <a href="https://forms.gle/tQw9SPJbJifx8E4AA" target="_blank" rel="noopener" class="btn-gform">ABRIR ENCUESTA</a>
+        </div>
+      </div>
+    </div>
+
     <!-- SUBMIT -->
     <div class="submit-wrap">
       <button type="submit" class="btn-submit" id="btn-submit">ENVIAR FICHA</button>
@@ -970,8 +1043,28 @@
 </div>
 
 <footer>
-  <strong>AGAP</strong> — Asociacion de Guias Aysen Patagonia A.G.<br>
-  aguiasayasenpatagonia@gmail.com · Region de Aysen, Chile
+  <div style="max-width:780px;margin:0 auto;padding:40px 24px 24px;display:grid;grid-template-columns:2fr 1fr;gap:2rem;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px;">
+    <div>
+      <img src="Logos/agap-logo.png" alt="AGAP" style="height:56px;margin-bottom:14px;display:block;" onerror="this.style.display='none'">
+      <p style="font-size:0.85rem;line-height:1.8;color:rgba(255,255,255,0.48);max-width:280px;">Asociación de Guías Aysén Patagonia A.G. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.72rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:white;margin-bottom:1rem;">Navegación</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+        <li><a href="index.html" style="color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.88rem;" onmouseover="this.style.color='#F5A623'" onmouseout="this.style.color='rgba(255,255,255,0.48)'">Inicio</a></li>
+        <li><a href="directiva.html" style="color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.88rem;" onmouseover="this.style.color='#F5A623'" onmouseout="this.style.color='rgba(255,255,255,0.48)'">Directiva</a></li>
+        <li><a href="guias.html" style="color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.88rem;" onmouseover="this.style.color='#F5A623'" onmouseout="this.style.color='rgba(255,255,255,0.48)'">Guías</a></li>
+        <li><a href="index.html#contacto" style="color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.88rem;" onmouseover="this.style.color='#F5A623'" onmouseout="this.style.color='rgba(255,255,255,0.48)'">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:780px;margin:0 auto;padding:0 24px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <span style="font-size:0.78rem;">© 2026 AGAP — Asociación de Guías Aysén Patagonia A.G.</span>
+    <div style="display:flex;gap:0.8rem;">
+      <a href="https://www.instagram.com/agap______________/" target="_blank" rel="noopener" style="width:34px;height:34px;background:rgba(255,255,255,0.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.75rem;font-weight:700;" onmouseover="this.style.background='#F5A623';this.style.color='#231F20'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.color='rgba(255,255,255,0.48)'">IG</a>
+      <a href="https://wa.me/56952237462" target="_blank" rel="noopener" style="width:34px;height:34px;background:rgba(255,255,255,0.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.48);text-decoration:none;font-size:0.75rem;font-weight:700;" onmouseover="this.style.background='#F5A623';this.style.color='#231F20'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.color='rgba(255,255,255,0.48)'">WA</a>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -1222,6 +1315,22 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
     btn.textContent = 'ENVIAR FICHA';
   }
 });
+
+// ── Google Form iframe fallback ───────────────────────────────
+function onIframeLoad() {
+  // Si l'iframe charge mais que le contenu est bloqué (blank), on montre le fallback
+  try {
+    const iframe = document.getElementById('gform-iframe');
+    // On ne peut pas lire le contenu cross-origin — on laisse 3s puis vérifie la hauteur
+    setTimeout(() => {
+      if (iframe.offsetHeight < 50) showFormFallback();
+    }, 3000);
+  } catch(e) { /* cross-origin — formulaire probablement chargé */ }
+}
+function showFormFallback() {
+  document.getElementById('gform-wrap').style.display = 'none';
+  document.getElementById('gform-fallback').style.display = 'block';
+}
 
 // Pills navigation
 function scrollTo(el, e) {
