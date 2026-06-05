@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /gestion.html
+
+Sitemap: https://asociacion-guias-aysen-patagonia.vercel.app/sitemap.xml
