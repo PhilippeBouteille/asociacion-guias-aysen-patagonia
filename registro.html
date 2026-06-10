@@ -12,6 +12,7 @@
     --orange-d:#D4891A;
     --red:     #E8312A;
     --blue:    #3AACE8;
+    --blue-d:  #1A6A9A;
     --green:   #2EAA3F;
     --brown:   #231F20;
     --cream:   #F8F4EE;
@@ -506,14 +507,14 @@
     border: none;
   }
   .gform-fallback {
-    display: none;
     text-align: center;
-    padding: 28px 20px;
+    padding: 16px 20px;
+    margin-top: 14px;
     background: #f0f8fd;
     border-radius: 10px;
     border: 2px dashed #b3dff2;
   }
-  .gform-fallback p { color: var(--muted, #888); font-size: 0.9rem; margin-bottom: 16px; }
+  .gform-fallback p { color: var(--gray); font-size: 0.9rem; margin-bottom: 12px; }
   .btn-gform {
     display: inline-block;
     background: var(--blue);
@@ -925,9 +926,14 @@
           <div class="cuenta-row"><span>Banco</span><strong>Banco Estado</strong></div>
           <div class="cuenta-row"><span>Tipo cuenta</span><strong>Cuenta Vista</strong></div>
           <div class="cuenta-row"><span>Numero de cuenta</span><strong>843-7-049459-1</strong></div>
-          <div class="cuenta-row"><span>Email de confirmacion</span><strong>aguiasayasenpatagonia@gmail.com</strong></div>
+          <div class="cuenta-row"><span>Email de confirmacion</span><strong>aguiasaysenpatagonia@gmail.com</strong></div>
           <div class="cuenta-row"><span>Monto</span><strong>$30.000 CLP</strong></div>
         </div>
+
+        <label class="check-item" style="margin-bottom:20px;display:inline-flex">
+          <input type="checkbox" id="ya_pago"><div class="box"></div><span>Ya pagué la cuota anual</span>
+        </label>
+        <p class="hint" style="font-size:0.78rem;color:var(--gray);font-style:italic;margin:-12px 0 20px">Si ya pagaste tu cuota anteriormente, marca esta casilla. El comprobante deja de ser obligatorio.</p>
 
         <!-- Foto de perfil ya esta en seccion 2 -->
 
@@ -987,7 +993,7 @@
 
         <!-- COMPROBANTE TRANSFERENCIA -->
         <div class="field">
-          <label>Comprobante de transferencia — Cuota anual $30.000 <span class="req">*</span></label>
+          <label>Comprobante de transferencia — Cuota anual $30.000 <span class="req" id="comp-req">*</span></label>
           <div class="upload-zone" id="comp-zone" onclick="document.getElementById('doc-comprobante').click()">
             <input type="file" id="doc-comprobante" accept="image/*,application/pdf" onchange="handleFileUpload(this,'comp-name')">
             <div class="uz-icon">
@@ -1013,16 +1019,17 @@
         <p style="font-size:0.88rem;color:var(--gray);margin-bottom:20px">
           Completa este cuestionario para que AGAP pueda conocer mejor a sus socios y fortalecer la asociación.
         </p>
+        <label class="check-item" style="margin-bottom:20px;display:inline-flex">
+          <input type="checkbox" id="ya_respondio"><div class="box"></div><span>Ya respondí la encuesta</span>
+        </label>
         <div class="gform-wrap" id="gform-wrap">
           <iframe
             id="gform-iframe"
-            src="https://forms.gle/tQw9SPJbJifx8E4AA"
+            src="https://docs.google.com/forms/d/e/1FAIpQLSc841o2tHWBLn3AFWJkSjzm8ZiUHFnhY52H3cKTqky8iEUt3A/viewform?embedded=true"
             height="900"
             frameborder="0"
             marginheight="0"
-            marginwidth="0"
-            onload="onIframeLoad()"
-            onerror="showFormFallback()">
+            marginwidth="0">
             Cargando…
           </iframe>
         </div>
@@ -1204,8 +1211,8 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
     showMsg('error', 'Por favor completa todos los campos obligatorios (*).');
     return;
   }
-  if (!document.getElementById('doc-comprobante').files[0]) {
-    showMsg('error', 'Debes adjuntar el comprobante de transferencia para la cuota anual.');
+  if (!document.getElementById('ya_pago').checked && !document.getElementById('doc-comprobante').files[0]) {
+    showMsg('error', 'Debes adjuntar el comprobante de transferencia para la cuota anual, o marcar "Ya pagué la cuota anual".');
     return;
   }
 
@@ -1276,6 +1283,9 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       expulsion_instituciones: getRadio('expulsion'),
       // Documentos
       url_cedula, url_licencia, url_cv, url_comprobante,
+      // Declaraciones
+      cuota_pagada:        document.getElementById('ya_pago').checked,
+      encuesta_respondida: document.getElementById('ya_respondio').checked,
       // Estado
       activo: false,
       orden: 99
@@ -1316,21 +1326,18 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
   }
 });
 
-// ── Google Form iframe fallback ───────────────────────────────
-function onIframeLoad() {
-  // Si l'iframe charge mais que le contenu est bloqué (blank), on montre le fallback
-  try {
-    const iframe = document.getElementById('gform-iframe');
-    // On ne peut pas lire le contenu cross-origin — on laisse 3s puis vérifie la hauteur
-    setTimeout(() => {
-      if (iframe.offsetHeight < 50) showFormFallback();
-    }, 3000);
-  } catch(e) { /* cross-origin — formulaire probablement chargé */ }
-}
-function showFormFallback() {
-  document.getElementById('gform-wrap').style.display = 'none';
-  document.getElementById('gform-fallback').style.display = 'block';
-}
+// ── Declaraciones "ya pagué" / "ya respondí" ─────────────────
+document.getElementById('ya_pago').addEventListener('change', e => {
+  const zone = document.getElementById('comp-zone');
+  const req  = document.getElementById('comp-req');
+  zone.style.opacity = e.target.checked ? '0.45' : '1';
+  zone.style.pointerEvents = e.target.checked ? 'none' : 'auto';
+  req.style.display = e.target.checked ? 'none' : 'inline';
+});
+document.getElementById('ya_respondio').addEventListener('change', e => {
+  document.getElementById('gform-wrap').style.display = e.target.checked ? 'none' : 'block';
+  document.getElementById('gform-fallback').style.display = e.target.checked ? 'none' : 'block';
+});
 
 // Pills navigation
 function scrollTo(el, e) {
