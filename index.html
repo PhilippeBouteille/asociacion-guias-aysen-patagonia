@@ -242,7 +242,7 @@
  <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
  <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
  <li><a href="#especialidades" data-t="nav_esp">Especialidades</a></li>
- <li id="nav-noticias" style="display:none;"><a href="#noticias" data-t="nav_blog">Noticias</a></li>
+ <li><a href="#noticias" data-t="nav_blog">Noticias</a></li>
  <li><a href="#contacto" data-t="nav_contacto">Contacto</a></li>
  </ul>
  <div class="nav-right">
@@ -281,6 +281,30 @@
  <div class="fu"><div class="stat-num">108K</div><div class="stat-lbl" data-t="stat3">km² de territorio</div></div>
  <div class="fu"><div class="stat-num">3</div><div class="stat-lbl" data-t="stat4">Idiomas</div></div>
  </div>
+ </div>
+</div>
+
+<!-- NOTICIAS (BLOG) -->
+<section id="noticias" style="display:none;">
+ <div class="container">
+  <div class="fu" style="text-align:center;max-width:600px;margin:0 auto 1rem;">
+   <div class="sec-label" data-t="sec_blog_lbl">Noticias</div>
+   <h2 class="sec-title" data-t="blog_title">VIDA DE LA<br>ASOCIACIÓN</h2>
+  </div>
+  <div class="blog-grid" id="blog-grid"></div>
+ </div>
+</section>
+
+<!-- MODAL ARTICULO -->
+<div class="post-overlay" id="post-overlay">
+ <div class="post-modal">
+  <button class="post-close" onclick="closePost()">×</button>
+  <div class="pm-img" id="pm-img" style="display:none;"></div>
+  <div class="pm-body">
+   <div class="pm-date" id="pm-date"></div>
+   <h3 id="pm-title"></h3>
+   <div class="pm-content" id="pm-content"></div>
+  </div>
  </div>
 </div>
 
@@ -430,29 +454,6 @@
 </section>
 
 <!-- NOTICIAS (BLOG) -->
-<section id="noticias" style="display:none;">
- <div class="container">
-  <div class="fu" style="text-align:center;max-width:600px;margin:0 auto 1rem;">
-   <div class="sec-label" data-t="sec_blog_lbl">Noticias</div>
-   <h2 class="sec-title" data-t="blog_title">VIDA DE LA<br>ASOCIACIÓN</h2>
-  </div>
-  <div class="blog-grid" id="blog-grid"></div>
- </div>
-</section>
-
-<!-- MODAL ARTICULO -->
-<div class="post-overlay" id="post-overlay">
- <div class="post-modal">
-  <button class="post-close" onclick="closePost()">×</button>
-  <div class="pm-img" id="pm-img" style="display:none;"></div>
-  <div class="pm-body">
-   <div class="pm-date" id="pm-date"></div>
-   <h3 id="pm-title"></h3>
-   <div class="pm-content" id="pm-content"></div>
-  </div>
- </div>
-</div>
-
 <!-- CONTACTO -->
 <section id="contacto">
  <div class="container">
