@@ -358,6 +358,7 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         <a onclick="showView('guides')"    id="nav-guides"><span class="nav-dot" style="background:var(--green)"></span>Guías</a>
         <a onclick="showView('directiva')" id="nav-directiva"><span class="nav-dot" style="background:var(--blue)"></span>Directiva</a>
         <a onclick="showView('inscriptions')" id="nav-inscriptions"><span class="nav-dot" style="background:var(--red)"></span>Inscripciones</a>
+        <a onclick="showView('blog')"      id="nav-blog"><span class="nav-dot" style="background:var(--green-d, #1A6B28)"></span>Noticias</a>
         <a onclick="showView('params')"    id="nav-params"><span class="nav-dot" style="background:var(--orange-d)"></span>Parámetros</a>
       </nav>
       <div class="sidebar-user">
@@ -452,6 +453,23 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         </div>
       </div>
 
+      <!-- BLOG / NOTICIAS -->
+      <div id="view-blog" style="display:none">
+        <div class="topbar">
+          <h1>NOTICIAS</h1>
+          <button class="btn btn-primary" onclick="openPost(null)">+ Nueva noticia</button>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2>ARTICULOS</h2>
+            <span class="badge" id="blog-count">0</span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div id="blog-table-wrap"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- PARAMS -->
       <div id="view-params" style="display:none">
         <div class="topbar"><h1>PARÁMETROS</h1></div>
@@ -493,6 +511,21 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-guide')">Cancelar</button>
       <button class="btn btn-primary" id="btn-save-guide" onclick="saveGuide()">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL BLOG ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-blog">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-blog-title">NOTICIA</h3>
+      <button class="modal-close" onclick="closeModal('modal-blog')">×</button>
+    </div>
+    <div class="modal-body" id="modal-blog-body"><!-- filled by JS --></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-blog')">Cancelar</button>
+      <button class="btn btn-primary" id="btn-save-post" onclick="savePost()">GUARDAR</button>
     </div>
   </div>
 </div>
@@ -596,13 +629,14 @@ if (saved) {
 
 // ── VIEWS ─────────────────────────────────────────────────
 function showView(name) {
-  ['dashboard','guides','directiva','inscriptions','params'].forEach(v => {
+  ['dashboard','guides','directiva','inscriptions','blog','params'].forEach(v => {
     document.getElementById(`view-${v}`).style.display = v === name ? 'block' : 'none';
     document.getElementById(`nav-${v}`).classList.toggle('active', v === name);
   });
   if (name === 'guides')       loadGuides();
   if (name === 'directiva')    loadDirectiva();
   if (name === 'inscriptions') loadInscriptions();
+  if (name === 'blog')         loadBlogAdmin();
   if (name === 'params')       loadParams();
   if (window.innerWidth < 640) document.getElementById('sidebar').classList.remove('open');
 }
@@ -747,7 +781,7 @@ function toggleSidebar() {
 async function loadDashboard() {
   try {
     const [gRes, iRes] = await Promise.all([
-      fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,photo_url,zona,orden&order=orden`, { headers: authHeaders() }),
+      fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,cotisation,photo_url,zona,orden&order=orden`, { headers: authHeaders() }),
       fetch(`${SUPA_URL}/rest/v1/agap_inscriptions?select=id,tratado`, { headers: authHeaders() })
     ]);
     const guides = await gRes.json();
@@ -842,7 +876,7 @@ function renderGuidesTable(guides) {
     return;
   }
   wrap.innerHTML = `<table class="tbl">
-    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Especialidades</th><th>Activo</th><th>Cotización</th><th>Orden</th><th></th></tr></thead>
+    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Especialidades</th><th>Activo</th><th>Cotización</th><th>Encuesta</th><th>Orden</th><th></th></tr></thead>
     <tbody>${guides.map(g => `
       <tr>
         <td>${avatarCell(g)}</td>
@@ -855,6 +889,10 @@ function renderGuidesTable(guides) {
         </label></td>
         <td><label class="toggle">
           <input type="checkbox" ${g.cotisation?'checked':''} onchange="toggleCotisation('${g.id}', this.checked)">
+          <div class="track"></div><div class="thumb"></div>
+        </label></td>
+        <td><label class="toggle" title="Encuesta AGAP respondida">
+          <input type="checkbox" ${g.encuesta_respondida?'checked':''} onchange="toggleEncuesta('${g.id}', this.checked)">
           <div class="track"></div><div class="thumb"></div>
         </label></td>
         <td><input type="number" value="${g.orden||99}" min="1" max="999" style="width:56px;border:1px solid #e0d8ce;border-radius:6px;padding:4px 6px;font-family:var(--fb);font-size:0.85rem;text-align:center" onchange="updateOrden('${g.id}', this.value)"></td>
@@ -894,6 +932,18 @@ async function toggleCotisation(id, val) {
     toast(val ? '✅ Cotización pagada' : '⚠️ Cotización pendiente', val ? 'ok' : 'err');
     ALL_GUIDES = ALL_GUIDES.map(g => g.id === id ? {...g, cotisation: val} : g);
     if (document.getElementById('view-dashboard').style.display !== 'none') loadDashboard();
+  } catch(e) { toast('Error al actualizar', 'err'); }
+}
+
+async function toggleEncuesta(id, val) {
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_guides?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ encuesta_respondida: val })
+    });
+    toast(val ? 'Encuesta marcada como respondida' : 'Encuesta marcada como pendiente', val ? 'ok' : 'err');
+    ALL_GUIDES = ALL_GUIDES.map(g => g.id === id ? {...g, encuesta_respondida: val} : g);
   } catch(e) { toast('Error al actualizar', 'err'); }
 }
 
@@ -1004,6 +1054,17 @@ function openGuide(idOrNull) {
         </select>
       </div>
       <div class="f"><label>Orden</label><input type="number" id="m-orden" value="${g.orden||99}" min="1"></div>
+    </div>
+    <div class="f-row c2">
+      <div class="f"><label>Encuesta AGAP</label>
+        <select id="m-encuesta" style="border:2px solid #e0d8ce;border-radius:8px;padding:9px 12px;font-family:var(--fb);font-size:0.9rem;background:var(--warm);cursor:pointer">
+          <option value="false"${!g.encuesta_respondida?' selected':''}>Pendiente</option>
+          <option value="true"${g.encuesta_respondida?' selected':''}>Respondida</option>
+        </select>
+      </div>
+      <div class="f"><label>Cuota declarada en registro</label>
+        <input value="${g.cuota_pagada ? 'El socio declaró haber pagado' : 'Sin declaración'}" disabled style="background:var(--cream);color:var(--gray)">
+      </div>
     </div>`;
 
   // Checkbox interactivity
@@ -1074,6 +1135,7 @@ async function saveGuide() {
       especialidades, idiomas, certificaciones, photo_url,
       activo:     document.getElementById('m-activo').value === 'true',
       cotisation: document.getElementById('m-cotisation').value === 'true',
+      encuesta_respondida: document.getElementById('m-encuesta').value === 'true',
       orden:      parseInt(document.getElementById('m-orden').value) || 99
     };
 
@@ -1245,6 +1307,186 @@ async function addParam() {
   } catch(e) { toast('Error al agregar', 'err'); }
 }
 
+// ── BLOG / NOTICIAS ───────────────────────────────────────
+let ALL_POSTS = [];
+let editingPost = null;
+let postImageFile = null;
+
+async function loadBlogAdmin() {
+  const wrap = document.getElementById('blog-table-wrap');
+  wrap.innerHTML = '<div class="empty"><p>Cargando…</p></div>';
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/agap_blog?select=*&order=fecha.desc`, { headers: authHeaders() });
+    ALL_POSTS = await res.json();
+    if (!Array.isArray(ALL_POSTS)) ALL_POSTS = [];
+  } catch(e) { ALL_POSTS = []; }
+  document.getElementById('blog-count').textContent = ALL_POSTS.length;
+  renderBlogTable();
+}
+
+function renderBlogTable() {
+  const wrap = document.getElementById('blog-table-wrap');
+  if (!ALL_POSTS.length) {
+    wrap.innerHTML = '<div class="empty"><p>Sin noticias. Crea la primera con el boton "+ Nueva noticia".</p></div>';
+    return;
+  }
+  wrap.innerHTML = `<table class="tbl">
+    <thead><tr><th>Imagen</th><th>Titulo</th><th>Fecha</th><th>Publicado</th><th>Acciones</th></tr></thead>
+    <tbody>${ALL_POSTS.map(p => `
+      <tr>
+        <td>${p.image_url
+          ? `<img src="${esc(p.image_url)}" style="width:56px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #e0d8ce">`
+          : `<div style="width:56px;height:40px;background:var(--cream);border-radius:6px;border:1px solid #e0d8ce"></div>`}</td>
+        <td><strong>${esc(p.titulo||'')}</strong><br><span style="color:var(--gray);font-size:0.78rem">${esc((p.contenido||'').slice(0,60))}${(p.contenido||'').length>60?'…':''}</span></td>
+        <td style="color:var(--gray);font-size:0.85rem;white-space:nowrap">${p.fecha ? new Date(p.fecha+'T12:00:00').toLocaleDateString('es-CL') : '—'}</td>
+        <td><label class="toggle" title="Visible en el sitio publico">
+          <input type="checkbox" ${p.publicado?'checked':''} onchange="togglePublicado('${p.id}', this.checked)">
+          <div class="track"></div><div class="thumb"></div>
+        </label></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost btn-sm" onclick="openPost('${p.id}')">Editar</button>
+          <button class="btn btn-ghost btn-sm" style="margin-left:4px" onclick="confirmDeletePost('${p.id}','${esc(p.titulo||'')}')">Eliminar</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+async function togglePublicado(id, val) {
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_blog?id=eq.${id}`, {
+      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ publicado: val })
+    });
+    toast(val ? 'Noticia publicada' : 'Noticia ocultada', 'ok');
+    ALL_POSTS = ALL_POSTS.map(p => p.id === id ? {...p, publicado: val} : p);
+  } catch(e) { toast('Error al actualizar', 'err'); }
+}
+
+function openPost(idOrNull) {
+  editingPost = idOrNull ? ALL_POSTS.find(p => p.id === idOrNull) : null;
+  postImageFile = null;
+  const p = editingPost || {};
+  document.getElementById('modal-blog-title').textContent = editingPost ? 'EDITAR NOTICIA' : 'NUEVA NOTICIA';
+  const hoy = new Date().toISOString().slice(0,10);
+  document.getElementById('modal-blog-body').innerHTML = `
+    <div class="f-row c2">
+      <div class="f"><label>Titulo *</label><input id="p-titulo" value="${esc(p.titulo||'')}" placeholder="Ej. Primer Dia del Guia Patagonico"></div>
+      <div class="f"><label>Fecha</label><input type="date" id="p-fecha" value="${p.fecha||hoy}"></div>
+    </div>
+    <div class="f-row">
+      <div class="f"><label>Imagen</label>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div id="p-img-prev">
+            ${p.image_url
+              ? `<img src="${esc(p.image_url)}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--orange)">`
+              : `<div style="width:120px;height:80px;background:var(--cream);border-radius:8px;border:2px dashed #e0d8ce;display:flex;align-items:center;justify-content:center;color:var(--gray);font-size:0.75rem">Sin imagen</div>`}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <input type="file" id="p-img-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="previewPostImage(this)">
+            <button type="button" class="btn-photo" onclick="document.getElementById('p-img-input').click()">Elegir imagen</button>
+            <span style="font-size:0.75rem;color:var(--gray)">JPG, PNG, WEBP — horizontal recomendado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f"><label>Contenido *</label>
+        <textarea id="p-contenido" style="min-height:200px" placeholder="Texto de la noticia. Los saltos de linea se respetan en el sitio.">${esc(p.contenido||'')}</textarea>
+      </div>
+    </div>
+    <div class="f-row c2">
+      <div class="f"><label>Estado</label>
+        <select id="p-publicado" style="border:2px solid #e0d8ce;border-radius:8px;padding:9px 12px;font-family:var(--fb);font-size:0.9rem;background:var(--warm);cursor:pointer">
+          <option value="false"${!p.publicado?' selected':''}>Borrador (oculto)</option>
+          <option value="true"${p.publicado?' selected':''}>Publicado (visible en el sitio)</option>
+        </select>
+      </div>
+      <div class="f"><label>&nbsp;</label>
+        <span style="font-size:0.78rem;color:var(--gray);font-style:italic">Las 3 noticias publicadas mas recientes aparecen en la pagina de inicio.</span>
+      </div>
+    </div>`;
+  document.getElementById('modal-blog').classList.add('open');
+}
+
+function previewPostImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  postImageFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('p-img-prev').innerHTML =
+      `<img src="${ev.target.result}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--orange)">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function savePost() {
+  const titulo    = document.getElementById('p-titulo').value.trim();
+  const contenido = document.getElementById('p-contenido').value.trim();
+  if (!titulo || !contenido) { toast('Completa titulo y contenido', 'err'); return; }
+
+  const btn = document.getElementById('btn-save-post');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
+
+  try {
+    let image_url = editingPost?.image_url || null;
+    if (postImageFile) {
+      const ext  = postImageFile.name.split('.').pop().toLowerCase();
+      const slug = `blog-${Date.now()}`;
+      const path = `${slug}.${ext}`;
+      const res  = await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${SESSION.access_token}`, 'Content-Type': postImageFile.type },
+        body: postImageFile
+      });
+      if (!res.ok) throw new Error('Error al subir la imagen');
+      image_url = `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+    }
+
+    const payload = {
+      titulo, contenido, image_url,
+      fecha:     document.getElementById('p-fecha').value || null,
+      publicado: document.getElementById('p-publicado').value === 'true'
+    };
+
+    if (editingPost) {
+      await fetch(`${SUPA_URL}/rest/v1/agap_blog?id=eq.${editingPost.id}`, {
+        method: 'PATCH', headers: authHeaders(), body: JSON.stringify(payload)
+      });
+      toast('Noticia actualizada', 'ok');
+    } else {
+      await fetch(`${SUPA_URL}/rest/v1/agap_blog`, {
+        method: 'POST', headers: { ...authHeaders(), 'Prefer': 'return=minimal' }, body: JSON.stringify(payload)
+      });
+      toast('Noticia creada', 'ok');
+    }
+    closeModal('modal-blog');
+    loadBlogAdmin();
+  } catch(e) {
+    toast('Error: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'GUARDAR';
+  }
+}
+
+function confirmDeletePost(id, titulo) {
+  document.getElementById('confirm-msg').textContent = `¿Eliminar la noticia "${titulo}"? Esta accion no se puede deshacer.`;
+  document.getElementById('confirm-ok').onclick = () => deletePost(id);
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+async function deletePost(id) {
+  closeConfirm();
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/agap_blog?id=eq.${id}`, { method: 'DELETE', headers: authHeaders() });
+    toast('Noticia eliminada', 'ok');
+    loadBlogAdmin();
+  } catch(e) { toast('Error al eliminar', 'err'); }
+}
+
+document.getElementById('modal-blog').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal('modal-blog');
+});
+
 // ── EXPORT XLS ───────────────────────────────────────────
 function exportXLS() {
   if (!ALL_GUIDES.length) { toast('No hay guías cargados', 'err'); return; }
@@ -1263,6 +1505,8 @@ function exportXLS() {
     'Certificaciones': (g.certificaciones || []).join(' | '),
     'Activo':          g.activo ? 'Sí' : 'No',
     'Cotización':      g.cotisation ? 'Pagada' : 'Pendiente',
+    'Encuesta':        g.encuesta_respondida ? 'Respondida' : 'Pendiente',
+    'Cuota declarada': g.cuota_pagada ? 'Sí' : 'No',
     'Orden':           g.orden || 99,
     'Fecha registro':  g.created_at ? new Date(g.created_at).toLocaleDateString('es-CL') : ''
   }));
@@ -1273,7 +1517,7 @@ function exportXLS() {
   ws['!cols'] = [
     {wch:14},{wch:18},{wch:28},{wch:16},{wch:16},
     {wch:16},{wch:24},{wch:22},{wch:30},{wch:20},
-    {wch:35},{wch:8},{wch:12},{wch:7},{wch:14}
+    {wch:35},{wch:8},{wch:12},{wch:12},{wch:14},{wch:7},{wch:14}
   ];
 
   // Style header (fond orange AGAP)
