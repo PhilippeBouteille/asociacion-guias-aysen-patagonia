@@ -477,7 +477,7 @@
  </div>
  <div class="fg"><label data-t="f_msg">Mensaje</label><textarea name="mensaje" rows="4" placeholder="Escribe tu consulta..."></textarea></div>
  <button type="submit" class="btn-primary" style="width:100%;" data-t="ctc_sub">Enviar consulta</button>
- <p id="ctc-note" style="display:none;font-size:.8rem;color:var(--muted);margin-top:.7rem;text-align:center;" data-t="ctc_note">Tu mensaje fue registrado. Se abrirá tu aplicación de correo para enviarlo también por email.</p>
+ <p id="ctc-note" style="display:none;font-size:.8rem;color:var(--muted);margin-top:.7rem;text-align:center;">Mensaje enviado. Te contestaremos a la brevedad.</p>
  </form>
  </div>
  </div>
@@ -797,23 +797,19 @@ async function submitContacto(e){
    btn.textContent = t('ctc_sub');
    var note = document.getElementById('ctc-note');
    if (note) {
-    var msgs = { fr: 'Message envoy\u00e9. Diego vous r\u00e9pondra par email.', en: 'Message sent. Diego will reply by email.', es: 'Mensaje enviado. Diego te responder\u00e1 por email.' };
+    var msgs = { fr: 'Message envoy\u00e9. Nous vous r\u00e9pondrons dans les plus brefs d\u00e9lais.', en: 'Message sent. We will get back to you shortly.', es: 'Mensaje enviado. Te contestaremos a la brevedad.' };
     note.textContent = msgs[lang] || msgs.es;
     note.style.display = 'block';
    }
    f.reset();
    return;
-  } catch(err) { /* fallback */ }
+  } catch(err) {
+   btn.disabled = false;
+   btn.textContent = t('ctc_sub');
+   var note3 = document.getElementById('ctc-note');
+   if (note3) { note3.textContent = 'Mensaje registrado. Puedes escribirnos directamente a ' + CONTACT_EMAIL; note3.style.display = 'block'; }
+  }
  }
-
- btn.disabled = false;
- btn.textContent = t('ctc_sub');
- var note2 = document.getElementById('ctc-note');
- if (note2) note2.style.display = 'block';
- var subject = encodeURIComponent('Consulta desde el sitio AGAP - ' + nom);
- var body    = encodeURIComponent(mensaje + '\n\n- ' + nom + ' (' + email + ')');
- window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + subject + '&body=' + body;
- f.reset();
 }
 
 /* ─── FALLBACK MOCK si Supabase vide ───────────────────────── */
