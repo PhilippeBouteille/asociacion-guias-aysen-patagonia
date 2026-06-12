@@ -702,7 +702,7 @@
         <hr class="sec-divider">
         <!-- Especialidades -->
         <div class="field" style="margin-bottom:16px">
-          <label>Especialidad en Guiado <span class="req">*</span></label>
+          <label>Actividades de Guiado <span class="req">*</span></label>
         </div>
         <div class="checkbox-grid" id="esp-grid">
           <label class="check-item"><input type="checkbox" value="convencional"><div class="box"></div><span>Convencional</span></label>
@@ -729,6 +729,9 @@
           <label class="check-item"><input type="checkbox" value="Portugués"><div class="box"></div><span>Portugues</span></label>
           <label class="check-item"><input type="checkbox" value="Alemán"><div class="box"></div><span>Aleman</span></label>
           <label class="check-item"><input type="checkbox" value="Otro"><div class="box"></div><span>Otro</span></label>
+        </div>
+        <div class="field" style="margin-bottom:16px">
+          <input type="text" id="otras-idio" placeholder="Otros idiomas no listados (sepáralos con comas: Mapudungun, Italiano…)">
         </div>
         <hr class="sec-divider">
         <!-- Certificaciones -->
@@ -1274,7 +1277,12 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       // Perfil guia
       zona, bio, photo_url,
       especialidades,
-      idiomas:            getChecked('idiomas-grid'),
+      idiomas: [
+        ...getChecked('idiomas-grid').filter(v => v !== 'Otro'),
+        ...( document.getElementById('otras-idio').value.trim()
+             ? document.getElementById('otras-idio').value.trim().split(',').map(s=>s.trim()).filter(Boolean)
+             : [] )
+      ],
       certificaciones:    [...document.querySelectorAll('#cert-list input')].map(i=>i.value.trim()).filter(Boolean),
       // Laboral
       profesion:          document.getElementById('profesion').value.trim() || null,

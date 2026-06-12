@@ -125,7 +125,7 @@
  <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
  <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
  <li><a href="guias.html" class="active" data-t="nav_guias">Guías</a></li>
- <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Actividades</a></li>
  <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
  </ul>
  <div class="nav-right">
@@ -163,6 +163,12 @@
  </div>
  <div class="dir-count"><span id="count-label">Cargando…</span></div>
  </div>
+ <div class="lang-row" style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
+ <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800">Idioma</span>
+ <div class="filters" id="lang-filters" style="margin:0">
+ <button class="fbtn active" onclick="setLangFilter('all',this)" data-t="f_all">Todos</button>
+ </div>
+ </div>
  <div class="guias-grid" id="guias-grid"></div>
  </div>
 </section>
@@ -184,7 +190,7 @@
  <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
  <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
  <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
- <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Actividades</a></li>
  <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
  </ul>
  </div>
@@ -211,7 +217,7 @@
 /* ─── i18n ─── */
 const T = {
  es:{
- nav_mision:'Misión',nav_guias:'Guías',nav_esp:'Especialidades',nav_unete:'Asociarse',nav_contacto:'Contacto',nav_unete_btn:'Asociarse',nav_directiva:'Directiva',
+ nav_mision:'Misión',nav_guias:'Guías',nav_esp:'Actividades',nav_unete:'Asociarse',nav_contacto:'Contacto',nav_unete_btn:'Asociarse',nav_directiva:'Directiva',
  ph_label:'Guías certificados',ph_title:'GUÍAS<br><em>AYSÉN PATAGONIA</em>',
  ph_sub:'Conoce al equipo de guías profesionales asociados a AGAP, expertos en los territorios de Aysén Patagonia.',
  f_all:'Todos',search_ph:'Buscar por nombre, zona…',
@@ -266,9 +272,14 @@ const ESP_TAG = {
  cabalgatas:{l:'Cabalgatas',c:'tt'}, fauna:{l:'Fauna',c:'tfa'}
 };
 const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
+const LANG_NORM = {es:'español',español:'español',espanol:'español',en:'inglés',inglés:'inglés',ingles:'inglés',english:'inglés',fr:'francés',francés:'francés',frances:'francés','français':'francés',francais:'francés',pt:'portugués',portugués:'portugués',portugues:'portugués',de:'alemán',alemán:'alemán',aleman:'alemán',deutsch:'alemán'};
+const LANG_FULL = {'español':'Español','inglés':'Inglés','francés':'Francés','portugués':'Portugués','alemán':'Alemán'};
+function langKey(v){ const k=(v||'').toLowerCase().trim(); return LANG_NORM[k]||k; }
+function langLabel(v){ const k=langKey(v); return LANG_FULL[k] || (k.charAt(0).toUpperCase()+k.slice(1)); }
 
 let ALL_GUIDES = [];
 let activeFilter = 'all';
+let activeLang = 'all';
 
 const GUIDES_MOCK = [
  {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN'},
@@ -283,7 +294,7 @@ async function loadGuides(){
  try {
  const {data,error} = await sb.from('agap_guides')
  .select('*').eq('activo',true).eq('cotisation',true).order('orden');
- if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);return;}
+ if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);return;}
  ALL_GUIDES = data.map(g=>({
  id:g.id,
  nombre:(g.prenom?g.prenom+' ':'')+g.nom,
@@ -292,16 +303,25 @@ async function loadGuides(){
  esp:g.especialidades||[],
  tags:(g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
  idiomas:(g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
+ langs:(g.idiomas||[]),
  }));
  renderFiltros(ALL_GUIDES);
+ renderLangFiltros(ALL_GUIDES);
  renderGuides(ALL_GUIDES);
- } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
+ } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
 }
 
 function setFilter(esp,btn){
- document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+ document.querySelectorAll('#filters .fbtn').forEach(b=>b.classList.remove('active'));
  btn.classList.add('active');
  activeFilter = esp;
+ applyFilters();
+}
+
+function setLangFilter(lang,btn){
+ document.querySelectorAll('#lang-filters .fbtn').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ activeLang = lang;
  applyFilters();
 }
 
@@ -323,9 +343,21 @@ function renderFiltros(list){
   + esps.map(e=>`<button class="fbtn${activeFilter===e?' active':''}" onclick="setFilter(${JSON.stringify(e)},this)">${espLabel(e)}</button>`).join('');
 }
 
+/* Génère les boutons de filtre par langue (dédoublonnage normalisé : es / Español / español -> un seul) */
+function renderLangFiltros(list){
+ const bar = document.getElementById('lang-filters');
+ if(!bar) return;
+ const set = new Set();
+ list.forEach(g => (g.langs||[]).forEach(l => { if(l) set.add(langKey(l)); }));
+ const langs = [...set].sort((a,b)=>langLabel(a).localeCompare(langLabel(b),'es'));
+ bar.innerHTML = `<button class="fbtn${activeLang==='all'?' active':''}" onclick="setLangFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
+  + langs.map(l=>`<button class="fbtn${activeLang===l?' active':''}" onclick="setLangFilter(${JSON.stringify(l)},this)">${langLabel(l)}</button>`).join('');
+}
+
 function applyFilters(){
  const q = (document.getElementById('search-input').value||'').toLowerCase().trim();
  let list = activeFilter==='all' ? ALL_GUIDES : ALL_GUIDES.filter(g=>(g.esp||[]).some(x=>(x||'').toLowerCase()===activeFilter));
+ if(activeLang!=='all') list = list.filter(g=>(g.langs||[]).some(l=>langKey(l)===activeLang));
  if(q) list = list.filter(g=>g.nombre.toLowerCase().includes(q)||g.zona.toLowerCase().includes(q));
  renderGuides(list);
 }

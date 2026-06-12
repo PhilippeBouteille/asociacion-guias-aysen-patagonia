@@ -854,7 +854,7 @@ function renderGuidesTable(guides) {
     return;
   }
   wrap.innerHTML = `<table class="tbl">
-    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Especialidades</th><th>Activo</th><th>Cotización</th><th>Encuesta</th><th>Orden</th><th></th></tr></thead>
+    <thead><tr><th></th><th>Nombre</th><th>Zona</th><th>Actividades</th><th>Activo</th><th>Cotización</th><th>Encuesta</th><th>Orden</th><th></th></tr></thead>
     <tbody>${guides.map(g => `
       <tr>
         <td>${avatarCell(g)}</td>
@@ -945,7 +945,7 @@ function openGuide(idOrNull) {
 
   const espList  = ['convencional','trekking','escalada','kayak','crucero','pesca','cabalgatas','fauna'];
   const ESP_LBL  = {convencional:'Convencional',trekking:'Trekking',escalada:'Montaña / Escalada',kayak:'Kayak / Rafting',crucero:'Crucero',pesca:'Pesca',cabalgatas:'Cabalgatas',fauna:'Fauna'};
-  const idioList = ['Español','Inglés','Francés','Portugués','Alemán','Otro'];
+  const idioList = ['Español','Inglés','Francés','Portugués','Alemán'];
   const espChk   = g.especialidades || [];
   const idioChk  = g.idiomas || [];
 
@@ -966,6 +966,7 @@ function openGuide(idOrNull) {
 
   // Especialidades standard + campo libre pour autres
   const otrasEsp = espChk.filter(e => !espList.includes((e||'').toLowerCase())).join(', ');
+  const otrasIdio = idioChk.filter(i => i && i.toLowerCase()!=='otro' && !idioList.some(x => x.toLowerCase() === i.toLowerCase())).join(', ');
 
   document.getElementById('modal-body').innerHTML = `
     <div class="f-section">DATOS PERSONALES</div>
@@ -992,7 +993,7 @@ function openGuide(idOrNull) {
     <div class="f-section">FOTO DE PERFIL</div>
     ${photoHtml}
 
-    <div class="f-section">ESPECIALIDADES</div>
+    <div class="f-section">ACTIVIDADES</div>
     <div class="cb-grid" id="m-esp-grid">
       ${espList.map(e => { const on = espChk.some(x=>(x||'').toLowerCase()===e); return `<label class="cb-item${on?' checked':''}">
         <input type="checkbox" value="${e}"${on?' checked':''}><div class="box"></div>${ESP_LBL[e]||e}
@@ -1004,9 +1005,12 @@ function openGuide(idOrNull) {
 
     <div class="f-section">IDIOMAS</div>
     <div class="cb-grid" id="m-idio-grid">
-      ${idioList.map(i => `<label class="cb-item${idioChk.includes(i)?' checked':''}">
-        <input type="checkbox" value="${i}"${idioChk.includes(i)?' checked':''}><div class="box"></div>${i}
-      </label>`).join('')}
+      ${idioList.map(i => { const on = idioChk.some(x=>(x||'').toLowerCase()===i.toLowerCase()); return `<label class="cb-item${on?' checked':''}">
+        <input type="checkbox" value="${i}"${on?' checked':''}><div class="box"></div>${i}
+      </label>`; }).join('')}
+    </div>
+    <div class="f"><label>Otros idiomas</label>
+      <input id="m-otras-idio" value="${esc(otrasIdio)}" placeholder="Ej. Mapudungun, Italiano… (separar con comas)">
     </div>
 
     <div class="f-section">CERTIFICACIONES</div>
@@ -1101,7 +1105,11 @@ async function saveGuide() {
     const otras = document.getElementById('m-otras-esp').value.trim()
       ? document.getElementById('m-otras-esp').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean) : [];
     const especialidades = [...espChecked, ...otras];
-    const idiomas = [...document.querySelectorAll('#m-idio-grid input:checked')].map(c => c.value);
+    const idiomas = [
+      ...[...document.querySelectorAll('#m-idio-grid input:checked')].map(c => c.value).filter(v => v !== 'Otro'),
+      ...(document.getElementById('m-otras-idio').value.trim()
+           ? document.getElementById('m-otras-idio').value.trim().split(',').map(s=>s.trim()).filter(Boolean) : [])
+    ];
     const certificaciones = [...document.querySelectorAll('#m-cert-list input')].map(i=>i.value.trim()).filter(Boolean);
 
     const payload = {
@@ -1444,7 +1452,7 @@ function exportXLS() {
     'Instagram':       g.instagram || '',
     'Sitio web':       g.sitio_web || '',
     'Zona':            g.zona || '',
-    'Especialidades':  (g.especialidades || []).join(', '),
+    'Actividades':  (g.especialidades || []).join(', '),
     'Idiomas':         (g.idiomas || []).join(', '),
     'Certificaciones': (g.certificaciones || []).join(' | '),
     'Activo':          g.activo ? 'Sí' : 'No',
