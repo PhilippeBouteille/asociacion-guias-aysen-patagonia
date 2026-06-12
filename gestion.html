@@ -357,7 +357,6 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
         <a onclick="showView('dashboard')" class="active" id="nav-dashboard"><span class="nav-dot" style="background:var(--orange)"></span>Dashboard</a>
         <a onclick="showView('guides')"    id="nav-guides"><span class="nav-dot" style="background:var(--green)"></span>Guías</a>
         <a onclick="showView('directiva')" id="nav-directiva"><span class="nav-dot" style="background:var(--blue)"></span>Directiva</a>
-        <a onclick="showView('inscriptions')" id="nav-inscriptions"><span class="nav-dot" style="background:var(--red)"></span>Inscripciones</a>
         <a onclick="showView('blog')"      id="nav-blog"><span class="nav-dot" style="background:var(--green-d, #1A6B28)"></span>Noticias</a>
         <a onclick="showView('params')"    id="nav-params"><span class="nav-dot" style="background:var(--orange-d)"></span>Parámetros</a>
       </nav>
@@ -381,8 +380,6 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
           <div class="stat-card"><div class="val" id="stat-pendientes">—</div><div class="lbl">Por activar</div></div>
           <div class="stat-card"><div class="val" id="stat-cot-ok" style="color:var(--green)">—</div><div class="lbl">Cotización al día</div></div>
           <div class="stat-card"><div class="val" id="stat-cot-nok" style="color:var(--red)">—</div><div class="lbl">Cotización pendiente</div></div>
-          <div class="stat-card"><div class="val" id="stat-inscripciones">—</div><div class="lbl">Inscripciones</div></div>
-          <div class="stat-card"><div class="val" id="stat-no-tratadas">—</div><div class="lbl">Sin tratar</div></div>
         </div>
         <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h2>GUÍAS POR ACTIVAR</h2></div>
@@ -439,16 +436,6 @@ nav.sidebar-nav a .ico{font-size:1.1rem;width:20px;text-align:center}
           </div>
           <div class="card-body" style="padding:0">
             <div id="directiva-table-wrap"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INSCRIPTIONS -->
-      <div id="view-inscriptions" style="display:none">
-        <div class="topbar"><h1>INSCRIPCIONES</h1></div>
-        <div class="card">
-          <div class="card-body" style="padding:0">
-            <div id="inscriptions-wrap"></div>
           </div>
         </div>
       </div>
@@ -629,13 +616,12 @@ if (saved) {
 
 // ── VIEWS ─────────────────────────────────────────────────
 function showView(name) {
-  ['dashboard','guides','directiva','inscriptions','blog','params'].forEach(v => {
+  ['dashboard','guides','directiva','blog','params'].forEach(v => {
     document.getElementById(`view-${v}`).style.display = v === name ? 'block' : 'none';
     document.getElementById(`nav-${v}`).classList.toggle('active', v === name);
   });
   if (name === 'guides')       loadGuides();
   if (name === 'directiva')    loadDirectiva();
-  if (name === 'inscriptions') loadInscriptions();
   if (name === 'blog')         loadBlogAdmin();
   if (name === 'params')       loadParams();
   if (window.innerWidth < 640) document.getElementById('sidebar').classList.remove('open');
@@ -780,26 +766,18 @@ function toggleSidebar() {
 // ── DASHBOARD ────────────────────────────────────────────
 async function loadDashboard() {
   try {
-    const [gRes, iRes] = await Promise.all([
-      fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,cotisation,photo_url,zona,orden&order=orden`, { headers: authHeaders() }),
-      fetch(`${SUPA_URL}/rest/v1/agap_inscriptions?select=id,tratado`, { headers: authHeaders() })
-    ]);
+    const gRes = await fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,cotisation,photo_url,zona,orden&order=orden`, { headers: authHeaders() });
     const guides = await gRes.json();
-    const insc   = await iRes.json();
 
     const activos    = guides.filter(g => g.activo).length;
     const pendientes = guides.filter(g => !g.activo).length;
     const cotOk      = guides.filter(g => g.cotisation).length;
     const cotNok     = guides.filter(g => !g.cotisation).length;
-    const totalInsc  = insc.length;
-    const noTratadas = insc.filter(i => !i.tratado).length;
 
     document.getElementById('stat-activos').textContent      = activos;
     document.getElementById('stat-pendientes').textContent   = pendientes;
     document.getElementById('stat-cot-ok').textContent       = cotOk;
     document.getElementById('stat-cot-nok').textContent      = cotNok;
-    document.getElementById('stat-inscripciones').textContent= totalInsc;
-    document.getElementById('stat-no-tratadas').textContent  = noTratadas;
     document.getElementById('badge-cot-nok').textContent     = cotNok;
 
     // Tableau guides par activar
@@ -1191,41 +1169,6 @@ async function deleteGuide(id) {
     loadGuides();
     loadDashboard();
   } catch(e) { toast('Error al eliminar', 'err'); }
-}
-
-// ── INSCRIPTIONS ──────────────────────────────────────────
-async function loadInscriptions() {
-  const wrap = document.getElementById('inscriptions-wrap');
-  wrap.innerHTML = '<div class="empty"><p>Cargando…</p></div>';
-  try {
-    const res  = await fetch(`${SUPA_URL}/rest/v1/agap_inscriptions?select=*&order=created_at.desc`, { headers: authHeaders() });
-    const data = await res.json();
-    if (!data.length) { wrap.innerHTML = '<div class="empty"><div class="ico">📋</div><p>Sin inscripciones</p></div>'; return; }
-    wrap.innerHTML = `<table class="tbl">
-      <thead><tr><th>Nombre</th><th>Email</th><th>Especialidad</th><th>Zona</th><th>Fecha</th><th>Tratado</th></tr></thead>
-      <tbody>${data.map(i=>`
-        <tr>
-          <td><strong>${i.prenom||''} ${i.nom||''}</strong></td>
-          <td style="font-size:0.82rem;color:var(--gray)">${i.email||'—'}</td>
-          <td><span class="tag">${i.especialidad||'—'}</span></td>
-          <td style="color:var(--gray);font-size:0.85rem">${i.zona||'—'}</td>
-          <td style="color:var(--gray);font-size:0.82rem">${new Date(i.created_at).toLocaleDateString('es-CL')}</td>
-          <td><label class="toggle">
-            <input type="checkbox" ${i.tratado?'checked':''} onchange="toggleTratado('${i.id}',this.checked)">
-            <div class="track"></div><div class="thumb"></div>
-          </label></td>
-        </tr>`).join('')}
-      </tbody></table>`;
-  } catch(e) { wrap.innerHTML = '<div class="empty"><p>Error al cargar inscripciones.</p></div>'; }
-}
-
-async function toggleTratado(id, val) {
-  try {
-    await fetch(`${SUPA_URL}/rest/v1/agap_inscriptions?id=eq.${id}`, {
-      method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ tratado: val })
-    });
-    toast(val ? 'Marcado como tratado' : 'Marcado como pendiente', 'ok');
-  } catch(e) {}
 }
 
 // ── PARAMS ────────────────────────────────────────────────

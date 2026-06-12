@@ -571,7 +571,6 @@ const T={
  uform_title:'INSCRIPCIÓN DE GUÍA',unete_cta_p:'Completa la ficha de inscripción para solicitar tu ingreso como socio activo.',unete_cta_btn:'COMPLETAR FICHA',
  sec_blog_lbl:'Noticias',blog_title:'VIDA DE LA<br>ASOCIACIÓN',blog_more:'Leer más',
  f_nom:'Nombre',f_ape:'Apellido',f_email:'Email',f_tel:'Teléfono / WhatsApp',
- f_esp:'Especialidad principal',f_esp0:'Selecciona...',f_zona:'Zona de operación',f_sub:'Enviar solicitud',
  sec_ctc_lbl:'Contacto',ctc_title:'CONTACTO',
  ctc_p:'¿Tienes preguntas sobre la asociación o quieres saber más sobre los guías de Aysén? Escríbenos.',
  ci1:'Ubicación',ci4:'Redes',f_act:'Tipo de actividad',f_msg:'Mensaje',f_combo:'Combinado / Otro',ctc_sub:'Enviar consulta',
@@ -617,7 +616,6 @@ const T={
  uform_title:'GUIDE REGISTRATION',unete_cta_p:'Fill in the registration form to apply for active membership.',unete_cta_btn:'COMPLETE FORM',
  sec_blog_lbl:'News',blog_title:'LIFE OF THE<br>ASSOCIATION',blog_more:'Read more',
  f_nom:'First Name',f_ape:'Last Name',f_email:'Email',f_tel:'Phone / WhatsApp',
- f_esp:'Main specialty',f_esp0:'Select...',f_zona:'Operating zone',f_sub:'Submit application',
  sec_ctc_lbl:'Contact',ctc_title:'CONTACT',
  ctc_p:'Questions about the association or the guides of Aysén? Get in touch.',
  ci1:'Location',ci4:'Social',f_act:'Type of activity',f_msg:'Message',f_combo:'Combined / Other',ctc_sub:'Send inquiry',
@@ -663,7 +661,6 @@ const T={
  uform_title:'INSCRIPTION GUIDE',unete_cta_p:"Remplissez la fiche d'inscription pour demander votre adhésion.",unete_cta_btn:'REMPLIR LA FICHE',
  sec_blog_lbl:'Actualités',blog_title:"VIE DE<br>L'ASSOCIATION",blog_more:'Lire la suite',
  f_nom:'Prénom',f_ape:'Nom',f_email:'Email',f_tel:'Téléphone / WhatsApp',
- f_esp:'Spécialité principale',f_esp0:'Sélectionner...',f_zona:"Zone d'opération",f_sub:'Envoyer la demande',
  sec_ctc_lbl:'Contact',ctc_title:'CONTACT',
  ctc_p:'Des questions sur l\'association ou les guides d\'Aysén ? Écrivez-nous.',
  ci1:'Localisation',ci4:'Réseaux',f_act:"Type d'activité",f_msg:'Message',f_combo:'Combiné / Autre',ctc_sub:'Envoyer la demande',
@@ -753,22 +750,6 @@ async function loadParametres() {
       if (ft) ft.href = url;
     }
   } catch(e) { console.warn('Params:', e); }
-}
-
-async function submitInscription(e){
- e.preventDefault();
- const btn = e.target.querySelector('button[type=submit]');
- btn.disabled=true; btn.textContent='Enviando...';
- const f = e.target;
- const {error} = await sb.from('agap_inscriptions').insert({
- prenom: f.prenom.value, nom: f.nom.value,
- email: f.email.value, telefono: f.tel.value,
- especialidad: f.especialidad.value, zona: f.zona.value
- });
- btn.disabled=false;
- if(error){ btn.textContent='Error — intenta de nuevo'; return; }
- btn.textContent=' Solicitud enviada';
- f.reset();
 }
 
 /* ─── CONTACTO : Supabase + Resend Edge Function ─────────────── */
