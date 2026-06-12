@@ -943,7 +943,8 @@ function openGuide(idOrNull) {
   const g = editingGuide || {};
   document.getElementById('modal-title').textContent = editingGuide ? `${g.prenom} ${g.nom}` : 'NUEVO GUÍA';
 
-  const espList  = ['Trekking','Kayak','Escalada','Fauna','Pesca','Cabalgatas'];
+  const espList  = ['convencional','trekking','escalada','kayak','crucero','pesca','cabalgatas','fauna'];
+  const ESP_LBL  = {convencional:'Convencional',trekking:'Trekking',escalada:'Montaña / Escalada',kayak:'Kayak / Rafting',crucero:'Crucero',pesca:'Pesca',cabalgatas:'Cabalgatas',fauna:'Fauna'};
   const idioList = ['Español','Inglés','Francés','Portugués','Alemán','Otro'];
   const espChk   = g.especialidades || [];
   const idioChk  = g.idiomas || [];
@@ -964,7 +965,7 @@ function openGuide(idOrNull) {
     </div>`;
 
   // Especialidades standard + campo libre pour autres
-  const otrasEsp = espChk.filter(e => !espList.includes(e)).join(', ');
+  const otrasEsp = espChk.filter(e => !espList.includes((e||'').toLowerCase())).join(', ');
 
   document.getElementById('modal-body').innerHTML = `
     <div class="f-section">DATOS PERSONALES</div>
@@ -993,9 +994,9 @@ function openGuide(idOrNull) {
 
     <div class="f-section">ESPECIALIDADES</div>
     <div class="cb-grid" id="m-esp-grid">
-      ${espList.map(e => `<label class="cb-item${espChk.includes(e)?' checked':''}">
-        <input type="checkbox" value="${e}"${espChk.includes(e)?' checked':''}><div class="box"></div>${e}
-      </label>`).join('')}
+      ${espList.map(e => { const on = espChk.some(x=>(x||'').toLowerCase()===e); return `<label class="cb-item${on?' checked':''}">
+        <input type="checkbox" value="${e}"${on?' checked':''}><div class="box"></div>${ESP_LBL[e]||e}
+      </label>`; }).join('')}
     </div>
     <div class="f"><label>Otras actividades</label>
       <input id="m-otras-esp" value="${esc(otrasEsp)}" placeholder="Ej. Snowshoeing, ski de travesía… (separar con comas)">
@@ -1098,7 +1099,7 @@ async function saveGuide() {
 
     const espChecked = [...document.querySelectorAll('#m-esp-grid input:checked')].map(c => c.value);
     const otras = document.getElementById('m-otras-esp').value.trim()
-      ? document.getElementById('m-otras-esp').value.trim().split(',').map(s=>s.trim()).filter(Boolean) : [];
+      ? document.getElementById('m-otras-esp').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean) : [];
     const especialidades = [...espChecked, ...otras];
     const idiomas = [...document.querySelectorAll('#m-idio-grid input:checked')].map(c => c.value);
     const certificaciones = [...document.querySelectorAll('#m-cert-list input')].map(i=>i.value.trim()).filter(Boolean);

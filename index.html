@@ -277,7 +277,7 @@
  <div class="container">
  <div class="stats-grid">
  <div class="fu"><div class="stat-num" id="stat-guias">0</div><div class="stat-lbl" data-t="stat1">Guías Asociados</div></div>
- <div class="fu"><div class="stat-num">6</div><div class="stat-lbl" data-t="stat2">Especialidades</div></div>
+ <div class="fu"><div class="stat-num" id="stat-esp">6</div><div class="stat-lbl" data-t="stat2">Especialidades</div></div>
  <div class="fu"><div class="stat-num">108K</div><div class="stat-lbl" data-t="stat3">km² de territorio</div></div>
  <div class="fu"><div class="stat-num">3</div><div class="stat-lbl" data-t="stat4">Idiomas</div></div>
  </div>
@@ -411,12 +411,8 @@
  <div class="sec-label" data-t="sec_guias_lbl">Nuestros Guías</div>
  <h2 class="sec-title" data-t="guias_title">ENCUENTRA<br>TU GUÍA</h2>
  </div>
- <div class="filters fu">
+ <div class="filters fu" id="guias-filters">
  <button class="fbtn active" onclick="filterGuias('all',this)" data-t="f_all">Todos</button>
- <button class="fbtn" onclick="filterGuias('trekking',this)">Trekking</button>
- <button class="fbtn" onclick="filterGuias('kayak',this)">Kayak</button>
- <button class="fbtn" onclick="filterGuias('escalada',this)">Escalada</button>
- <button class="fbtn" onclick="filterGuias('fauna',this)">Fauna</button>
  </div>
  </div>
  <div class="guias-grid" id="guias-grid"></div>
@@ -685,30 +681,33 @@ function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 const ESP_TAG = {
- trekking:{l:'Trekking',c:'tt'}, kayak:{l:'Kayak',c:'tk'},
- escalada:{l:'Escalada',c:'te'}, fauna:{l:'Fauna',c:'tfa'},
- pesca:{l:'Pesca',c:'tk'}, cabalgatas:{l:'Cabalgatas',c:'tt'}
+ convencional:{l:'Convencional',c:'tt'}, trekking:{l:'Trekking',c:'tt'},
+ escalada:{l:'Montaña / Escalada',c:'te'}, kayak:{l:'Kayak / Rafting',c:'tk'},
+ crucero:{l:'Crucero',c:'tk'}, pesca:{l:'Pesca',c:'tk'},
+ cabalgatas:{l:'Cabalgatas',c:'tt'}, fauna:{l:'Fauna',c:'tfa'}
 };
 const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
 
 let ALL_GUIDES = [];
+let ESP_COUNT = 6;
 let CONTACT_EMAIL = 'aguiasaysenpatagonia@gmail.com';
 
 async function loadGuides(){
  const {data,error} = await sb.from('agap_guides')
  .select('*').eq('activo',true).eq('cotisation',true).order('orden');
- if(error||!data||data.length===0){ renderGuias(GUIDES_MOCK); return; }
+ if(error||!data||data.length===0){ renderFiltros(GUIDES_MOCK); renderGuias(GUIDES_MOCK); return; }
  ALL_GUIDES = data.map(g=>({
  id: g.id,
  nombre: (g.prenom?g.prenom+' ':'')+g.nom,
  zona: g.zona||'Aysén',
  foto: g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
  esp: g.especialidades||[],
- tags: (g.especialidades||[]).slice(0,3).map(e=>ESP_TAG[e]||{l:e,c:'tt'}),
+ tags: (g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
  idiomas: (g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
  acred: (g.certificaciones||['AGAP'])[0]
  }));
  document.getElementById('stat-guias').textContent = ALL_GUIDES.length;
+ renderFiltros(ALL_GUIDES);
  renderGuias(ALL_GUIDES);
 }
 
@@ -823,7 +822,28 @@ function filterGuias(esp,btn){
  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
  btn.classList.add('active');
  const src = ALL_GUIDES.length ? ALL_GUIDES : GUIDES_MOCK;
- renderGuias(esp==='all'?src:src.filter(g=>g.esp.includes(esp)));
+ renderGuias(esp==='all'?src:src.filter(g=>(g.esp||[]).some(x=>(x||'').toLowerCase()===esp)));
+}
+
+/* Libellé d'une spécialité : connu via ESP_TAG, sinon valeur brute embellie */
+function espLabel(e){
+ const k=(e||'').toLowerCase();
+ if(ESP_TAG[k]) return ESP_TAG[k].l;
+ return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
+}
+
+/* Génère les boutons de filtre à partir des spécialités présentes (clés minuscules, dédoublonnage insensible à la casse) */
+function renderFiltros(list){
+ const set = new Set();
+ list.forEach(g => (g.esp||[]).forEach(e => { if(e) set.add(e.toLowerCase()); }));
+ const esps = [...set].sort((a,b)=>espLabel(a).localeCompare(espLabel(b),'es'));
+ ESP_COUNT = esps.length;
+ const st = document.getElementById('stat-esp');
+ if(st) st.textContent = ESP_COUNT;
+ const bar = document.getElementById('guias-filters');
+ if(!bar) return;
+ bar.innerHTML = `<button class="fbtn active" onclick="filterGuias('all',this)" data-t="f_all">${t('f_all')}</button>`
+  + esps.map(e=>`<button class="fbtn" onclick="filterGuias(${JSON.stringify(e)},this)">${espLabel(e)}</button>`).join('');
 }
 
 /* ─── NOTICIAS (BLOG) ───────────────────────────────────────── */
@@ -905,6 +925,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  if(e[0].isIntersecting){
  const n = ALL_GUIDES.length || GUIDES_MOCK.length;
  counter(document.getElementById('stat-guias'), n);
+ counter(document.getElementById('stat-esp'), ESP_COUNT);
  }
  }).observe(document.getElementById('stats'));
 

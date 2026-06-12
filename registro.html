@@ -705,17 +705,17 @@
           <label>Especialidad en Guiado <span class="req">*</span></label>
         </div>
         <div class="checkbox-grid" id="esp-grid">
-          <label class="check-item"><input type="checkbox" value="Convencional"><div class="box"></div><span>Convencional</span></label>
-          <label class="check-item"><input type="checkbox" value="Trekking"><div class="box"></div><span>Trekking</span></label>
-          <label class="check-item"><input type="checkbox" value="Montaña/Escalada"><div class="box"></div><span>Montana / Escalada</span></label>
-          <label class="check-item"><input type="checkbox" value="Kayak/Rafting"><div class="box"></div><span>Kayak / Rafting</span></label>
-          <label class="check-item"><input type="checkbox" value="Crucero"><div class="box"></div><span>Crucero</span></label>
-          <label class="check-item"><input type="checkbox" value="Pesca"><div class="box"></div><span>Pesca</span></label>
-          <label class="check-item"><input type="checkbox" value="Cabalgatas"><div class="box"></div><span>Cabalgatas</span></label>
-          <label class="check-item"><input type="checkbox" value="Otro"><div class="box"></div><span>Otro</span></label>
+          <label class="check-item"><input type="checkbox" value="convencional"><div class="box"></div><span>Convencional</span></label>
+          <label class="check-item"><input type="checkbox" value="trekking"><div class="box"></div><span>Trekking</span></label>
+          <label class="check-item"><input type="checkbox" value="escalada"><div class="box"></div><span>Montana / Escalada</span></label>
+          <label class="check-item"><input type="checkbox" value="kayak"><div class="box"></div><span>Kayak / Rafting</span></label>
+          <label class="check-item"><input type="checkbox" value="crucero"><div class="box"></div><span>Crucero</span></label>
+          <label class="check-item"><input type="checkbox" value="pesca"><div class="box"></div><span>Pesca</span></label>
+          <label class="check-item"><input type="checkbox" value="cabalgatas"><div class="box"></div><span>Cabalgatas</span></label>
+          <label class="check-item"><input type="checkbox" value="otro"><div class="box"></div><span>Otro</span></label>
         </div>
         <div class="field" style="margin-bottom:16px">
-          <input type="text" id="otras-esp" placeholder="Otra especialidad (detalle si marco Otro)">
+          <input type="text" id="otras-esp" placeholder="Otras actividades no listadas (sepáralas con comas: Ski de randonnée, Raquetas de nieve…)">
         </div>
         <hr class="sec-divider">
         <!-- Idiomas -->
@@ -991,6 +991,24 @@
           </div>
         </div>
 
+        <!-- CERTIFICADO DE INHABILIDADES -->
+        <div class="field" style="margin-bottom:20px">
+          <label>Certificado de Inhabilidades para trabajar con menores <span class="req">*</span></label>
+          <div class="upload-zone" onclick="document.getElementById('doc-inhabilidades').click()">
+            <input type="file" id="doc-inhabilidades" accept="image/*,application/pdf" onchange="handleFileUpload(this,'inhab-name')">
+            <div class="uz-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            </div>
+            <p><strong>Certificado de Inhabilidades</strong></p>
+            <p>PDF o imagen — emitido por el Registro Civil</p>
+            <div class="file-name" id="inhab-name"></div>
+          </div>
+          <p style="font-size:0.82rem;color:var(--muted);margin-top:8px">
+            Obtén el certificado gratuito en
+            <a href="https://inhabilidades.srcei.cl/ConsInhab/consultaInhabilidad.do" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">inhabilidades.srcei.cl</a>
+          </p>
+        </div>
+
         <!-- COMPROBANTE TRANSFERENCIA -->
         <div class="field">
           <label>Comprobante de transferencia — Cuota anual $30.000 <span class="req" id="comp-req">*</span></label>
@@ -1224,18 +1242,19 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
     const slug = `${prenom}-${nom}`.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // Upload archivos
-    const [photo_url, url_cedula, url_licencia, url_cv, url_comprobante] = await Promise.all([
+    const [photo_url, url_cedula, url_licencia, url_cv, url_comprobante, url_inhabilidades] = await Promise.all([
       uploadFile(photoFile, BUCKET, slug),
       uploadFile(document.getElementById('doc-cedula').files[0],      BUCKET_DOCS, `${slug}-cedula`),
       uploadFile(document.getElementById('doc-licencia').files[0],     BUCKET_DOCS, `${slug}-licencia`),
       uploadFile(document.getElementById('doc-cv').files[0],           BUCKET_DOCS, `${slug}-cv`),
-      uploadFile(document.getElementById('doc-comprobante').files[0],  BUCKET_DOCS, `${slug}-comprobante`)
+      uploadFile(document.getElementById('doc-comprobante').files[0],  BUCKET_DOCS, `${slug}-comprobante`),
+      uploadFile(document.getElementById('doc-inhabilidades').files[0],BUCKET_DOCS, `${slug}-inhabilidades`)
     ]);
 
     const especialidades = [
-      ...getChecked('esp-grid'),
+      ...getChecked('esp-grid').filter(v => v !== 'otro'),
       ...( document.getElementById('otras-esp').value.trim()
-           ? document.getElementById('otras-esp').value.trim().split(',').map(s=>s.trim()).filter(Boolean)
+           ? document.getElementById('otras-esp').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean)
            : [] )
     ];
 
@@ -1282,7 +1301,7 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       antecedentes_penales: getRadio('penales'),
       expulsion_instituciones: getRadio('expulsion'),
       // Documentos
-      url_cedula, url_licencia, url_cv, url_comprobante,
+      url_cedula, url_licencia, url_cv, url_comprobante, url_inhabilidades,
       // Declaraciones
       cuota_pagada:        document.getElementById('ya_pago').checked,
       encuesta_respondida: document.getElementById('ya_respondio').checked,

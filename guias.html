@@ -160,12 +160,6 @@
  <div class="dir-controls">
  <div class="filters" id="filters">
  <button class="fbtn active" onclick="setFilter('all',this)" data-t="f_all">Todos</button>
- <button class="fbtn" onclick="setFilter('trekking',this)">Trekking</button>
- <button class="fbtn" onclick="setFilter('kayak',this)">Kayak</button>
- <button class="fbtn" onclick="setFilter('escalada',this)">Escalada</button>
- <button class="fbtn" onclick="setFilter('fauna',this)">Fauna</button>
- <button class="fbtn" onclick="setFilter('pesca',this)">Pesca</button>
- <button class="fbtn" onclick="setFilter('cabalgatas',this)">Cabalgatas</button>
  </div>
  <div class="dir-count"><span id="count-label">Cargando…</span></div>
  </div>
@@ -266,9 +260,10 @@ const sb = supabase.createClient(
 );
 
 const ESP_TAG = {
- trekking:{l:'Trekking',c:'tt'}, kayak:{l:'Kayak',c:'tk'},
- escalada:{l:'Escalada',c:'te'}, fauna:{l:'Fauna',c:'tfa'},
- pesca:{l:'Pesca',c:'tp'}, cabalgatas:{l:'Cabalgatas',c:'tt'}
+ convencional:{l:'Convencional',c:'tt'}, trekking:{l:'Trekking',c:'tt'},
+ escalada:{l:'Montaña / Escalada',c:'te'}, kayak:{l:'Kayak / Rafting',c:'tk'},
+ crucero:{l:'Crucero',c:'tk'}, pesca:{l:'Pesca',c:'tp'},
+ cabalgatas:{l:'Cabalgatas',c:'tt'}, fauna:{l:'Fauna',c:'tfa'}
 };
 const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
 
@@ -288,18 +283,19 @@ async function loadGuides(){
  try {
  const {data,error} = await sb.from('agap_guides')
  .select('*').eq('activo',true).eq('cotisation',true).order('orden');
- if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderGuides(ALL_GUIDES);return;}
+ if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);return;}
  ALL_GUIDES = data.map(g=>({
  id:g.id,
  nombre:(g.prenom?g.prenom+' ':'')+g.nom,
  zona:g.zona||'Aysén',
  foto:g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
  esp:g.especialidades||[],
- tags:(g.especialidades||[]).slice(0,3).map(e=>ESP_TAG[e]||{l:e,c:'tt'}),
+ tags:(g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
  idiomas:(g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
  }));
+ renderFiltros(ALL_GUIDES);
  renderGuides(ALL_GUIDES);
- } catch(e){ALL_GUIDES=GUIDES_MOCK;renderGuides(ALL_GUIDES);}
+ } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
 }
 
 function setFilter(esp,btn){
@@ -309,9 +305,27 @@ function setFilter(esp,btn){
  applyFilters();
 }
 
+/* Libellé d'une spécialité : connu via ESP_TAG, sinon valeur brute embellie */
+function espLabel(e){
+ const k=(e||'').toLowerCase();
+ if(ESP_TAG[k]) return ESP_TAG[k].l;
+ return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
+}
+
+/* Génère les boutons de filtre à partir des spécialités présentes (clés minuscules, dédoublonnage insensible à la casse) */
+function renderFiltros(list){
+ const bar = document.getElementById('filters');
+ if(!bar) return;
+ const set = new Set();
+ list.forEach(g => (g.esp||[]).forEach(e => { if(e) set.add(e.toLowerCase()); }));
+ const esps = [...set].sort((a,b)=>espLabel(a).localeCompare(espLabel(b),'es'));
+ bar.innerHTML = `<button class="fbtn${activeFilter==='all'?' active':''}" onclick="setFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
+  + esps.map(e=>`<button class="fbtn${activeFilter===e?' active':''}" onclick="setFilter(${JSON.stringify(e)},this)">${espLabel(e)}</button>`).join('');
+}
+
 function applyFilters(){
  const q = (document.getElementById('search-input').value||'').toLowerCase().trim();
- let list = activeFilter==='all' ? ALL_GUIDES : ALL_GUIDES.filter(g=>g.esp.includes(activeFilter));
+ let list = activeFilter==='all' ? ALL_GUIDES : ALL_GUIDES.filter(g=>(g.esp||[]).some(x=>(x||'').toLowerCase()===activeFilter));
  if(q) list = list.filter(g=>g.nombre.toLowerCase().includes(q)||g.zona.toLowerCase().includes(q));
  renderGuides(list);
 }
@@ -319,7 +333,7 @@ function applyFilters(){
 function renderGuides(list){
  const grid = document.getElementById('guias-grid');
  if(!list.length){
- grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="ico">🔍</div><p>No se encontraron guías con ese criterio.</p></div>`;
+ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><p>No se encontraron guías con ese criterio.</p></div>`;
  updateCount(0);return;
  }
  grid.innerHTML = list.map(g=>`
@@ -327,7 +341,7 @@ function renderGuides(list){
  <div class="g-photo" style="background-image:url('${g.foto}')"></div>
  <div class="g-body">
  <div class="g-name">${g.nombre}</div>
- <div class="g-zone">📍 ${g.zona}</div>
+ <div class="g-zone">${g.zona}</div>
  <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
  <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
  </div>
