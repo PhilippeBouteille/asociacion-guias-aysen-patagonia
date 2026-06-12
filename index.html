@@ -768,21 +768,44 @@ async function submitInscription(e){
  f.reset();
 }
 
-/* ─── CONTACTO : registro Supabase + mailto ──────────────────── */
+/* ─── CONTACTO : Supabase + Resend Edge Function ─────────────
+   Passer RESEND_ACTIVE à true une fois la Edge Function déployée  */
+const RESEND_ACTIVE = true;
+const EDGE_URL = `${SUPA_URL}/functions/v1/send-contact-email`;
+
 async function submitContacto(e){
  e.preventDefault();
  const btn = e.target.querySelector('button[type=submit]');
- btn.disabled=true; btn.textContent='Enviando...';
+ btn.disabled = true; btn.textContent = 'Enviando...';
  const f = e.target;
  const nom = f.nom.value.trim(), email = f.email.value.trim(), mensaje = f.mensaje.value.trim();
- const {error} = await sb.from('agap_demandes').insert({ nom, email, mensaje });
- btn.disabled=false;
- if(error){ btn.textContent='Error — intenta de nuevo'; return; }
- btn.textContent='Mensaje enviado';
+ if (!nom || !email) { btn.disabled=false; btn.textContent=t('ctc_sub'); return; }
+
+ // 1. Toujours enregistrer dans Supabase
+ await sb.from('agap_demandes').insert({ nom, email, mensaje }).catch(()=>{});
+
+ // 2a. Resend actif → appel Edge Function
+ if (RESEND_ACTIVE) {
+  try {
+   const res = await fetch(EDGE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE' },
+    body: JSON.stringify({ nom, email, mensaje })
+   });
+   if (!res.ok) throw new Error();
+   btn.disabled = false; btn.textContent = t('ctc_sub');
+   const note = document.getElementById('ctc-note');
+   if (note) { note.dataset.t = 'ctc_note_sent'; note.textContent = lang==='fr' ? 'Message envoyé. Diego vous répondra par email.' : lang==='en' ? 'Message sent. Diego will reply by email.' : 'Mensaje enviado. Diego te responderá por email.'; note.style.display = 'block'; }
+   f.reset(); return;
+  } catch(err) { /* fallback mailto */ }
+ }
+
+ // 2b. Fallback mailto
+ btn.disabled = false; btn.textContent = t('ctc_sub');
  const note = document.getElementById('ctc-note');
  if (note) note.style.display = 'block';
  const subject = encodeURIComponent('Consulta desde el sitio AGAP — ' + nom);
- const body = encodeURIComponent(mensaje + '\n\n— ' + nom + ' (' + email + ')');
+ const body    = encodeURIComponent(mensaje + '\n\n— ' + nom + ' (' + email + ')');
  window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + subject + '&body=' + body;
  f.reset();
 }
