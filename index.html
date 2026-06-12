@@ -525,6 +525,12 @@
 </footer>
 
 <script>
+/* ─── CONSTANTES ─────────────────────────────────────────────── */
+const SUPA_URL      = 'https://ejutlkmzamjmwyaigisy.supabase.co';
+const SUPA_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE';
+const RESEND_ACTIVE = true;
+const EDGE_URL      = `${SUPA_URL}/functions/v1/send-contact-email`;
+
 /* ─── i18n ──────────────────────────────────────────────────── */
 const T={
  es:{
@@ -679,10 +685,7 @@ function applyLang(){
 function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
 
 /* ─── SUPABASE ───────────────────────────────────────────────── */
-const sb = supabase.createClient(
- 'https://ejutlkmzamjmwyaigisy.supabase.co',
- 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE'
-);
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 const ESP_TAG = {
  trekking:{l:'Trekking',c:'tt'}, kayak:{l:'Kayak',c:'tk'},
@@ -769,9 +772,6 @@ async function submitInscription(e){
 }
 
 /* ─── CONTACTO : Supabase + Resend Edge Function ─────────────
-   Passer RESEND_ACTIVE à true une fois la Edge Function déployée  */
-const RESEND_ACTIVE = true;
-const EDGE_URL = `${SUPA_URL}/functions/v1/send-contact-email`;
 
 async function submitContacto(e){
  e.preventDefault();
