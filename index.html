@@ -771,41 +771,47 @@ async function submitInscription(e){
  f.reset();
 }
 
-/* ─── CONTACTO : Supabase + Resend Edge Function ─────────────
+/* ─── CONTACTO : Supabase + Resend Edge Function ─────────────── */
 
 async function submitContacto(e){
  e.preventDefault();
- const btn = e.target.querySelector('button[type=submit]');
+ var btn = e.target.querySelector('button[type=submit]');
  btn.disabled = true; btn.textContent = 'Enviando...';
- const f = e.target;
- const nom = f.nom.value.trim(), email = f.email.value.trim(), mensaje = f.mensaje.value.trim();
+ var f = e.target;
+ var nom = f.nom.value.trim();
+ var email = f.email.value.trim();
+ var mensaje = f.mensaje.value.trim();
  if (!nom || !email) { btn.disabled=false; btn.textContent=t('ctc_sub'); return; }
 
- // 1. Toujours enregistrer dans Supabase
- await sb.from('agap_demandes').insert({ nom, email, mensaje }).catch(()=>{});
+ await sb.from('agap_demandes').insert({ nom: nom, email: email, mensaje: mensaje }).catch(function(){});
 
- // 2a. Resend actif → appel Edge Function
  if (RESEND_ACTIVE) {
   try {
-   const res = await fetch(EDGE_URL, {
+   var res = await fetch(EDGE_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXRsa216YW1qbXd5YWlnaXN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzI1OTIsImV4cCI6MjA5NTE0ODU5Mn0.M8hO3yHUxj5PiAM-ZcDD_TEwNgibTwrcH7wgJCG6QKE' },
-    body: JSON.stringify({ nom, email, mensaje })
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+    body: JSON.stringify({ nom: nom, email: email, mensaje: mensaje })
    });
-   if (!res.ok) throw new Error();
-   btn.disabled = false; btn.textContent = t('ctc_sub');
-   const note = document.getElementById('ctc-note');
-   if (note) { note.dataset.t = 'ctc_note_sent'; note.textContent = lang==='fr' ? 'Message envoyé. Diego vous répondra par email.' : lang==='en' ? 'Message sent. Diego will reply by email.' : 'Mensaje enviado. Diego te responderá por email.'; note.style.display = 'block'; }
-   f.reset(); return;
-  } catch(err) { /* fallback mailto */ }
+   if (!res.ok) throw new Error('resend_fail');
+   btn.disabled = false;
+   btn.textContent = t('ctc_sub');
+   var note = document.getElementById('ctc-note');
+   if (note) {
+    var msgs = { fr: 'Message envoy\u00e9. Diego vous r\u00e9pondra par email.', en: 'Message sent. Diego will reply by email.', es: 'Mensaje enviado. Diego te responder\u00e1 por email.' };
+    note.textContent = msgs[lang] || msgs.es;
+    note.style.display = 'block';
+   }
+   f.reset();
+   return;
+  } catch(err) { /* fallback */ }
  }
 
- // 2b. Fallback mailto
- btn.disabled = false; btn.textContent = t('ctc_sub');
- const note = document.getElementById('ctc-note');
- if (note) note.style.display = 'block';
- const subject = encodeURIComponent('Consulta desde el sitio AGAP — ' + nom);
- const body    = encodeURIComponent(mensaje + '\n\n— ' + nom + ' (' + email + ')');
+ btn.disabled = false;
+ btn.textContent = t('ctc_sub');
+ var note2 = document.getElementById('ctc-note');
+ if (note2) note2.style.display = 'block';
+ var subject = encodeURIComponent('Consulta desde el sitio AGAP - ' + nom);
+ var body    = encodeURIComponent(mensaje + '\n\n- ' + nom + ' (' + email + ')');
  window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + subject + '&body=' + body;
  f.reset();
 }
