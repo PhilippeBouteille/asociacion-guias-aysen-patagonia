@@ -783,7 +783,7 @@ async function submitContacto(e){
  var mensaje = f.mensaje.value.trim();
  if (!nom || !email) { btn.disabled=false; btn.textContent=t('ctc_sub'); return; }
 
- await sb.from('agap_demandes').insert({ nom: nom, email: email, mensaje: mensaje }).catch(function(){});
+ try { await sb.from('agap_demandes').insert({ nom: nom, email: email, mensaje: mensaje }); } catch(e) {}
 
  if (RESEND_ACTIVE) {
   try {
