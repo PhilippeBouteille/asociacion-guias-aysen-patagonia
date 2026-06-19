@@ -76,10 +76,13 @@
  .tk{background:rgba(77,189,232,.12);color:#2A9DC4;}
  .te{background:rgba(224,48,48,.12);color:var(--red);}
  .tf{background:rgba(245,166,35,.12);color:var(--orange-d);}
- .tfa{background:rgba(61,175,74,.18);color:#2A8C38);}
+ .tfa{background:rgba(61,175,74,.18);color:#2A8C38;}
  .tp{background:rgba(77,189,232,.12);color:#2A9DC4;}
  .g-langs{font-size:.8rem;color:var(--muted);}
  .g-langs strong{color:var(--brown);}
+ .g-contact{font-size:.8rem;color:var(--muted);margin-top:.35rem;}
+ .g-contact strong{color:var(--brown);}
+ .g-contact a{color:inherit;text-decoration:underline dotted;}
 
  /* ── EMPTY ── */
  .empty-state{text-align:center;padding:80px 20px;color:var(--muted);}
@@ -167,6 +170,12 @@
  <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800">Idioma</span>
  <div class="filters" id="lang-filters" style="margin:0">
  <button class="fbtn active" onclick="setLangFilter('all',this)" data-t="f_all">Todos</button>
+ </div>
+ </div>
+ <div class="zona-row" style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
+ <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800">Zona</span>
+ <div class="filters" id="zona-filters" style="margin:0">
+ <button class="fbtn active" onclick="setZonaFilter('all',this)" data-t="f_all">Todos</button>
  </div>
  </div>
  <div class="guias-grid" id="guias-grid"></div>
@@ -277,38 +286,56 @@ const LANG_FULL = {'español':'Español','inglés':'Inglés','francés':'Francé
 function langKey(v){ const k=(v||'').toLowerCase().trim(); return LANG_NORM[k]||k; }
 function langLabel(v){ const k=langKey(v); return LANG_FULL[k] || (k.charAt(0).toUpperCase()+k.slice(1)); }
 
+/* Comunas oficiales de la Región de Aysén (lista cerrada usada en registro.html) */
+const ZONA_LABEL = {
+ pumalin:'Caleta Gonzalo / Pumalín',
+ coyhaique:'Coyhaique', lago_verde:'Lago Verde', puerto_aysen:'Puerto Aysén',
+ cisnes:'Cisnes / Puerto Cisnes', guaitecas:'Guaitecas / Melinka', rio_ibanez:'Río Ibáñez',
+ chile_chico:'Chile Chico', cochrane:'Cochrane', tortel:'Tortel', ohiggins:"Villa O'Higgins"
+};
+/* Libellé d'une zona : connu via ZONA_LABEL, sinon valeur brute embellie (zonas "otro" en texte libre) */
+function zonaLabel(z){
+ const k=(z||'').toLowerCase().trim();
+ if(ZONA_LABEL[k]) return ZONA_LABEL[k];
+ return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
+}
+
 let ALL_GUIDES = [];
 let activeFilter = 'all';
 let activeLang = 'all';
+let activeZona = 'all';
 
 const GUIDES_MOCK = [
- {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN'},
- {id:2,nombre:'Valentina Soto',zona:'Puerto Aysén / Fiordos',foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR'},
- {id:3,nombre:'Miguel Á. Vera',zona:'Cochrane / Río Baker',foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN'},
- {id:4,nombre:'Paula Henríquez',zona:'Chile Chico / LGC',foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN · PT'},
- {id:5,nombre:'Rodrigo Ojeda',zona:'Coyhaique / Simpson',foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN'},
- {id:6,nombre:'Claudia Neira',zona:'Lago Verde / Palena',foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR'},
+ {id:1,nombre:'Carlos Mansilla',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN'},
+ {id:2,nombre:'Valentina Soto',zonas:['puerto_aysen','cisnes'],foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR'},
+ {id:3,nombre:'Miguel Á. Vera',zonas:['cochrane','tortel'],foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN'},
+ {id:4,nombre:'Paula Henríquez',zonas:['chile_chico','rio_ibanez'],foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN · PT'},
+ {id:5,nombre:'Rodrigo Ojeda',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN'},
+ {id:6,nombre:'Claudia Neira',zonas:['lago_verde'],foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR'},
 ];
 
 async function loadGuides(){
  try {
  const {data,error} = await sb.from('agap_guides')
  .select('*').eq('activo',true).eq('cotisation',true).order('orden');
- if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);return;}
+ if(error||!data||!data.length){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderZonaFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);return;}
  ALL_GUIDES = data.map(g=>({
  id:g.id,
  nombre:(g.prenom?g.prenom+' ':'')+g.nom,
- zona:g.zona||'Aysén',
+ zonas:(g.zonas&&g.zonas.length)?g.zonas:(g.zona?[g.zona]:[]),
  foto:g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
  esp:g.especialidades||[],
  tags:(g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
  idiomas:(g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
  langs:(g.idiomas||[]),
+ telefono:g.telefono||null,
+ whatsapp:g.whatsapp||null,
  }));
  renderFiltros(ALL_GUIDES);
  renderLangFiltros(ALL_GUIDES);
+ renderZonaFiltros(ALL_GUIDES);
  renderGuides(ALL_GUIDES);
- } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
+ } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderZonaFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
 }
 
 function setFilter(esp,btn){
@@ -322,6 +349,13 @@ function setLangFilter(lang,btn){
  document.querySelectorAll('#lang-filters .fbtn').forEach(b=>b.classList.remove('active'));
  btn.classList.add('active');
  activeLang = lang;
+ applyFilters();
+}
+
+function setZonaFilter(zona,btn){
+ document.querySelectorAll('#zona-filters .fbtn').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ activeZona = zona;
  applyFilters();
 }
 
@@ -354,12 +388,36 @@ function renderLangFiltros(list){
   + langs.map(l=>`<button class="fbtn${activeLang===l?' active':''}" onclick="setLangFilter(${JSON.stringify(l)},this)">${langLabel(l)}</button>`).join('');
 }
 
+/* Génère les boutons de filtre par zone à partir des zonas présentes (liste fermée + "otro" éventuel en texte libre) */
+function renderZonaFiltros(list){
+ const bar = document.getElementById('zona-filters');
+ if(!bar) return;
+ const set = new Set();
+ list.forEach(g => (g.zonas||[]).forEach(z => { if(z) set.add(z.toLowerCase().trim()); }));
+ const zonas = [...set].sort((a,b)=>zonaLabel(a).localeCompare(zonaLabel(b),'es'));
+ bar.innerHTML = `<button class="fbtn${activeZona==='all'?' active':''}" onclick="setZonaFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
+  + zonas.map(z=>`<button class="fbtn${activeZona===z?' active':''}" onclick="setZonaFilter(${JSON.stringify(z)},this)">${zonaLabel(z)}</button>`).join('');
+}
+
 function applyFilters(){
  const q = (document.getElementById('search-input').value||'').toLowerCase().trim();
  let list = activeFilter==='all' ? ALL_GUIDES : ALL_GUIDES.filter(g=>(g.esp||[]).some(x=>(x||'').toLowerCase()===activeFilter));
  if(activeLang!=='all') list = list.filter(g=>(g.langs||[]).some(l=>langKey(l)===activeLang));
- if(q) list = list.filter(g=>g.nombre.toLowerCase().includes(q)||g.zona.toLowerCase().includes(q));
+ if(activeZona!=='all') list = list.filter(g=>(g.zonas||[]).some(z=>(z||'').toLowerCase().trim()===activeZona));
+ if(q) list = list.filter(g=>g.nombre.toLowerCase().includes(q)||(g.zonas||[]).some(z=>zonaLabel(z).toLowerCase().includes(q)));
  renderGuides(list);
+}
+
+/* Ligne de contact (WhatsApp prioritaire, sinon téléphone) */
+function contactLine(g){
+ if(g.whatsapp){
+ const num = g.whatsapp.replace(/[^0-9]/g,'');
+ return `<strong>WhatsApp:</strong> <a href="https://wa.me/${num}" target="_blank" rel="noopener">${g.whatsapp}</a>`;
+ }
+ if(g.telefono){
+ return `<strong>Tel:</strong> <a href="tel:${g.telefono.replace(/[^0-9+]/g,'')}">${g.telefono}</a>`;
+ }
+ return '';
 }
 
 function renderGuides(list){
@@ -373,9 +431,10 @@ function renderGuides(list){
  <div class="g-photo" style="background-image:url('${g.foto}')"></div>
  <div class="g-body">
  <div class="g-name">${g.nombre}</div>
- <div class="g-zone">${g.zona}</div>
+ <div class="g-zone">${(g.zonas||[]).map(zonaLabel).join(' · ')}</div>
  <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
  <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
+ ${(g.whatsapp||g.telefono) ? `<div class="g-contact">${contactLine(g)}</div>` : ''}
  </div>
  </div>`).join('');
  updateCount(list.length);

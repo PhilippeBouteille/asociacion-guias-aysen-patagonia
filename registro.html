@@ -685,11 +685,28 @@
             <div class="file-name" id="photo-name"></div>
           </div>
         </div>
-        <!-- Zona y bio -->
+        <!-- Zona -->
+        <div class="field" style="margin-bottom:16px">
+          <label>Zona(s) de operacion <span class="req">*</span></label>
+          <span class="hint">Puedes seleccionar varias comunas si trabajas en distintas zonas.</span>
+        </div>
+        <div class="checkbox-grid" id="zona-grid">
+          <label class="check-item"><input type="checkbox" value="pumalin"><div class="box"></div><span>Caleta Gonzalo / Pumalín</span></label>
+          <label class="check-item"><input type="checkbox" value="coyhaique"><div class="box"></div><span>Coyhaique</span></label>
+          <label class="check-item"><input type="checkbox" value="lago_verde"><div class="box"></div><span>Lago Verde</span></label>
+          <label class="check-item"><input type="checkbox" value="puerto_aysen"><div class="box"></div><span>Puerto Aysén</span></label>
+          <label class="check-item"><input type="checkbox" value="cisnes"><div class="box"></div><span>Cisnes / Puerto Cisnes</span></label>
+          <label class="check-item"><input type="checkbox" value="guaitecas"><div class="box"></div><span>Guaitecas / Melinka</span></label>
+          <label class="check-item"><input type="checkbox" value="rio_ibanez"><div class="box"></div><span>Río Ibáñez</span></label>
+          <label class="check-item"><input type="checkbox" value="chile_chico"><div class="box"></div><span>Chile Chico</span></label>
+          <label class="check-item"><input type="checkbox" value="cochrane"><div class="box"></div><span>Cochrane</span></label>
+          <label class="check-item"><input type="checkbox" value="tortel"><div class="box"></div><span>Tortel</span></label>
+          <label class="check-item"><input type="checkbox" value="ohiggins"><div class="box"></div><span>Villa O'Higgins</span></label>
+          <label class="check-item"><input type="checkbox" value="otro"><div class="box"></div><span>Otro</span></label>
+        </div>
         <div class="row">
           <div class="field">
-            <label>Zona de operacion <span class="req">*</span></label>
-            <input type="text" id="zona" placeholder="Ej. Coyhaique, Lago General Carrera, Cochrane…" required>
+            <input type="text" id="otras-zona" placeholder="Otra zona o sector no listado (sepáralas con comas: Río Baker, Fiordos…)">
           </div>
         </div>
         <div class="row">
@@ -1224,11 +1241,11 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
   const prenom = document.getElementById('prenom').value.trim();
   const nom    = document.getElementById('nom').value.trim();
   const email  = document.getElementById('email').value.trim();
-  const zona   = document.getElementById('zona').value.trim();
+  const zonas  = getChecked('zona-grid');
   const bio    = document.getElementById('bio').value.trim();
   const rut    = document.getElementById('rut').value.trim();
 
-  if (!prenom || !nom || !email || !zona || !bio || !rut) {
+  if (!prenom || !nom || !email || !zonas.length || !bio || !rut) {
     showMsg('error', 'Por favor completa todos los campos obligatorios (*).');
     return;
   }
@@ -1261,6 +1278,13 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
            : [] )
     ];
 
+    const zonas = [
+      ...getChecked('zona-grid').filter(v => v !== 'otro'),
+      ...( document.getElementById('otras-zona').value.trim()
+           ? document.getElementById('otras-zona').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean)
+           : [] )
+    ];
+
     const payload = {
       // Identidad
       prenom, nom, email, rut,
@@ -1275,7 +1299,7 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       instagram:          document.getElementById('instagram').value.trim() || null,
       sitio_web:          document.getElementById('sitio_web').value.trim() || null,
       // Perfil guia
-      zona, bio, photo_url,
+      zonas, bio, photo_url,
       especialidades,
       idiomas: [
         ...getChecked('idiomas-grid').filter(v => v !== 'Otro'),

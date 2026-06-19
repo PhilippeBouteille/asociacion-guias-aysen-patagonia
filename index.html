@@ -705,6 +705,20 @@ const ESP_TAG = {
 };
 const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
 
+/* Comunas oficiales de la Región de Aysén (lista cerrada usada en registro.html) */
+const ZONA_LABEL = {
+ pumalin:'Caleta Gonzalo / Pumalín',
+ coyhaique:'Coyhaique', lago_verde:'Lago Verde', puerto_aysen:'Puerto Aysén',
+ cisnes:'Cisnes / Puerto Cisnes', guaitecas:'Guaitecas / Melinka', rio_ibanez:'Río Ibáñez',
+ chile_chico:'Chile Chico', cochrane:'Cochrane', tortel:'Tortel', ohiggins:"Villa O'Higgins"
+};
+/* Libellé d'une zona : connu via ZONA_LABEL, sinon valeur brute embellie (zonas "otro" en texte libre) */
+function zonaLabel(z){
+ const k=(z||'').toLowerCase().trim();
+ if(ZONA_LABEL[k]) return ZONA_LABEL[k];
+ return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
+}
+
 let ALL_GUIDES = [];
 let ESP_COUNT = 6;
 let CONTACT_EMAIL = 'aguiasaysenpatagonia@gmail.com';
@@ -716,7 +730,7 @@ async function loadGuides(){
  ALL_GUIDES = data.map(g=>({
  id: g.id,
  nombre: (g.prenom?g.prenom+' ':'')+g.nom,
- zona: g.zona||'Aysén',
+ zonas: (g.zonas&&g.zonas.length)?g.zonas:(g.zona?[g.zona]:[]),
  foto: g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
  esp: g.especialidades||[],
  tags: (g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
@@ -811,12 +825,12 @@ async function submitContacto(e){
 
 /* ─── FALLBACK MOCK si Supabase vide ───────────────────────── */
 const GUIDES_MOCK=[
- {id:1,nombre:'Carlos Mansilla',zona:'Coyhaique / P. Patagonia',foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
- {id:2,nombre:'Valentina Soto',zona:'Puerto Aysén / Fiordos',foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR',acred:'AGAP Nivel 3'},
- {id:3,nombre:'Miguel Á. Vera',zona:'Cochrane / Río Baker',foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
- {id:4,nombre:'Paula Henríquez',zona:'Chile Chico / LGC',foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Fotografía',c:'tf'}],idiomas:'ES · EN · PT',acred:'AGAP Nivel 1'},
- {id:5,nombre:'Rodrigo Ojeda',zona:'Coyhaique / Simpson',foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN',acred:'AGAP Nivel 3'},
- {id:6,nombre:'Claudia Neira',zona:'Lago Verde / Palena',foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR',acred:'AGAP Nivel 2'},
+ {id:1,nombre:'Carlos Mansilla',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
+ {id:2,nombre:'Valentina Soto',zonas:['puerto_aysen','cisnes'],foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR',acred:'AGAP Nivel 3'},
+ {id:3,nombre:'Miguel Á. Vera',zonas:['cochrane','tortel'],foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
+ {id:4,nombre:'Paula Henríquez',zonas:['chile_chico','rio_ibanez'],foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Fotografía',c:'tf'}],idiomas:'ES · EN · PT',acred:'AGAP Nivel 1'},
+ {id:5,nombre:'Rodrigo Ojeda',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN',acred:'AGAP Nivel 3'},
+ {id:6,nombre:'Claudia Neira',zonas:['lago_verde'],foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR',acred:'AGAP Nivel 2'},
 ];
 
 function renderGuias(list){
@@ -827,7 +841,7 @@ function renderGuias(list){
  </div>
  <div class="g-body">
  <div class="g-name">${g.nombre}</div>
- <div class="g-zone"> ${g.zona}</div>
+ <div class="g-zone"> ${(g.zonas||[]).map(zonaLabel).join(' · ')}</div>
  <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
  <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
  </div>
