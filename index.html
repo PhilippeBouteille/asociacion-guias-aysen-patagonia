@@ -84,7 +84,7 @@
 
  /* ── STATS ── */
  #stats{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-d) 100%);padding:40px 0;}
- .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;}
+ .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;text-align:center;}
  .stat-num{font-family:var(--fd);font-size:3.5rem;color:var(--brown);line-height:1;}
  .stat-lbl{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(35,31,32,.6);margin-top:.2rem;}
 
@@ -135,27 +135,16 @@
  /* ── GUÍAS ── */
  #guias{background:var(--warm);}
  .guias-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;}
- .filters{display:flex;gap:.45rem;flex-wrap:wrap;}
- .fbtn{background:none;border:1px solid #ddd;padding:6px 16px;font-size:.78rem;font-weight:700;cursor:pointer;border-radius:20px;transition:all .2s;font-family:var(--fb);color:var(--muted);}
- .fbtn:hover,.fbtn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
- .guias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
- .g-card{background:white;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
- .g-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
- .g-photo{height:220px;background-size:cover;background-position:center top;position:relative;}
- .g-badge{position:absolute;bottom:1rem;left:1rem;background:var(--orange);color:var(--brown);padding:4px 10px;border-radius:3px;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
- .g-body{padding:1.2rem;}
- .g-name{font-family:var(--fd);font-size:1.5rem;color:var(--brown);}
- .g-zone{font-size:.78rem;color:var(--muted);margin-bottom:.7rem;}
- .g-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.9rem;}
- .tag{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
- .tt{background:rgba(61,175,74,.12);color:var(--green);}
- .tk{background:rgba(77,189,232,.12);color:#2A9DC4;}
- .te{background:rgba(224,48,48,.12);color:var(--red);}
- .tf{background:rgba(245,166,35,.12);color:var(--orange-d);}
- .tfa{background:rgba(61,175,74,.18);color:#2A8C38;}
- .g-langs{font-size:.8rem;color:var(--muted);}
- .g-langs strong{color:var(--brown);}
- .guias-cta{text-align:center;margin-top:2.8rem;}
+ .guias-banner{position:relative;display:block;border-radius:16px;overflow:hidden;min-height:320px;text-decoration:none;isolation:isolate;}
+ .guias-banner-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .6s ease;}
+ .guias-banner:hover .guias-banner-bg{transform:scale(1.05);}
+ .guias-banner-shade{position:absolute;inset:0;background:linear-gradient(100deg,rgba(35,31,32,.93) 0%,rgba(35,31,32,.62) 42%,rgba(35,31,32,.18) 100%);}
+ .guias-banner-content{position:relative;z-index:2;max-width:540px;min-height:320px;padding:3rem 2.6rem;display:flex;flex-direction:column;justify-content:center;gap:.9rem;}
+ .guias-banner-eyebrow{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);}
+ .guias-banner-content h3{font-family:var(--fd);font-size:clamp(1.8rem,3.4vw,2.6rem);color:white;line-height:1.08;letter-spacing:.01em;}
+ .guias-banner-content p{color:rgba(255,255,255,.75);font-size:1rem;max-width:430px;line-height:1.6;}
+ .guias-banner-cta{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--fb);font-weight:800;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;color:var(--brown);background:var(--orange);padding:11px 22px;border-radius:6px;width:fit-content;margin-top:.5rem;transition:background .2s;}
+ .guias-banner:hover .guias-banner-cta{background:var(--orange-d);}
 
  /* ── ÚNETE ── */
  #unete{background:var(--green-d);}
@@ -235,14 +224,18 @@
  @media(max-width:900px){
  .nav-links{display:none;}
  .mision-grid,.terr-content,.unete-grid,.ctc-grid,.ft-grid{grid-template-columns:1fr;gap:2.2rem;}
- .guias-grid,.esp-grid,.blog-grid{grid-template-columns:1fr 1fr;}
- .stats-grid{grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+ .esp-grid,.blog-grid{grid-template-columns:1fr 1fr;}
+ .stats-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem;}
  .terr-facts{grid-template-columns:1fr 1fr;}
  section{padding:60px 0;}
  }
  @media(max-width:520px){
- .guias-grid,.esp-grid,.blog-grid{grid-template-columns:1fr;}
+ .esp-grid,.blog-grid{grid-template-columns:1fr;}
  .f2{grid-template-columns:1fr;}
+ .guias-banner,.guias-banner-content{min-height:0;}
+ .guias-banner-content{padding:2.2rem 1.6rem;max-width:none;}
+ .guias-banner-content p{max-width:none;}
+ .stats-grid{grid-template-columns:1fr;gap:1.8rem;}
  }
  </style>
 </head>
@@ -296,7 +289,6 @@
  <div class="fu"><div class="stat-num" id="stat-guias">0</div><div class="stat-lbl" data-t="stat1">Guías Asociados</div></div>
  <div class="fu"><div class="stat-num" id="stat-esp">6</div><div class="stat-lbl" data-t="stat2">Actividades</div></div>
  <div class="fu"><div class="stat-num">108K</div><div class="stat-lbl" data-t="stat3">km² de territorio</div></div>
- <div class="fu"><div class="stat-num">3</div><div class="stat-lbl" data-t="stat4">Idiomas</div></div>
  </div>
  </div>
 </div>
@@ -428,14 +420,17 @@
  <div class="sec-label" data-t="sec_guias_lbl">Nuestros Guías</div>
  <h2 class="sec-title" data-t="guias_title">ENCUENTRA<br>TU GUÍA</h2>
  </div>
- <div class="filters fu" id="guias-filters">
- <button class="fbtn active" onclick="filterGuias('all',this)" data-t="f_all">Todos</button>
  </div>
+ <a href="guias.html" class="guias-banner fu">
+ <div class="guias-banner-bg" style="background-image:url('assets/images/especialidades/trekking.jpeg')"></div>
+ <div class="guias-banner-shade"></div>
+ <div class="guias-banner-content">
+ <span class="guias-banner-eyebrow" data-t="gb_eyebrow">Directorio completo</span>
+ <h3 data-t="gb_h">CONOCE A NUESTROS GUÍAS CERTIFICADOS</h3>
+ <p data-t="gb_p">Filtra por actividad, idioma y zona para encontrar al guía ideal para tu próxima aventura en Aysén.</p>
+ <span class="guias-banner-cta" data-t="guias_cta_link">Ver todos los guías →</span>
  </div>
- <div class="guias-grid" id="guias-grid"></div>
- <div class="guias-cta fu">
- <a href="guias.html" class="btn-primary" data-t="guias_cta_link">Ver todos los guías →</a>
- </div>
+ </a>
  </div>
 </section>
 
@@ -552,7 +547,7 @@ const T={
  hero_title_html:'GUÍAS<br><em>AYSÉN</em><br>PATAGONIA',
  hero_sub:'Asociación de guías certificados que conectan viajeros con el alma de la Patagonia profunda',
  hero_btn1:'Ver Guías',hero_btn2:'Asociarse',
- stat1:'Guías Asociados',stat2:'Actividades',stat3:'km² de territorio',stat4:'Idiomas',
+ stat1:'Guías Asociados',stat2:'Actividades',stat3:'km² de territorio',
  sec_nosotros:'Quiénes somos',sec_mv_title:'MISIÓN &<br>VISIÓN',
  mision_h:'MISIÓN',mision_p:'Unir y representar a los guías de la región en una sola organización, creando un estilo de vida e identidad asociada al patrimonio de Aysén. Promovemos la conservación y el turismo sostenible.',
  vision_h:'VISIÓN',vision_p:'Ser un gremio líder de guías formalizados y acreditados por AGAP, valorando habilidades y conocimientos locales a través de un sistema de acreditación que incluye evaluaciones y capacitaciones.',
@@ -574,6 +569,8 @@ const T={
  esp6_tag:'Cabalgatas',esp6_h:'CABALGATAS',esp6_p:'Recorridos a caballo por valles, estepas y senderos del interior de Aysén.',
  sec_guias_lbl:'Nuestros Guías',guias_title:'ENCUENTRA<br>TU GUÍA',
  guias_cta_link:'Ver todos los guías →',
+ gb_eyebrow:'Directorio completo',gb_h:'CONOCE A NUESTROS GUÍAS CERTIFICADOS',
+ gb_p:'Filtra por actividad, idioma y zona para encontrar al guía ideal para tu próxima aventura en Aysén.',
  nav_directiva:'Directiva',
  f_all:'Todos',guias_cta:'Ver todos los guías →',
  sec_unete_lbl:'Para guías',unete_title:'ÚNETE A<br>AGAP',
@@ -597,7 +594,7 @@ const T={
  hero_title_html:'GUIDES<br><em>AYSÉN</em><br>PATAGONIA',
  hero_sub:'Association of certified guides connecting travelers with the soul of deep Patagonia',
  hero_btn1:'Find a Guide',hero_btn2:'Join Us',
- stat1:'Member Guides',stat2:'Activities',stat3:'km² of territory',stat4:'Languages',
+ stat1:'Member Guides',stat2:'Activities',stat3:'km² of territory',
  sec_nosotros:'About us',sec_mv_title:'MISSION &<br>VISION',
  mision_h:'MISSION',mision_p:'Unite and represent the guides of the region in a single organization, creating an identity linked to the heritage of Aysén. We promote conservation and sustainable tourism.',
  vision_h:'VISION',vision_p:'To be a leading guild of guides formalized and accredited by AGAP, valuing local skills and knowledge through an accreditation system that includes evaluations and training.',
@@ -619,6 +616,8 @@ const T={
  esp6_tag:'Cabalgatas',esp6_h:'HORSE RIDING',esp6_p:'Horseback rides through valleys, steppes and backcountry trails of Aysén.',
  sec_guias_lbl:'Our Guides',guias_title:'FIND YOUR<br>GUIDE',
  guias_cta_link:'View full directory →',
+ gb_eyebrow:'Full directory',gb_h:'MEET OUR CERTIFIED GUIDES',
+ gb_p:'Filter by activity, language and zone to find the right guide for your next Aysén adventure.',
  nav_directiva:'Board',
  f_all:'All',guias_cta:'View all guides →',
  sec_unete_lbl:'For guides',unete_title:'JOIN<br>AGAP',
@@ -642,7 +641,7 @@ const T={
  hero_title_html:'GUIDES<br><em>AYSÉN</em><br>PATAGONIE',
  hero_sub:"Association de guides certifiés qui connectent les voyageurs avec l'âme de la Patagonie profonde",
  hero_btn1:'Voir les Guides',hero_btn2:'Rejoindre',
- stat1:'Guides Membres',stat2:'Activités',stat3:'km² de territoire',stat4:'Langues',
+ stat1:'Guides Membres',stat2:'Activités',stat3:'km² de territoire',
  sec_nosotros:'Qui sommes-nous',sec_mv_title:'MISSION &<br>VISION',
  mision_h:'MISSION',mision_p:"Unir et représenter les guides de la région dans une seule organisation, créant une identité liée au patrimoine d'Aysén. Nous promouvons la conservation et le tourisme durable.",
  vision_h:'VISION',vision_p:"Devenir un syndicat leader de guides formalisés et accrédités par AGAP, valorisant les compétences et connaissances locales via un système d'accréditation.",
@@ -664,6 +663,8 @@ const T={
  esp6_tag:'Cabalgatas',esp6_h:'RANDONNÉE ÉQUESTRE',esp6_p:"Randonnées à cheval dans les vallées et steppes de l'intérieur d'Aysén.",
  sec_guias_lbl:'Nos Guides',guias_title:'TROUVEZ<br>VOTRE GUIDE',
  guias_cta_link:'Voir le répertoire complet →',
+ gb_eyebrow:'Répertoire complet',gb_h:'DÉCOUVREZ NOS GUIDES CERTIFIÉS',
+ gb_p:'Filtrez par activité, langue et zone pour trouver le guide idéal pour votre prochaine aventure en Aysén.',
  nav_directiva:'Direction',
  f_all:'Tous',guias_cta:'Voir tous les guides →',
  sec_unete_lbl:'Pour les guides',unete_title:'REJOIGNEZ<br>AGAP',
@@ -697,49 +698,28 @@ function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
 /* ─── SUPABASE ───────────────────────────────────────────────── */
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-const ESP_TAG = {
- convencional:{l:'Convencional',c:'tt'}, trekking:{l:'Trekking',c:'tt'},
- escalada:{l:'Montaña / Escalada',c:'te'}, kayak:{l:'Kayak / Rafting',c:'tk'},
- crucero:{l:'Crucero',c:'tk'}, pesca:{l:'Pesca',c:'tk'},
- cabalgatas:{l:'Cabalgatas',c:'tt'}, fauna:{l:'Fauna',c:'tfa'}
-};
-const LANG_MAP = {es:'ES',en:'EN',fr:'FR',pt:'PT'};
-
-/* Comunas oficiales de la Región de Aysén (lista cerrada usada en registro.html) */
-const ZONA_LABEL = {
- pumalin:'Caleta Gonzalo / Pumalín',
- coyhaique:'Coyhaique', lago_verde:'Lago Verde', puerto_aysen:'Puerto Aysén',
- cisnes:'Cisnes / Puerto Cisnes', guaitecas:'Guaitecas / Melinka', rio_ibanez:'Río Ibáñez',
- chile_chico:'Chile Chico', cochrane:'Cochrane', tortel:'Tortel', ohiggins:"Villa O'Higgins"
-};
-/* Libellé d'une zona : connu via ZONA_LABEL, sinon valeur brute embellie (zonas "otro" en texte libre) */
-function zonaLabel(z){
- const k=(z||'').toLowerCase().trim();
- if(ZONA_LABEL[k]) return ZONA_LABEL[k];
- return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
-}
-
 let ALL_GUIDES = [];
 let ESP_COUNT = 6;
 let CONTACT_EMAIL = 'aguiasaysenpatagonia@gmail.com';
+/* Fallback si Supabase ne renvoie aucun guide actif+cotisant : conserve les valeurs par défaut des stats (6 guías, 6 actividades déjà dans le HTML) */
+const GUIDES_FALLBACK_ESP = [['trekking','fauna'],['kayak','fauna'],['trekking','escalada'],['fauna','pesca'],['escalada','trekking'],['kayak','cabalgatas']];
 
 async function loadGuides(){
  const {data,error} = await sb.from('agap_guides')
- .select('*').eq('activo',true).eq('cotisation',true).order('orden');
- if(error||!data||data.length===0){ renderFiltros(GUIDES_MOCK); renderGuias(GUIDES_MOCK); return; }
- ALL_GUIDES = data.map(g=>({
- id: g.id,
- nombre: (g.prenom?g.prenom+' ':'')+g.nom,
- zonas: (g.zonas&&g.zonas.length)?g.zonas:(g.zona?[g.zona]:[]),
- foto: g.photo_url||'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
- esp: g.especialidades||[],
- tags: (g.especialidades||[]).slice(0,3).map(e=>({l:espLabel(e),c:(ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt'})),
- idiomas: (g.idiomas||['es']).map(i=>LANG_MAP[i]||i.toUpperCase()).join(' · '),
- acred: (g.certificaciones||['AGAP'])[0]
- }));
+ .select('especialidades').eq('activo',true).eq('cotisation',true);
+ if(error||!data||!data.length){ computeEspCount(GUIDES_FALLBACK_ESP.map(esp=>({especialidades:esp}))); return; }
+ ALL_GUIDES = data;
  document.getElementById('stat-guias').textContent = ALL_GUIDES.length;
- renderFiltros(ALL_GUIDES);
- renderGuias(ALL_GUIDES);
+ computeEspCount(ALL_GUIDES);
+}
+
+/* Calcule le nombre d'activités distinctes pour la stat "Actividades" (le détail par guía vit désormais uniquement sur guias.html) */
+function computeEspCount(list){
+ const set = new Set();
+ list.forEach(g => (g.especialidades||[]).forEach(e => { if(e) set.add(e.toLowerCase()); }));
+ ESP_COUNT = set.size;
+ const st = document.getElementById('stat-esp');
+ if(st) st.textContent = ESP_COUNT;
 }
 
 /* ─── PARAMÈTRES : texte ET liens dynamiques ────────────────── */
@@ -823,60 +803,6 @@ async function submitContacto(e){
  }
 }
 
-/* ─── FALLBACK MOCK si Supabase vide ───────────────────────── */
-const GUIDES_MOCK=[
- {id:1,nombre:'Carlos Mansilla',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',esp:['trekking','fauna'],tags:[{l:'Trekking',c:'tt'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
- {id:2,nombre:'Valentina Soto',zonas:['puerto_aysen','cisnes'],foto:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · EN · FR',acred:'AGAP Nivel 3'},
- {id:3,nombre:'Miguel Á. Vera',zonas:['cochrane','tortel'],foto:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',esp:['trekking','escalada'],tags:[{l:'Trekking',c:'tt'},{l:'Escalada',c:'te'}],idiomas:'ES · EN',acred:'AGAP Nivel 2'},
- {id:4,nombre:'Paula Henríquez',zonas:['chile_chico','rio_ibanez'],foto:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',esp:['fauna','trekking'],tags:[{l:'Fauna',c:'tfa'},{l:'Fotografía',c:'tf'}],idiomas:'ES · EN · PT',acred:'AGAP Nivel 1'},
- {id:5,nombre:'Rodrigo Ojeda',zonas:['coyhaique'],foto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',esp:['escalada','trekking'],tags:[{l:'Escalada',c:'te'},{l:'Trekking',c:'tt'}],idiomas:'ES · EN',acred:'AGAP Nivel 3'},
- {id:6,nombre:'Claudia Neira',zonas:['lago_verde'],foto:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80',esp:['kayak','fauna'],tags:[{l:'Kayak',c:'tk'},{l:'Fauna',c:'tfa'}],idiomas:'ES · FR',acred:'AGAP Nivel 2'},
-];
-
-function renderGuias(list){
- document.getElementById('guias-grid').innerHTML=list.map(g=>`
- <div class="g-card fu">
- <div class="g-photo" style="background-image:url('${g.foto}')">
-
- </div>
- <div class="g-body">
- <div class="g-name">${g.nombre}</div>
- <div class="g-zone"> ${(g.zonas||[]).map(zonaLabel).join(' · ')}</div>
- <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
- <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
- </div>
- </div>`).join('');
- observeFU();
-}
-
-function filterGuias(esp,btn){
- document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
- const src = ALL_GUIDES.length ? ALL_GUIDES : GUIDES_MOCK;
- renderGuias(esp==='all'?src:src.filter(g=>(g.esp||[]).some(x=>(x||'').toLowerCase()===esp)));
-}
-
-/* Libellé d'une spécialité : connu via ESP_TAG, sinon valeur brute embellie */
-function espLabel(e){
- const k=(e||'').toLowerCase();
- if(ESP_TAG[k]) return ESP_TAG[k].l;
- return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
-}
-
-/* Génère les boutons de filtre à partir des spécialités présentes (clés minuscules, dédoublonnage insensible à la casse) */
-function renderFiltros(list){
- const set = new Set();
- list.forEach(g => (g.esp||[]).forEach(e => { if(e) set.add(e.toLowerCase()); }));
- const esps = [...set].sort((a,b)=>espLabel(a).localeCompare(espLabel(b),'es'));
- ESP_COUNT = esps.length;
- const st = document.getElementById('stat-esp');
- if(st) st.textContent = ESP_COUNT;
- const bar = document.getElementById('guias-filters');
- if(!bar) return;
- bar.innerHTML = `<button class="fbtn active" onclick="filterGuias('all',this)" data-t="f_all">${t('f_all')}</button>`
-  + esps.map(e=>`<button class="fbtn" onclick="filterGuias(${JSON.stringify(e)},this)">${espLabel(e)}</button>`).join('');
-}
-
 /* ─── NOTICIAS (BLOG) ───────────────────────────────────────── */
 let BLOG_POSTS = [];
 
@@ -954,7 +880,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  observeFU();
  new IntersectionObserver(e=>{
  if(e[0].isIntersecting){
- const n = ALL_GUIDES.length || GUIDES_MOCK.length;
+ const n = ALL_GUIDES.length || GUIDES_FALLBACK_ESP.length;
  counter(document.getElementById('stat-guias'), n);
  counter(document.getElementById('stat-esp'), ESP_COUNT);
  }
