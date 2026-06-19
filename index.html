@@ -62,6 +62,20 @@
  .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
  .nav-cta{background:var(--orange);color:var(--brown);border:none;padding:8px 18px;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--fb);}
  .nav-cta:hover{background:var(--orange-d);color:var(--brown);}
+ .nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;}
+ .nav-burger span{display:block;width:100%;height:2px;background:white;border-radius:2px;transition:transform .25s,opacity .25s;}
+ .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+ .nav-burger.open span:nth-child(2){opacity:0;}
+ .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+ .mobile-menu{position:fixed;top:64px;left:0;right:0;background:var(--brown);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99;border-bottom:2px solid rgba(245,166,35,.25);}
+ .mobile-menu.open{max-height:calc(100vh - 64px);overflow-y:auto;}
+ .mobile-nav-links{list-style:none;padding:1.2rem 2rem 0;}
+ .mobile-nav-links li{border-bottom:1px solid rgba(255,255,255,.08);}
+ .mobile-nav-links a{display:block;padding:14px 0;color:rgba(255,255,255,.85);text-decoration:none;font-size:.95rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+ .mobile-nav-links a:hover{color:var(--orange);}
+ .mobile-lang-sw{display:flex;gap:.6rem;padding:1.3rem 2rem;}
+ .mobile-lang-sw .lang-btn{flex:1;padding:9px;text-align:center;}
+ .mobile-cta{display:block;width:calc(100% - 4rem);margin:0 2rem 1.6rem;text-align:center;}
 
  /* ── HERO ── */
  #hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
@@ -118,7 +132,8 @@
  .terr-facts{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
  .fact-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:1.5rem;border-radius:8px;transition:background .2s;}
  .fact-card:hover{background:rgba(255,255,255,.12);}
- .fact-num{font-family:var(--fd);font-size:2.6rem;color:var(--orange);line-height:1;}
+ .fact-num{font-family:var(--fd);font-size:2.6rem;color:var(--orange);line-height:1;display:flex;align-items:center;}
+ .fact-num svg{height:1.55rem;width:auto;}
  .fact-desc{font-size:.83rem;color:rgba(255,255,255,.58);margin-top:.25rem;}
 
  /* ── ESPECIALIDADES ── */
@@ -223,6 +238,8 @@
  /* ── RESPONSIVE ── */
  @media(max-width:900px){
  .nav-links{display:none;}
+ .nav-right{display:none;}
+ .nav-burger{display:flex;}
  .mision-grid,.terr-content,.unete-grid,.ctc-grid,.ft-grid{grid-template-columns:1fr;gap:2.2rem;}
  .esp-grid,.blog-grid{grid-template-columns:1fr 1fr;}
  .stats-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem;}
@@ -263,7 +280,27 @@
  </div>
  <button class="nav-cta" onclick="window.location.href='registro.html'" data-t="nav_unete_btn">Únete</button>
  </div>
+ <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu" onclick="toggleMobileMenu()">
+ <span></span><span></span><span></span>
+ </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+ <ul class="mobile-nav-links">
+ <li><a href="#mision" data-t="nav_mision" onclick="closeMobileMenu()">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="#especialidades" data-t="nav_esp" onclick="closeMobileMenu()">Actividades</a></li>
+ <li><a href="#noticias" data-t="nav_blog" onclick="closeMobileMenu()">Noticias</a></li>
+ <li><a href="#contacto" data-t="nav_contacto" onclick="closeMobileMenu()">Contacto</a></li>
+ </ul>
+ <div class="mobile-lang-sw">
+ <button class="lang-btn" onclick="setLang('es')">ES</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
+ <button class="nav-cta mobile-cta" onclick="closeMobileMenu();window.location.href='registro.html'" data-t="nav_unete_btn">Únete</button>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -365,7 +402,7 @@
  <div class="fact-card"><div class="fact-num">108K</div><div class="fact-desc" data-t="f1">km² de superficie</div></div>
  <div class="fact-card"><div class="fact-num">~90K</div><div class="fact-desc" data-t="f2">habitantes</div></div>
  <div class="fact-card"><div class="fact-num">6</div><div class="fact-desc" data-t="f3">parques nacionales</div></div>
- <div class="fact-card"><div class="fact-num">∞</div><div class="fact-desc" data-t="f4">fiordos y glaciares</div></div>
+ <div class="fact-card"><div class="fact-num"><svg viewBox="0 0 64 32" aria-hidden="true" focusable="false"><path d="M16 8 C 9 8 9 24 16 24 C 23 24 25 8 32 8 C 39 8 39 24 32 24 C 25 24 23 8 16 8 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/></svg></div><div class="fact-desc" data-t="f4">fiordos y glaciares</div></div>
  </div>
  </div>
  </div>
@@ -694,6 +731,20 @@ function applyLang(){
  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
 }
 function setLang(l){lang=l;localStorage.setItem('agap_lang',l);applyLang();}
+
+/* ─── MENU MOBILE (hamburger) ───────────────────────────────── */
+function toggleMobileMenu(){
+ const burger = document.getElementById('nav-burger');
+ const menu = document.getElementById('mobile-menu');
+ const isOpen = menu.classList.toggle('open');
+ burger.classList.toggle('open', isOpen);
+ burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+function closeMobileMenu(){
+ document.getElementById('nav-burger').classList.remove('open');
+ document.getElementById('mobile-menu').classList.remove('open');
+ document.getElementById('nav-burger').setAttribute('aria-expanded','false');
+}
 
 /* ─── SUPABASE ───────────────────────────────────────────────── */
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
