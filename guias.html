@@ -58,9 +58,12 @@
  .search-input:focus{outline:none;border-color:var(--orange);}
 
  /* ── FILTERS ── */
- .filters{display:flex;gap:.45rem;flex-wrap:wrap;}
- .fbtn{background:none;border:1px solid #ddd;padding:6px 16px;font-size:.78rem;font-weight:700;cursor:pointer;border-radius:20px;transition:all .2s;font-family:var(--fb);color:var(--muted);}
- .fbtn:hover,.fbtn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+ .filter-selects{display:flex;gap:.9rem;flex-wrap:wrap;}
+ .select-wrap{display:flex;flex-direction:column;gap:.3rem;}
+ .select-wrap label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;}
+ .select-wrap select{appearance:none;-webkit-appearance:none;background:white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z" fill="%236B6860"/></svg>') no-repeat right 14px center;border:2px solid #e5e1db;border-radius:8px;padding:9px 36px 9px 14px;font-family:var(--fb);font-size:.85rem;font-weight:700;color:var(--brown);cursor:pointer;min-width:170px;transition:border-color .2s;}
+ .select-wrap select:hover{border-color:var(--orange);}
+ .select-wrap select:focus{outline:none;border-color:var(--orange);}
 
  /* ── GUIDES GRID ── */
  .guias-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
@@ -113,7 +116,11 @@
  .guias-grid{grid-template-columns:repeat(2,1fr);}
  .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
  }
- @media(max-width:520px){.guias-grid{grid-template-columns:1fr;}}
+ @media(max-width:520px){
+ .guias-grid{grid-template-columns:1fr;}
+ .filter-selects{flex-direction:column;width:100%;}
+ .select-wrap select{width:100%;min-width:0;}
+ }
  </style>
 </head>
 <body>
@@ -161,22 +168,27 @@
  <input type="text" class="search-input" id="search-input" placeholder="Buscar por nombre, zona…" oninput="applyFilters()" data-t-placeholder="search_ph">
  </div>
  <div class="dir-controls">
- <div class="filters" id="filters">
- <button class="fbtn active" onclick="setFilter('all',this)" data-t="f_all">Todos</button>
+ <div class="filter-selects">
+ <div class="select-wrap">
+ <label for="filter-activity" data-t="lbl_activity">Actividad</label>
+ <select id="filter-activity" onchange="setFilter(this.value)">
+ <option value="all" data-t="f_all">Todas</option>
+ </select>
+ </div>
+ <div class="select-wrap">
+ <label for="filter-lang" data-t="lbl_lang">Idioma</label>
+ <select id="filter-lang" onchange="setLangFilter(this.value)">
+ <option value="all" data-t="f_all">Todos</option>
+ </select>
+ </div>
+ <div class="select-wrap">
+ <label for="filter-zona" data-t="lbl_zona">Zona</label>
+ <select id="filter-zona" onchange="setZonaFilter(this.value)">
+ <option value="all" data-t="f_all">Todas</option>
+ </select>
+ </div>
  </div>
  <div class="dir-count"><span id="count-label">Cargando…</span></div>
- </div>
- <div class="lang-row" style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
- <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800">Idioma</span>
- <div class="filters" id="lang-filters" style="margin:0">
- <button class="fbtn active" onclick="setLangFilter('all',this)" data-t="f_all">Todos</button>
- </div>
- </div>
- <div class="zona-row" style="display:flex;align-items:center;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
- <span style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800">Zona</span>
- <div class="filters" id="zona-filters" style="margin:0">
- <button class="fbtn active" onclick="setZonaFilter('all',this)" data-t="f_all">Todos</button>
- </div>
  </div>
  <div class="guias-grid" id="guias-grid"></div>
  </div>
@@ -230,6 +242,7 @@ const T = {
  ph_label:'Guías certificados',ph_title:'GUÍAS<br><em>AYSÉN PATAGONIA</em>',
  ph_sub:'Conoce al equipo de guías profesionales asociados a AGAP, expertos en los territorios de Aysén Patagonia.',
  f_all:'Todos',search_ph:'Buscar por nombre, zona…',
+ lbl_activity:'Actividad',lbl_lang:'Idioma',lbl_zona:'Zona',
  count_tmpl:'<strong>{n}</strong> guías',
  ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
  ft_nav:'Navegación',ft_leg:'Legal',ft_est:'Estatutos AGAP',ft_cod:'Código de Conducta',ft_priv:'Privacidad',
@@ -239,6 +252,7 @@ const T = {
  ph_label:'Certified guides',ph_title:'GUIDES<br><em>AYSÉN PATAGONIA</em>',
  ph_sub:'Meet the professional guides associated with AGAP, experts in the territories of Aysén Patagonia.',
  f_all:'All',search_ph:'Search by name, zone…',
+ lbl_activity:'Activity',lbl_lang:'Language',lbl_zona:'Zone',
  count_tmpl:'<strong>{n}</strong> guides',
  ft_txt:"Association of Aysén Patagonia Guides. Uniting the region's guides to promote sustainable tourism and local heritage.",
  ft_nav:'Navigation',ft_leg:'Legal',ft_est:'AGAP Bylaws',ft_cod:'Code of Conduct',ft_priv:'Privacy',
@@ -248,6 +262,7 @@ const T = {
  ph_label:'Guides certifiés',ph_title:'GUIDES<br><em>AYSÉN PATAGONIE</em>',
  ph_sub:"Découvrez l'équipe de guides professionnels membres d'AGAP, experts des territoires d'Aysén Patagonie.",
  f_all:'Tous',search_ph:'Rechercher par nom, zone…',
+ lbl_activity:'Activité',lbl_lang:'Langue',lbl_zona:'Zone',
  count_tmpl:'<strong>{n}</strong> guides',
  ft_txt:"Association des Guides Aysén Patagonie. Unissant les guides de la région pour promouvoir le tourisme durable et le patrimoine local.",
  ft_nav:'Navigation',ft_leg:'Légal',ft_est:'Statuts AGAP',ft_cod:'Code de Conduite',ft_priv:'Confidentialité',
@@ -338,23 +353,17 @@ async function loadGuides(){
  } catch(e){ALL_GUIDES=GUIDES_MOCK;renderFiltros(ALL_GUIDES);renderLangFiltros(ALL_GUIDES);renderZonaFiltros(ALL_GUIDES);renderGuides(ALL_GUIDES);}
 }
 
-function setFilter(esp,btn){
- document.querySelectorAll('#filters .fbtn').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
+function setFilter(esp){
  activeFilter = esp;
  applyFilters();
 }
 
-function setLangFilter(lang,btn){
- document.querySelectorAll('#lang-filters .fbtn').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
+function setLangFilter(lang){
  activeLang = lang;
  applyFilters();
 }
 
-function setZonaFilter(zona,btn){
- document.querySelectorAll('#zona-filters .fbtn').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
+function setZonaFilter(zona){
  activeZona = zona;
  applyFilters();
 }
@@ -366,37 +375,40 @@ function espLabel(e){
  return k.charAt(0).toUpperCase()+k.slice(1).replace(/[_-]/g,' ');
 }
 
-/* Génère les boutons de filtre à partir des spécialités présentes (clés minuscules, dédoublonnage insensible à la casse) */
+/* Génère les options du menu Actividad à partir des spécialités présentes (clés minuscules, dédoublonnage insensible à la casse) */
 function renderFiltros(list){
- const bar = document.getElementById('filters');
- if(!bar) return;
+ const sel = document.getElementById('filter-activity');
+ if(!sel) return;
  const set = new Set();
  list.forEach(g => (g.esp||[]).forEach(e => { if(e) set.add(e.toLowerCase()); }));
  const esps = [...set].sort((a,b)=>espLabel(a).localeCompare(espLabel(b),'es'));
- bar.innerHTML = `<button class="fbtn${activeFilter==='all'?' active':''}" onclick="setFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
-  + esps.map(e=>`<button class="fbtn${activeFilter===e?' active':''}" onclick="setFilter(${JSON.stringify(e)},this)">${espLabel(e)}</button>`).join('');
+ sel.innerHTML = `<option value="all">${t('f_all')}</option>`
+  + esps.map(e=>`<option value="${e}">${espLabel(e)}</option>`).join('');
+ sel.value = activeFilter;
 }
 
-/* Génère les boutons de filtre par langue (dédoublonnage normalisé : es / Español / español -> un seul) */
+/* Génère les options du menu Idioma (dédoublonnage normalisé : es / Español / español -> un seul) */
 function renderLangFiltros(list){
- const bar = document.getElementById('lang-filters');
- if(!bar) return;
+ const sel = document.getElementById('filter-lang');
+ if(!sel) return;
  const set = new Set();
  list.forEach(g => (g.langs||[]).forEach(l => { if(l) set.add(langKey(l)); }));
  const langs = [...set].sort((a,b)=>langLabel(a).localeCompare(langLabel(b),'es'));
- bar.innerHTML = `<button class="fbtn${activeLang==='all'?' active':''}" onclick="setLangFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
-  + langs.map(l=>`<button class="fbtn${activeLang===l?' active':''}" onclick="setLangFilter(${JSON.stringify(l)},this)">${langLabel(l)}</button>`).join('');
+ sel.innerHTML = `<option value="all">${t('f_all')}</option>`
+  + langs.map(l=>`<option value="${l}">${langLabel(l)}</option>`).join('');
+ sel.value = activeLang;
 }
 
-/* Génère les boutons de filtre par zone à partir des zonas présentes (liste fermée + "otro" éventuel en texte libre) */
+/* Génère les options du menu Zona à partir des zonas présentes (liste fermée + "otro" éventuel en texte libre) */
 function renderZonaFiltros(list){
- const bar = document.getElementById('zona-filters');
- if(!bar) return;
+ const sel = document.getElementById('filter-zona');
+ if(!sel) return;
  const set = new Set();
  list.forEach(g => (g.zonas||[]).forEach(z => { if(z) set.add(z.toLowerCase().trim()); }));
  const zonas = [...set].sort((a,b)=>zonaLabel(a).localeCompare(zonaLabel(b),'es'));
- bar.innerHTML = `<button class="fbtn${activeZona==='all'?' active':''}" onclick="setZonaFilter('all',this)" data-t="f_all">${t('f_all')}</button>`
-  + zonas.map(z=>`<button class="fbtn${activeZona===z?' active':''}" onclick="setZonaFilter(${JSON.stringify(z)},this)">${zonaLabel(z)}</button>`).join('');
+ sel.innerHTML = `<option value="all">${t('f_all')}</option>`
+  + zonas.map(z=>`<option value="${z}">${zonaLabel(z)}</option>`).join('');
+ sel.value = activeZona;
 }
 
 function applyFilters(){
