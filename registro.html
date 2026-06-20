@@ -154,6 +154,13 @@
   }
   .nota-mod a:hover { color: white; }
 
+  .nota-mod.nota-admision {
+    background: var(--red);
+    border-left: 4px solid var(--orange);
+  }
+  .nota-mod.nota-admision p { margin: 0; }
+  .nota-mod.nota-admision p + p { margin-top: 10px; }
+
   /* SECTION BLOCK */
   .section-block {
     background: white;
@@ -571,16 +578,13 @@
 
 <div class="container">
 
-  <div class="nota-mod">
-    Tu ficha será revisada por la directiva antes de ser aceptada. Recibirás confirmación por email una vez activada tu membresía.
+  <div class="nota-mod nota-admision">
+    <p>Tu ficha será revisada por la directiva antes de ser aceptada. Recibirás confirmación por email una vez activada tu membresía.</p>
+    <p>La directiva de AGAP se reserva el derecho de admisión de nuevos socios, evaluando cada solicitud en base al cumplimiento de los requisitos profesionales, el Código de Conducta y los criterios de la asociación.</p>
   </div>
 
   <div class="nota-mod">
     ¿Ya eres socio/a y necesitas modificar tu ficha (foto, zona, teléfono, especialidades, etc.)? No completes este formulario de nuevo — <a href="mailto:aguiasaysenpatagonia@gmail.com?subject=Solicitud%20de%20modificaci%C3%B3n%20de%20ficha%20AGAP&body=Nombre%20completo%3A%20%0AEmail%20con%20el%20que%20me%20inscribi%3A%20%0A%0ACambios%20que%20solicito%20%28foto%2C%20zona%2C%20telefono%2C%20especialidades%2C%20etc.%29%3A%0A-%20">escríbenos directamente indicando los cambios</a> y la directiva los actualizará por ti.
-  </div>
-
-  <div class="nota-mod">
-    La directiva de AGAP se reserva el derecho de admisión de nuevos socios, evaluando cada solicitud en base al cumplimiento de los requisitos profesionales, el Código de Conducta y los criterios de la asociación.
   </div>
 
   <div id="msg-success" class="msg success">Ficha enviada correctamente. La directiva revisará tu solicitud y te contactará pronto.</div>
