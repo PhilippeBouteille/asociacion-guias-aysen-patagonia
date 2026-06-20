@@ -63,6 +63,16 @@
  #directorio{padding:64px 0 84px;}
  .container{max-width:1240px;margin:0 auto;padding:0 2rem;}
  .dir-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+
+ /* ── CÓDIGO DE CONDUCTA ── */
+ #conducta{padding:84px 0;}
+ .sec-label{font-size:.73rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;}
+ .sec-title{font-family:var(--fd);font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:.9;color:var(--brown);margin-bottom:.9rem;}
+ .sec-text{max-width:620px;color:var(--muted);font-size:.97rem;line-height:1.82;}
+ .mc{background:var(--cream);padding:2.2rem;border-radius:8px;border-left:4px solid var(--orange);margin-top:.9rem;}
+ .mc+.mc{border-left-color:var(--blue);}
+ .mc h3{font-family:var(--fd);font-size:1.8rem;color:var(--brown);margin-bottom:.8rem;}
+ .mc p{color:var(--muted);line-height:1.82;font-size:.94rem;}
  .dir-count{font-size:.82rem;color:var(--muted);font-weight:600;}
  .dir-count strong{color:var(--brown);}
 
@@ -131,6 +141,9 @@
  .nav-burger{display:flex;}
  .guias-grid{grid-template-columns:repeat(2,1fr);}
  .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+ #conducta{padding:60px 0;}
+ #cod-grid{grid-template-columns:1fr!important;}
+ #cod-grid .mc[style*="span 3"]{grid-column:span 1!important;}
  }
  @media(max-width:520px){
  .guias-grid{grid-template-columns:1fr;}
@@ -229,6 +242,47 @@
  </div>
 </section>
 
+<!-- CÓDIGO DE CONDUCTA -->
+<section id="conducta" style="background:var(--warm);">
+ <div class="container">
+  <div class="fu" style="text-align:center;max-width:640px;margin:0 auto 3.5rem;">
+   <div class="sec-label" data-t="sec_cod_lbl">Ética profesional</div>
+   <h2 class="sec-title" data-t="sec_cod_title">CÓDIGO DE<br><span style="color:var(--orange)">CONDUCTA</span></h2>
+   <p class="sec-text" style="margin:0 auto;" data-t="sec_cod_intro">Los principios que guían el ejercicio profesional de cada socio AGAP.</p>
+  </div>
+  <div class="fu" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;" id="cod-grid">
+   <div class="mc" style="border-left-color:var(--orange);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">1</span> <span data-t="cod1_h">Excelencia profesional</span></h3>
+    <p data-t="cod1_p">Ejercer con el más alto estándar técnico, mantener certificaciones vigentes y formación continua.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--green);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">2</span> <span data-t="cod2_h">Seguridad ante todo</span></h3>
+    <p data-t="cod2_p">La seguridad de los visitantes y del equipo es innegociable. Ningún objetivo comercial justifica riesgos indebidos en terreno.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--blue);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">3</span> <span data-t="cod3_h">Respeto al territorio</span></h3>
+    <p data-t="cod3_p">Minimizar el impacto, respetar las áreas protegidas y transmitir una cultura de conservación a cada visitante.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--orange-d);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">4</span> <span data-t="cod4_h">Honestidad comercial</span></h3>
+    <p data-t="cod4_p">Transparencia en precios, servicios y capacidades reales. No prometer lo que no se puede cumplir.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--red);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">5</span> <span data-t="cod5_h">Respeto entre pares</span></h3>
+    <p data-t="cod5_p">Competencia leal entre socios. Solidaridad en terreno ante emergencias, independientemente de la empresa o afiliación.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--green);">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">6</span> <span data-t="cod6_h">Representación de la región</span></h3>
+    <p data-t="cod6_p">Como embajadores de Aysén, actuar con orgullo y responsabilidad ante visitantes nacionales e internacionales.</p>
+   </div>
+   <div class="mc" style="border-left-color:var(--blue);grid-column:span 3;">
+    <h3 style="font-size:1.3rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.5rem;">7</span> <span data-t="cod7_h">Cumplimiento normativo</span></h3>
+    <p data-t="cod7_p">Registro Sernatur vigente, cumplimiento de la normativa laboral y tributaria aplicable. Los datos y documentos entregados a AGAP son de carácter confidencial y sólo se usarán para fines gremiales.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
  <div class="container">
@@ -254,7 +308,7 @@
  <h4 data-t="ft_leg">Legal</h4>
  <ul class="ft-links">
  <li><a href="#" data-t="ft_est">Estatutos AGAP</a></li>
- <li><a href="directiva.html#conducta" data-t="ft_cod">Código de Conducta</a></li>
+ <li><a href="#conducta" data-t="ft_cod">Código de Conducta</a></li>
  <li><a href="privacidad.html" data-t="ft_priv">Privacidad</a></li>
  </ul>
  </div>
@@ -281,6 +335,14 @@ const T = {
  count_tmpl:'<strong>{n}</strong> guías',
  ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
  ft_nav:'Navegación',ft_leg:'Legal',ft_est:'Estatutos AGAP',ft_cod:'Código de Conducta',ft_priv:'Privacidad',
+ sec_cod_lbl:'Ética profesional',sec_cod_title:'CÓDIGO DE<br><span style="color:var(--orange)">CONDUCTA</span>',sec_cod_intro:'Los principios que guían el ejercicio profesional de cada socio AGAP.',
+ cod1_h:'Excelencia profesional',cod1_p:'Ejercer con el más alto estándar técnico, mantener certificaciones vigentes y formación continua.',
+ cod2_h:'Seguridad ante todo',cod2_p:'La seguridad de los visitantes y del equipo es innegociable. Ningún objetivo comercial justifica riesgos indebidos en terreno.',
+ cod3_h:'Respeto al territorio',cod3_p:'Minimizar el impacto, respetar las áreas protegidas y transmitir una cultura de conservación a cada visitante.',
+ cod4_h:'Honestidad comercial',cod4_p:'Transparencia en precios, servicios y capacidades reales. No prometer lo que no se puede cumplir.',
+ cod5_h:'Respeto entre pares',cod5_p:'Competencia leal entre socios. Solidaridad en terreno ante emergencias, independientemente de la empresa o afiliación.',
+ cod6_h:'Representación de la región',cod6_p:'Como embajadores de Aysén, actuar con orgullo y responsabilidad ante visitantes nacionales e internacionales.',
+ cod7_h:'Cumplimiento normativo',cod7_p:'Registro Sernatur vigente, cumplimiento de la normativa laboral y tributaria aplicable. Los datos y documentos entregados a AGAP son de carácter confidencial y sólo se usarán para fines gremiales.',
  },
  en:{
  nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activities',nav_unete:'Join',nav_contacto:'Contact',nav_unete_btn:'Join',nav_directiva:'Board',
@@ -291,6 +353,14 @@ const T = {
  count_tmpl:'<strong>{n}</strong> guides',
  ft_txt:"Association of Aysén Patagonia Guides. Uniting the region's guides to promote sustainable tourism and local heritage.",
  ft_nav:'Navigation',ft_leg:'Legal',ft_est:'AGAP Bylaws',ft_cod:'Code of Conduct',ft_priv:'Privacy',
+ sec_cod_lbl:'Professional ethics',sec_cod_title:'CODE OF<br><span style="color:var(--orange)">CONDUCT</span>',sec_cod_intro:'The principles guiding the professional practice of every AGAP member.',
+ cod1_h:'Professional excellence',cod1_p:'Operate at the highest technical standard, keep certifications current and pursue ongoing training.',
+ cod2_h:'Safety first',cod2_p:'The safety of visitors and team members is non-negotiable. No commercial goal justifies undue risk in the field.',
+ cod3_h:'Respect for the territory',cod3_p:'Minimize impact, respect protected areas and instil a conservation culture in every visitor.',
+ cod4_h:'Commercial honesty',cod4_p:'Transparency in pricing, services and actual capabilities. Never promise what cannot be delivered.',
+ cod5_h:'Respect among peers',cod5_p:'Fair competition between members. Solidarity in the field during emergencies, regardless of company or affiliation.',
+ cod6_h:'Regional representation',cod6_p:'As ambassadors of Aysén, act with pride and responsibility toward national and international visitors.',
+ cod7_h:'Regulatory compliance',cod7_p:'Current Sernatur registration and compliance with applicable labour and tax regulations.',
  },
  fr:{
  nav_mision:'Mission',nav_guias:'Guides',nav_esp:'Activités',nav_unete:'Rejoindre',nav_contacto:'Contact',nav_unete_btn:'Rejoindre',nav_directiva:'Direction',
@@ -301,6 +371,14 @@ const T = {
  count_tmpl:'<strong>{n}</strong> guides',
  ft_txt:"Association des Guides Aysén Patagonie. Unissant les guides de la région pour promouvoir le tourisme durable et le patrimoine local.",
  ft_nav:'Navigation',ft_leg:'Légal',ft_est:'Statuts AGAP',ft_cod:'Code de Conduite',ft_priv:'Confidentialité',
+ sec_cod_lbl:'Éthique professionnelle',sec_cod_title:'CODE DE<br><span style="color:var(--orange)">CONDUITE</span>',sec_cod_intro:'Les principes qui guident la pratique professionnelle de chaque membre AGAP.',
+ cod1_h:'Excellence professionnelle',cod1_p:'Exercer au plus haut niveau technique, maintenir les certifications à jour et se former en continu.',
+ cod2_h:'Sécurité avant tout',cod2_p:"La sécurité des visiteurs et de l'équipe est non négociable. Aucun objectif commercial ne justifie des risques indus sur le terrain.",
+ cod3_h:'Respect du territoire',cod3_p:"Minimiser l'impact, respecter les zones protégées et transmettre une culture de conservation à chaque visiteur.",
+ cod4_h:'Honnêteté commerciale',cod4_p:'Transparence sur les prix, les services et les capacités réelles. Ne jamais promettre ce qui ne peut être tenu.',
+ cod5_h:'Respect entre pairs',cod5_p:"Concurrence loyale entre membres. Solidarité sur le terrain lors d'urgences, indépendamment de l'entreprise ou de l'affiliation.",
+ cod6_h:"Représentation de la région",cod6_p:"En tant qu'ambassadeurs d'Aysén, agir avec fierté et responsabilité envers les visiteurs nationaux et internationaux.",
+ cod7_h:'Conformité réglementaire',cod7_p:"Inscription Sernatur à jour et respect des réglementations du travail et fiscales applicables.",
  }
 };
 
