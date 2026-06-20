@@ -34,6 +34,20 @@
   .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
   .nav-cta{background:var(--orange);color:var(--brown)!important;font-family:var(--fb);font-weight:800;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;text-decoration:none;transition:background .2s;}
   .nav-cta:hover{background:var(--orange-d);}
+  .nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;}
+  .nav-burger span{display:block;width:100%;height:2px;background:white;border-radius:2px;transition:transform .25s,opacity .25s;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{position:fixed;top:64px;left:0;right:0;background:var(--brown);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99;border-bottom:2px solid rgba(245,166,35,.25);}
+  .mobile-menu.open{max-height:calc(100vh - 64px);overflow-y:auto;}
+  .mobile-nav-links{list-style:none;padding:1.2rem 2rem 0;}
+  .mobile-nav-links li{border-bottom:1px solid rgba(255,255,255,.08);}
+  .mobile-nav-links a{display:block;padding:14px 0;color:rgba(255,255,255,.85);text-decoration:none;font-size:.95rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .mobile-nav-links a:hover{color:var(--orange);}
+  .mobile-lang-sw{display:flex;gap:.6rem;padding:1.3rem 2rem;}
+  .mobile-lang-sw .lang-btn{flex:1;padding:9px;text-align:center;}
+  .mobile-cta{display:block;width:calc(100% - 4rem);margin:0 2rem 1.6rem;text-align:center;}
 
   /* ── PAGE HEADER ── */
   .page-header{position:relative;padding:130px 0 64px;text-align:center;background:var(--brown);overflow:hidden;}
@@ -77,6 +91,8 @@
 
   @media(max-width:768px){
    .nav-links{display:none;}
+   .nav-right{display:none;}
+   .nav-burger{display:flex;}
    .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
   }
  </style>
@@ -104,7 +120,26 @@
   </div>
   <a href="registro.html" class="nav-cta" data-t="nav_unete_btn">Asociarse</a>
  </div>
+ <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu" onclick="toggleMobileMenu()">
+ <span></span><span></span><span></span>
+ </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+ <ul class="mobile-nav-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="mobile-lang-sw">
+ <button class="lang-btn" onclick="setLang('es')">ES</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
+ <a href="registro.html" class="nav-cta mobile-cta" data-t="nav_unete_btn">Asociarse</a>
+</div>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
@@ -359,10 +394,40 @@ function setLang(l){
  document.documentElement.lang=l;
 }
 
+/* ─── MENU MOBILE (hamburger) ───────────────────────────────── */
+function toggleMobileMenu(){
+ const burger = document.getElementById('nav-burger');
+ const menu = document.getElementById('mobile-menu');
+ const isOpen = menu.classList.toggle('open');
+ burger.classList.toggle('open', isOpen);
+ burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+function closeMobileMenu(){
+ document.getElementById('nav-burger').classList.remove('open');
+ document.getElementById('mobile-menu').classList.remove('open');
+ document.getElementById('nav-burger').setAttribute('aria-expanded','false');
+}
+
 (function(){
  const l=localStorage.getItem('agap_lang')||'es';
  setLang(l);
 })();
 </script>
+
+<!-- Cookie consent (composant réutilisable Clarté Consultoría) -->
+<script>
+  window.COOKIE_CONFIG = {
+    siteName:       'AGAP',
+    companyName:    'AREGTUCPA A.G. (Asociación de Guías Aysén Patagonia)',
+    email:          'aguiasaysenpatagonia@gmail.com',
+    lang:           'es',
+    langStorageKey: 'agap_lang',
+    accentColor:    '#F5A623',
+    textColor:      '#ffffff',
+    bgColor:        '#231F20',
+    policyUrl:      'privacidad.html',
+  };
+</script>
+<script src="cookie-consent.js"></script>
 </body>
 </html>
