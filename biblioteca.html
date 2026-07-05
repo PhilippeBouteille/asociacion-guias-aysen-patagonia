@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AGAP — Biblioteca de Socios</title>
+ <link rel="icon" href="Logos/agap-favicon.png" type="image/png">
+ <meta name="description" content="Biblioteca de material de estudio y recursos para los guías socios de la Asociación de Guías Aysén Patagonia.">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+ <style>
+  :root {
+   --orange:#F5A623; --orange-d:#D4891A;
+   --red:#E8312A; --blue:#3AACE8; --blue-d:#1A6A9A; --green:#2EAA3F; --green-d:#1A6B28;
+   --brown:#231F20; --cream:#F8F4EE; --warm:#FDFAF6; --muted:#6B6860;
+   --fd:'Bebas Neue',sans-serif; --fb:'Nunito',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fb);font-size:17px;line-height:1.7;color:var(--brown);background:var(--warm);overflow-x:hidden;}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(35,31,32,0.93);backdrop-filter:blur(14px);border-bottom:2px solid rgba(245,166,35,0.25);}
+  .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-logo-img{height:36px;width:auto;}
+  .nav-brand-text{font-family:var(--fb);font-weight:800;font-size:1rem;color:white;letter-spacing:.05em;line-height:1.1;}
+  .nav-brand-text span{display:block;font-weight:300;font-size:.68rem;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+  .nav-right{display:flex;align-items:center;gap:1rem;}
+  .lang-sw{display:flex;gap:.3rem;}
+  .lang-btn{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-family:var(--fb);font-size:.72rem;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .2s;}
+  .lang-btn:hover,.lang-btn.active{background:var(--orange);border-color:var(--orange);color:var(--brown);}
+  .nav-cta{background:var(--orange);color:var(--brown)!important;font-family:var(--fb);font-weight:800;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:6px;text-decoration:none;transition:background .2s;}
+  .nav-cta:hover{background:var(--orange-d);}
+  .nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;}
+  .nav-burger span{display:block;width:100%;height:2px;background:white;border-radius:2px;transition:transform .25s,opacity .25s;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{position:fixed;top:64px;left:0;right:0;background:var(--brown);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99;border-bottom:2px solid rgba(245,166,35,.25);}
+  .mobile-menu.open{max-height:calc(100vh - 64px);overflow-y:auto;}
+  .mobile-nav-links{list-style:none;padding:1.2rem 2rem 0;}
+  .mobile-nav-links li{border-bottom:1px solid rgba(255,255,255,.08);}
+  .mobile-nav-links a{display:block;padding:14px 0;color:rgba(255,255,255,.85);text-decoration:none;font-size:.95rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .mobile-nav-links a:hover,.mobile-nav-links a.active{color:var(--orange);}
+  .mobile-lang-sw{display:flex;gap:.6rem;padding:1.3rem 2rem;}
+  .mobile-lang-sw .lang-btn{flex:1;padding:9px;text-align:center;}
+  .mobile-cta{display:block;width:calc(100% - 4rem);margin:0 2rem 1.6rem;text-align:center;}
+
+  /* ── PAGE HEADER ── */
+  .page-header{position:relative;padding:130px 0 64px;text-align:center;background:var(--brown);overflow:hidden;}
+  .page-header-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(35,31,32,0.92) 0%,rgba(26,106,154,0.25) 100%);}
+  .container{max-width:900px;margin:0 auto;padding:0 2rem;position:relative;}
+  .page-header-content{position:relative;z-index:1;}
+  .sec-label{font-size:.78rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:.8rem;}
+  h1{font-family:var(--fd);font-size:clamp(2.6rem,6vw,4.2rem);line-height:.95;color:white;margin-bottom:1.2rem;}
+  h1 em{color:var(--orange);font-style:normal;}
+  .ph-sub{color:rgba(255,255,255,.6);font-size:1rem;max-width:520px;margin:0 auto;}
+
+  /* ── CONTENT ── */
+  .biblio-section{padding:70px 0;}
+  .biblio-section:nth-child(even){background:var(--cream);}
+  .biblio-lead{max-width:780px;}
+  .biblio-h{font-family:var(--fd);font-size:1.6rem;letter-spacing:.04em;color:var(--brown);margin-bottom:.8rem;}
+  .biblio-p{color:#4a4540;max-width:780px;}
+  .biblio-p + .biblio-p{margin-top:.8rem;}
+
+  /* CTA principal */
+  .biblio-cta-wrap{margin:2.4rem 0 .6rem;}
+  .biblio-cta{display:inline-flex;align-items:center;gap:.75rem;background:var(--orange);color:var(--brown);font-family:var(--fb);font-weight:800;font-size:1rem;letter-spacing:.03em;padding:16px 30px;border-radius:8px;text-decoration:none;transition:background .2s,transform .2s;box-shadow:0 6px 20px rgba(245,166,35,.28);}
+  .biblio-cta:hover{background:var(--orange-d);transform:translateY(-2px);}
+  .biblio-cta svg{flex-shrink:0;}
+  .biblio-cta-note{font-size:.85rem;color:var(--muted);margin-top:.9rem;}
+
+  /* Grille catégories */
+  .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;margin-top:1.8rem;}
+  .cat-card{background:var(--warm);border:1px solid rgba(35,31,32,.1);border-radius:12px;padding:1.6rem 1.7rem;transition:border-color .2s,box-shadow .2s;}
+  .cat-card:hover{border-color:var(--orange);box-shadow:0 6px 18px rgba(35,31,32,.06);}
+  .cat-ic{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+  .cat-ic svg{width:22px;height:22px;}
+  .cat-card h3{font-family:var(--fd);font-size:1.35rem;letter-spacing:.03em;color:var(--brown);margin-bottom:.4rem;}
+  .cat-card p{font-size:.94rem;color:#4a4540;line-height:1.55;}
+
+  /* Contribution */
+  .contrib-box{background:rgba(46,170,63,0.07);border:1px solid rgba(46,170,63,.25);border-radius:12px;padding:1.8rem 1.9rem;max-width:820px;}
+  .contrib-box .biblio-h{margin-bottom:.6rem;}
+  .contrib-note{background:rgba(245,166,35,0.1);border-left:3px solid var(--orange);padding:.9rem 1.2rem;border-radius:0 6px 6px 0;margin-top:1.1rem;font-size:.92rem;color:#4a4540;}
+  .contrib-note strong{color:var(--brown);}
+
+  /* ── FOOTER ── */
+  footer{background:var(--brown);padding:60px 0 28px;color:rgba(255,255,255,.48);}
+  .ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem;}
+  .ft-brand-txt{font-size:.88rem;line-height:1.6;margin-top:1rem;max-width:280px;}
+  .ft-col h4{font-family:var(--fd);font-size:1.1rem;letter-spacing:.08em;color:white;margin-bottom:1rem;}
+  .ft-links{list-style:none;}
+  .ft-links li{margin-bottom:.45rem;}
+  .ft-links a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.88rem;transition:color .2s;}
+  .ft-links a:hover{color:var(--orange);}
+  .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.08);font-size:.82rem;}
+  .ft-social{display:flex;gap:.9rem;}
+  .soc{width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.48);text-decoration:none;font-size:.82rem;transition:all .2s;}
+  .soc:hover{background:var(--orange);color:var(--brown);}
+
+  @media(max-width:768px){
+   .nav-links{display:none;}
+   .nav-right{display:none;}
+   .nav-burger{display:flex;}
+   .cat-grid{grid-template-columns:1fr;}
+   .ft-grid{grid-template-columns:1fr;gap:2.2rem;}
+  }
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <a href="index.html" class="nav-brand">
+  <img src="Logos/agap-icon.png" alt="AGAP" class="nav-logo-img" onerror="this.style.display='none'">
+  <div class="nav-brand-text">AGAP<span>Guías Aysén Patagonia</span></div>
+ </a>
+ <ul class="nav-links">
+  <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+  <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+  <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+  <li><a href="biblioteca.html" class="active" data-t="nav_biblio">Biblioteca</a></li>
+  <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+  <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="nav-right">
+  <div class="lang-sw">
+   <button class="lang-btn" onclick="setLang('es')">ES</button>
+   <button class="lang-btn" onclick="setLang('en')">EN</button>
+   <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+  <a href="registro.html" class="nav-cta" data-t="nav_unete_btn">Asociarse</a>
+ </div>
+ <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu" onclick="toggleMobileMenu()">
+ <span></span><span></span><span></span>
+ </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+ <ul class="mobile-nav-links">
+ <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+ <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+ <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+ <li><a href="biblioteca.html" class="active" data-t="nav_biblio">Biblioteca</a></li>
+ <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+ <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+ </ul>
+ <div class="mobile-lang-sw">
+ <button class="lang-btn" onclick="setLang('es')">ES</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
+ <a href="registro.html" class="nav-cta mobile-cta" data-t="nav_unete_btn">Asociarse</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+ <div class="page-header-bg"></div>
+ <div class="container">
+  <div class="page-header-content">
+   <img src="Logos/agap-icon.png" alt="AGAP" style="height:90px;margin-bottom:1.4rem;" onerror="this.style.display='none'">
+   <div class="sec-label" data-t="ph_label">Asociación de Guías Aysén Patagonia</div>
+   <h1 data-t="ph_title">BIBLIOTECA<br><em>DE SOCIOS</em></h1>
+   <p class="ph-sub" data-t="ph_sub">Material de estudio y recursos para guías AGAP</p>
+  </div>
+ </div>
+</div>
+
+<!-- INTRO + CTA -->
+<section class="biblio-section">
+ <div class="container">
+  <div class="biblio-lead">
+   <h2 class="biblio-h" data-t="intro_h">Recursos compartidos</h2>
+   <p class="biblio-p" data-t="intro_p">La biblioteca reúne manuales, libros, artículos y pruebas de conocimiento aportados por los socios de AGAP. Es un espacio colaborativo alojado en Google Drive: cualquier socio puede consultar el material y sumar nuevos documentos.</p>
+   <div class="biblio-cta-wrap">
+    <a href="https://drive.google.com/drive/folders/1Tt7KKJDb6_f9LKBu48QEd78sNs6LQBrN" target="_blank" rel="noopener" class="biblio-cta">
+     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 3h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+     <span data-t="cta_btn">Abrir biblioteca en Google Drive</span>
+    </a>
+   </div>
+   <p class="biblio-cta-note" data-t="cta_note">Se abre en una pestaña nueva. No requiere iniciar sesión para consultar.</p>
+  </div>
+ </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="biblio-section">
+ <div class="container">
+  <h2 class="biblio-h" data-t="cat_h">¿Qué encontrarás?</h2>
+  <div class="cat-grid">
+
+   <div class="cat-card">
+    <div class="cat-ic" style="background:rgba(245,166,35,.14);">
+     <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+    </div>
+    <h3 data-t="c1_h">Manuales técnicos</h3>
+    <p data-t="c1_p">Técnicas de montaña, interpretación de la naturaleza y manuales de referencia para el ejercicio del guiado.</p>
+   </div>
+
+   <div class="cat-card">
+    <div class="cat-ic" style="background:rgba(58,172,232,.14);">
+     <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <h3 data-t="c2_h">Libros y material de estudio</h3>
+    <p data-t="c2_p">Fauna, geografía y geología, historia regional y planes de manejo de áreas protegidas.</p>
+   </div>
+
+   <div class="cat-card">
+    <div class="cat-ic" style="background:rgba(46,170,63,.14);">
+     <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    </div>
+    <h3 data-t="c3_h">Pruebas de conocimiento</h3>
+    <p data-t="c3_p">Evaluaciones y material de preparación para distintas disciplinas del guiado.</p>
+   </div>
+
+   <div class="cat-card">
+    <div class="cat-ic" style="background:rgba(232,49,42,.12);">
+     <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+    </div>
+    <h3 data-t="c4_h">Guías de campo</h3>
+    <p data-t="c4_p">Recursos destacados como los geositios de Aysén y guías de ecoturismo de la región.</p>
+   </div>
+
+  </div>
+ </div>
+</section>
+
+<!-- CONTRIBUTION -->
+<section class="biblio-section">
+ <div class="container">
+  <div class="contrib-box">
+   <h2 class="biblio-h" data-t="contrib_h">Cómo aportar material</h2>
+   <p class="biblio-p" data-t="contrib_p">La biblioteca es de acceso abierto por enlace: cualquier socio con el enlace puede agregar documentos directamente en Google Drive. Al subir material, ubícalo en la carpeta temática correspondiente y usa nombres de archivo claros.</p>
+   <div class="contrib-note">
+    <strong data-t="contrib_note_t">Moderación:</strong> <span data-t="contrib_note">AGAP revisa el contenido. Cualquier material inapropiado será retirado por la directiva. Sube únicamente documentos pertinentes a la actividad de los guías y respeta los derechos de autor.</span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+ <div class="container" style="max-width:1200px;">
+  <div class="ft-grid">
+   <div>
+    <div style="display:flex;align-items:center;gap:10px;">
+     <img src="Logos/agap-logo.png" alt="AGAP" style="height:64px;" onerror="this.style.display='none'">
+     <div style="font-family:var(--fb);font-weight:800;font-size:1.2rem;color:white;">AGAP</div>
+    </div>
+    <p class="ft-brand-txt" data-t="ft_txt">Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.</p>
+   </div>
+   <div class="ft-col">
+    <h4 data-t="ft_nav">Navegación</h4>
+    <ul class="ft-links">
+     <li><a href="index.html#mision" data-t="nav_mision">Misión</a></li>
+     <li><a href="directiva.html" data-t="nav_directiva">Directiva</a></li>
+     <li><a href="guias.html" data-t="nav_guias">Guías</a></li>
+     <li><a href="biblioteca.html" data-t="nav_biblio">Biblioteca</a></li>
+     <li><a href="index.html#especialidades" data-t="nav_esp">Especialidades</a></li>
+     <li><a href="index.html#contacto" data-t="nav_contacto">Contacto</a></li>
+    </ul>
+   </div>
+   <div class="ft-col">
+    <h4 data-t="ft_leg">Legal</h4>
+    <ul class="ft-links">
+     <li><a href="assets/docs/estatutos-agap.pdf" target="_blank" rel="noopener" data-t="ft_est">Estatutos AGAP</a></li>
+     <li><a href="guias.html#conducta" data-t="ft_cod">Código de Conducta</a></li>
+     <li><a href="privacidad.html" data-t="ft_priv">Privacidad</a></li>
+    </ul>
+   </div>
+  </div>
+  <div class="ft-bottom">
+   <span>© 2026 AGAP — Asociación de Guías Aysén Patagonia</span>
+   <div class="ft-social">
+    <a href="https://www.instagram.com/agap______________/" target="_blank" rel="noopener" class="soc" title="Instagram">IG</a>
+    <a href="https://wa.me/56952237462" target="_blank" rel="noopener" class="soc" title="WhatsApp">WA</a>
+   </div>
+  </div>
+ </div>
+</footer>
+
+<script>
+/* ─── i18n ─── */
+const T = {
+ es:{
+  nav_mision:'Misión', nav_directiva:'Directiva', nav_guias:'Guías', nav_biblio:'Biblioteca',
+  nav_esp:'Especialidades', nav_contacto:'Contacto', nav_unete_btn:'Asociarse',
+  ph_label:'Asociación de Guías Aysén Patagonia',
+  ph_title:'BIBLIOTECA<br><em>DE SOCIOS</em>',
+  ph_sub:'Material de estudio y recursos para guías AGAP',
+  intro_h:'Recursos compartidos',
+  intro_p:'La biblioteca reúne manuales, libros, artículos y pruebas de conocimiento aportados por los socios de AGAP. Es un espacio colaborativo alojado en Google Drive: cualquier socio puede consultar el material y sumar nuevos documentos.',
+  cta_btn:'Abrir biblioteca en Google Drive',
+  cta_note:'Se abre en una pestaña nueva. No requiere iniciar sesión para consultar.',
+  cat_h:'¿Qué encontrarás?',
+  c1_h:'Manuales técnicos',
+  c1_p:'Técnicas de montaña, interpretación de la naturaleza y manuales de referencia para el ejercicio del guiado.',
+  c2_h:'Libros y material de estudio',
+  c2_p:'Fauna, geografía y geología, historia regional y planes de manejo de áreas protegidas.',
+  c3_h:'Pruebas de conocimiento',
+  c3_p:'Evaluaciones y material de preparación para distintas disciplinas del guiado.',
+  c4_h:'Guías de campo',
+  c4_p:'Recursos destacados como los geositios de Aysén y guías de ecoturismo de la región.',
+  contrib_h:'Cómo aportar material',
+  contrib_p:'La biblioteca es de acceso abierto por enlace: cualquier socio con el enlace puede agregar documentos directamente en Google Drive. Al subir material, ubícalo en la carpeta temática correspondiente y usa nombres de archivo claros.',
+  contrib_note_t:'Moderación:',
+  contrib_note:'AGAP revisa el contenido. Cualquier material inapropiado será retirado por la directiva. Sube únicamente documentos pertinentes a la actividad de los guías y respeta los derechos de autor.',
+  ft_txt:'Asociación de Guías Aysén Patagonia. Uniendo a los guías de la región para promover el turismo sostenible y el patrimonio local.',
+  ft_nav:'Navegación', ft_leg:'Legal', ft_est:'Estatutos AGAP',
+  ft_cod:'Código de Conducta', ft_priv:'Privacidad',
+ },
+ en:{
+  nav_mision:'Mission', nav_directiva:'Board', nav_guias:'Guides', nav_biblio:'Library',
+  nav_esp:'Activities', nav_contacto:'Contact', nav_unete_btn:'Join',
+  ph_label:'Association of Guides Aysén Patagonia',
+  ph_title:'MEMBERS<br><em>LIBRARY</em>',
+  ph_sub:'Study material and resources for AGAP guides',
+  intro_h:'Shared resources',
+  intro_p:'The library gathers manuals, books, articles and knowledge tests contributed by AGAP members. It is a collaborative space hosted on Google Drive: any member can browse the material and add new documents.',
+  cta_btn:'Open library in Google Drive',
+  cta_note:'Opens in a new tab. No sign-in required to browse.',
+  cat_h:'What you will find',
+  c1_h:'Technical manuals',
+  c1_p:'Mountain techniques, nature interpretation and reference manuals for guiding.',
+  c2_h:'Books and study material',
+  c2_p:'Wildlife, geography and geology, regional history and protected-area management plans.',
+  c3_h:'Knowledge tests',
+  c3_p:'Assessments and preparation material for the various guiding disciplines.',
+  c4_h:'Field guides',
+  c4_p:'Featured resources such as the Aysén geosites and regional ecotourism guides.',
+  contrib_h:'How to contribute',
+  contrib_p:'The library is open by link: any member with the link can add documents directly in Google Drive. When uploading, place files in the matching thematic folder and use clear file names.',
+  contrib_note_t:'Moderation:',
+  contrib_note:'AGAP reviews the content. Any inappropriate material will be removed by the board. Upload only material relevant to guiding activity and respect copyright.',
+  ft_txt:'Association of Guides Aysén Patagonia. Uniting regional guides to promote sustainable tourism and local heritage.',
+  ft_nav:'Navigation', ft_leg:'Legal', ft_est:'AGAP Bylaws',
+  ft_cod:'Code of Conduct', ft_priv:'Privacy',
+ },
+ fr:{
+  nav_mision:'Mission', nav_directiva:'Direction', nav_guias:'Guides', nav_biblio:'Bibliothèque',
+  nav_esp:'Spécialités', nav_contacto:'Contact', nav_unete_btn:'Adhérer',
+  ph_label:'Association de Guides Aysén Patagonie',
+  ph_title:'BIBLIOTHÈQUE<br><em>DES MEMBRES</em>',
+  ph_sub:'Matériel d\'étude et ressources pour les guides AGAP',
+  intro_h:'Ressources partagées',
+  intro_p:'La bibliothèque réunit des manuels, livres, articles et épreuves de connaissances apportés par les membres d\'AGAP. C\'est un espace collaboratif hébergé sur Google Drive : tout membre peut consulter le matériel et ajouter de nouveaux documents.',
+  cta_btn:'Ouvrir la bibliothèque sur Google Drive',
+  cta_note:'Ouverture dans un nouvel onglet. Consultation sans connexion.',
+  cat_h:'Ce que vous y trouverez',
+  c1_h:'Manuels techniques',
+  c1_p:'Techniques de montagne, interprétation de la nature et manuels de référence pour le guidage.',
+  c2_h:'Livres et matériel d\'étude',
+  c2_p:'Faune, géographie et géologie, histoire régionale et plans de gestion des aires protégées.',
+  c3_h:'Épreuves de connaissances',
+  c3_p:'Évaluations et matériel de préparation pour les différentes disciplines du guidage.',
+  c4_h:'Guides de terrain',
+  c4_p:'Ressources phares comme les géosites d\'Aysén et les guides d\'écotourisme de la région.',
+  contrib_h:'Comment contribuer',
+  contrib_p:'La bibliothèque est en accès ouvert par lien : tout membre disposant du lien peut ajouter des documents directement dans Google Drive. Lors de l\'ajout, placez les fichiers dans le dossier thématique correspondant et utilisez des noms de fichiers clairs.',
+  contrib_note_t:'Modération :',
+  contrib_note:'AGAP contrôle le contenu. Tout matériel inapproprié sera retiré par la direction. N\'ajoutez que des documents pertinents pour l\'activité des guides et respectez les droits d\'auteur.',
+  ft_txt:'Association de Guides Aysén Patagonie. Unir les guides de la région pour promouvoir le tourisme durable et le patrimoine local.',
+  ft_nav:'Navigation', ft_leg:'Légal', ft_est:'Statuts AGAP',
+  ft_cod:'Code de Conduite', ft_priv:'Confidentialité',
+ }
+};
+
+function setLang(l){
+ localStorage.setItem('agap_lang',l);
+ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+ const d=T[l]||T.es;
+ document.querySelectorAll('[data-t]').forEach(el=>{
+  const k=el.dataset.t;
+  if(d[k]!==undefined) el.innerHTML=d[k];
+ });
+ document.documentElement.lang=l;
+}
+
+/* ─── MENU MOBILE (hamburger) ─── */
+function toggleMobileMenu(){
+ const burger = document.getElementById('nav-burger');
+ const menu = document.getElementById('mobile-menu');
+ const isOpen = menu.classList.toggle('open');
+ burger.classList.toggle('open', isOpen);
+ burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+function closeMobileMenu(){
+ document.getElementById('nav-burger').classList.remove('open');
+ document.getElementById('mobile-menu').classList.remove('open');
+ document.getElementById('nav-burger').setAttribute('aria-expanded','false');
+}
+
+(function(){
+ const l=localStorage.getItem('agap_lang')||'es';
+ setLang(l);
+})();
+</script>
+
+<!-- Cookie consent (composant réutilisable Clarté Consultoría) -->
+<script>
+  window.COOKIE_CONFIG = {
+    siteName:       'AGAP',
+    companyName:    'AREGTUCPA A.G. (Asociación de Guías Aysén Patagonia)',
+    email:          'aguiasaysenpatagonia@gmail.com',
+    lang:           'es',
+    langStorageKey: 'agap_lang',
+    accentColor:    '#F5A623',
+    textColor:      '#ffffff',
+    bgColor:        '#231F20',
+    policyUrl:      'privacidad.html',
+  };
+</script>
+<script src="cookie-consent.js"></script>
+</body>
+</html>
