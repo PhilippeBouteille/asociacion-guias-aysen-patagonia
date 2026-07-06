@@ -1331,7 +1331,7 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       instagram:          document.getElementById('instagram').value.trim() || null,
       sitio_web:          document.getElementById('sitio_web').value.trim() || null,
       // Perfil guia
-      zonas, bio, photo_url,
+      zona: zonas, bio, photo_url,
       especialidades,
       idiomas: [
         ...getChecked('idiomas-grid').filter(v => v !== 'Otro'),
