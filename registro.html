@@ -696,7 +696,7 @@
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
               </div>
               <p><strong>Haz clic o arrastra tu foto</strong></p>
-              <p>JPG, PNG o WEBP — minimo 400x400 px</p>
+              <p>JPG, PNG o WEBP — minimo 400x400 px — máx. 3 MB</p>
             </div>
             <img id="photo-preview" class="photo-preview" style="display:none" alt="preview">
             <div class="file-name" id="photo-name"></div>
@@ -985,6 +985,8 @@
         </label>
         <p class="hint" style="font-size:0.78rem;color:var(--gray);font-style:italic;margin:-12px 0 20px">Si ya pagaste tu cuota anteriormente, marca esta casilla. El comprobante deja de ser obligatorio.</p>
 
+        <p class="hint" style="font-size:0.82rem;color:var(--brown);background:#fff8ed;border-left:3px solid var(--orange);padding:8px 12px;border-radius:6px;margin-bottom:16px">Por favor comprime tus fotos y documentos antes de subirlos (ideal: menos de 3 MB por archivo). Muchos celulares permiten reducir la calidad al tomar la foto, o puedes usar una app gratuita de compresión de imagen/PDF.</p>
+
         <!-- Foto de perfil ya esta en seccion 2 -->
 
         <div class="row col2" style="margin-bottom:20px">
@@ -996,7 +998,7 @@
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
               </div>
               <p><strong>Foto de perfil</strong></p>
-              <p>JPG / PNG — min 400x400 px</p>
+              <p>JPG / PNG — min 400x400 px — máx. 3 MB</p>
               <div class="file-name" id="photo-name2"></div>
             </div>
           </div>
@@ -1008,7 +1010,7 @@
                 <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
               </div>
               <p><strong>Cedula de identidad</strong></p>
-              <p>PDF o imagen — ambos lados</p>
+              <p>PDF o imagen — ambos lados — máx. 3 MB</p>
               <div class="file-name" id="cedula-name"></div>
             </div>
           </div>
@@ -1023,7 +1025,7 @@
                 <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
               </div>
               <p><strong>Licencia o titulo</strong></p>
-              <p>Si lo posee — PDF o imagen</p>
+              <p>Si lo posee — PDF o imagen — máx. 3 MB</p>
               <div class="file-name" id="licencia-name"></div>
             </div>
           </div>
@@ -1035,7 +1037,7 @@
                 <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm1 9H9v-2h6v2zm2 4H9v-2h8v2zM13 9V3.5L18.5 9H13z"/></svg>
               </div>
               <p><strong>Curriculum</strong></p>
-              <p>PDF o Word</p>
+              <p>PDF o Word — máx. 2 MB</p>
               <div class="file-name" id="cv-name"></div>
             </div>
           </div>
@@ -1050,7 +1052,7 @@
               <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
             </div>
             <p><strong>Certificado de Inhabilidades</strong></p>
-            <p>PDF o imagen — emitido por el Registro Civil</p>
+            <p>PDF o imagen — emitido por el Registro Civil — máx. 3 MB</p>
             <div class="file-name" id="inhab-name"></div>
           </div>
           <p style="font-size:0.82rem;color:var(--muted);margin-top:8px">
@@ -1068,7 +1070,7 @@
               <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
             </div>
             <p><strong>Comprobante de transferencia o deposito</strong></p>
-            <p>Imagen o PDF — cuota anual $30.000 CLP</p>
+            <p>Imagen o PDF — cuota anual $30.000 CLP — máx. 2 MB</p>
             <div class="file-name" id="comp-name"></div>
           </div>
         </div>
