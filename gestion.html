@@ -542,6 +542,22 @@ let ALL_GUIDES = [];
 let editingGuide = null;
 let editPhotoFile = null;
 
+// Liste des zones (même ordre/slugs que registro.html, zona-grid)
+const ZONA_LIST = [
+  ['pumalin','Caleta Gonzalo / Pumalín'], ['puyuhuapi','Puyuhuapi'], ['queulat','Queulat'],
+  ['la_junta','La Junta'], ['raul_marin_balmaceda','Raúl Marín Balmaceda'], ['coyhaique','Coyhaique'],
+  ['lago_verde','Lago Verde'], ['manihuales','Mañihuales'], ['nirehuao','Nirehuao'],
+  ['villa_ortega','Villa Ortega'], ['puerto_aysen','Puerto Aysén'], ['cisnes','Cisnes / Puerto Cisnes'],
+  ['guaitecas','Guaitecas / Melinka'], ['cerro_castillo','Villa Cerro Castillo'], ['puerto_rio_tranquilo','Puerto Río Tranquilo'],
+  ['rio_ibanez','Río Ibáñez'], ['puerto_guadal','Puerto Guadal'], ['chile_chico','Chile Chico'],
+  ['jeinimeni','Parque Jeinimeni'], ['cochrane','Cochrane'], ['valle_chacabuco','Valle Chacabuco'],
+  ['tortel','Tortel'], ['ohiggins',"Villa O'Higgins"]
+];
+const ZONA_LBL = Object.fromEntries(ZONA_LIST);
+function zonaTxt(g) {
+  return (g.zona || []).map(z => ZONA_LBL[(z||'').toLowerCase()] || z).join(', ');
+}
+
 // ── AUTH ──────────────────────────────────────────────────
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
@@ -792,7 +808,7 @@ async function loadDashboard() {
           <tr>
             <td>${avatarCell(g)}</td>
             <td><strong>${g.prenom} ${g.nom}</strong></td>
-            <td style="color:var(--gray)">${g.zona||'—'}</td>
+            <td style="color:var(--gray)">${zonaTxt(g)||'—'}</td>
             <td><label class="toggle" title="Activar">
               <input type="checkbox" ${g.activo?'checked':''} onchange="toggleActivo('${g.id}', this.checked)">
               <div class="track"></div><div class="thumb"></div>
@@ -815,7 +831,7 @@ async function loadDashboard() {
             <td>${avatarCell(g)}</td>
             <td><strong>${g.prenom} ${g.nom}</strong></td>
             <td style="font-size:0.82rem;color:var(--gray)">${g.email||'—'}</td>
-            <td style="color:var(--gray);font-size:0.85rem">${g.zona||'—'}</td>
+            <td style="color:var(--gray);font-size:0.85rem">${zonaTxt(g)||'—'}</td>
             <td><span class="status-badge ${g.activo?'status-active':'status-inactive'}">${g.activo?'Activo':'Pendiente'}</span></td>
             <td><button class="btn btn-success btn-sm" onclick="toggleCotisation('${g.id}', true)">✅ Pagado</button></td>
           </tr>`).join('')}
@@ -841,7 +857,7 @@ function filterGuides() {
   const cot    = document.getElementById('guide-filter-cot')?.value ?? '';
   let filtered = ALL_GUIDES;
   if (q) filtered = filtered.filter(g =>
-    (g.prenom+' '+g.nom+' '+(g.zona||'')).toLowerCase().includes(q));
+    (g.prenom+' '+g.nom+' '+zonaTxt(g)).toLowerCase().includes(q));
   if (activo !== '') filtered = filtered.filter(g => String(g.activo) === activo);
   if (cot    !== '') filtered = filtered.filter(g => String(g.cotisation) === cot);
   renderGuidesTable(filtered);
@@ -859,7 +875,7 @@ function renderGuidesTable(guides) {
       <tr>
         <td>${avatarCell(g)}</td>
         <td><strong>${g.prenom} ${g.nom}</strong><br><span style="color:var(--gray);font-size:0.78rem">${g.email||''}</span></td>
-        <td style="color:var(--gray);font-size:0.85rem">${g.zona||'—'}</td>
+        <td style="color:var(--gray);font-size:0.85rem">${zonaTxt(g)||'—'}</td>
         <td><div class="tags">${(g.especialidades||[]).slice(0,3).map(e=>`<span class="tag">${e}</span>`).join('')}${(g.especialidades||[]).length>3?`<span class="tag">+${(g.especialidades||[]).length-3}</span>`:''}</div></td>
         <td><label class="toggle">
           <input type="checkbox" ${g.activo?'checked':''} onchange="toggleActivo('${g.id}', this.checked)">
@@ -1009,8 +1025,15 @@ function openGuide(idOrNull) {
     <div class="f-row">
       <div class="f"><label>Local de pago de patente</label><input id="m-local_patente" value="${esc(g.local_patente||'')}"></div>
     </div>
-    <div class="f-row">
-      <div class="f"><label>Zona de operación *</label><input id="m-zona" value="${esc(g.zona||'')}"></div>
+
+    <div class="f-section">ZONA(S) DE OPERACIÓN *</div>
+    <div class="cb-grid" id="m-zona-grid">
+      ${ZONA_LIST.map(([slug,lbl]) => { const on = (g.zona||[]).some(z=>(z||'').toLowerCase()===slug); return `<label class="cb-item${on?' checked':''}">
+        <input type="checkbox" value="${slug}"${on?' checked':''}><div class="box"></div>${lbl}
+      </label>`; }).join('')}
+    </div>
+    <div class="f"><label>Otras zonas</label>
+      <input id="m-otras-zona" value="${esc((g.zona||[]).filter(z => z && !ZONA_LIST.some(([s])=>s===(z||'').toLowerCase()) && z.toLowerCase()!=='otro').join(', '))}" placeholder="Ej. Río Baker, Fiordos… (separar con comas)">
     </div>
     <div class="f-row">
       <div class="f"><label>Bio</label><textarea id="m-bio">${esc(g.bio||'')}</textarea></div>
@@ -1168,8 +1191,10 @@ async function saveGuide() {
   const prenom = document.getElementById('m-prenom').value.trim();
   const nom    = document.getElementById('m-nom').value.trim();
   const email  = document.getElementById('m-email').value.trim();
-  const zona   = document.getElementById('m-zona').value.trim();
-  if (!prenom || !nom || !email || !zona) { toast('Completa los campos obligatorios', 'err'); return; }
+  const zonaChecked = [...document.querySelectorAll('#m-zona-grid input:checked')].map(c => c.value);
+  const otrasZonaEl = document.getElementById('m-otras-zona').value.trim();
+  const zona = [...zonaChecked, ...(otrasZonaEl ? otrasZonaEl.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean) : [])];
+  if (!prenom || !nom || !email || !zona.length) { toast('Completa los campos obligatorios', 'err'); return; }
 
   const btn = document.getElementById('btn-save-guide');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
@@ -1565,7 +1590,7 @@ function exportXLS() {
     'WhatsApp':        g.whatsapp || '',
     'Instagram':       g.instagram || '',
     'Sitio web':       g.sitio_web || '',
-    'Zona':            g.zona || '',
+    'Zona':            zonaTxt(g),
     'Actividades':  (g.especialidades || []).join(', '),
     'Idiomas':         (g.idiomas || []).join(', '),
     'Certificaciones': (g.certificaciones || []).join(' | '),
