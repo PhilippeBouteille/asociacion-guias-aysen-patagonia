@@ -567,12 +567,12 @@
   <h1>FICHA DE <span>INSCRIPCIÓN</span></h1>
   <p>Solicitud de ingreso como socio activo a la Asociación de Guías Aysén Patagonia A.G.</p>
   <div class="steps-bar">
-    <a class="step-pill active" href="#sec-1" onclick="scrollTo(this,event)">1. Datos personales</a>
-    <a class="step-pill" href="#sec-2" onclick="scrollTo(this,event)">2. Perfil guía</a>
-    <a class="step-pill" href="#sec-3" onclick="scrollTo(this,event)">3. Datos laborales</a>
-    <a class="step-pill" href="#sec-4" onclick="scrollTo(this,event)">4. Emergencias</a>
-    <a class="step-pill" href="#sec-5" onclick="scrollTo(this,event)">5. Documentos</a>
-    <a class="step-pill" href="#sec-6" onclick="scrollTo(this,event)">6. Encuesta</a>
+    <a class="step-pill active" href="#sec-1" onclick="scrollToPill(this,event)">1. Datos personales</a>
+    <a class="step-pill" href="#sec-2" onclick="scrollToPill(this,event)">2. Perfil guía</a>
+    <a class="step-pill" href="#sec-3" onclick="scrollToPill(this,event)">3. Datos laborales</a>
+    <a class="step-pill" href="#sec-4" onclick="scrollToPill(this,event)">4. Emergencias</a>
+    <a class="step-pill" href="#sec-5" onclick="scrollToPill(this,event)">5. Documentos</a>
+    <a class="step-pill" href="#sec-6" onclick="scrollToPill(this,event)">6. Encuesta</a>
   </div>
 </div>
 
@@ -1423,7 +1423,7 @@ document.getElementById('ya_respondio').addEventListener('change', e => {
 });
 
 // Pills navigation
-function scrollTo(el, e) {
+function scrollToPill(el, e) {
   e.preventDefault();
   const target = document.querySelector(el.getAttribute('href'));
   if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
