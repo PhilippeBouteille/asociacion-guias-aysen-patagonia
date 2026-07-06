@@ -554,8 +554,16 @@ const ZONA_LIST = [
   ['tortel','Tortel'], ['ohiggins',"Villa O'Higgins"]
 ];
 const ZONA_LBL = Object.fromEntries(ZONA_LIST);
+function zonaArr(g) {
+  const z = g.zonas ?? g.zona;
+  if (Array.isArray(z)) return z;
+  if (typeof z === 'string' && z.trim()) {
+    return z.replace(/^\{|\}$/g, '').split(',').map(s => s.trim()).filter(Boolean);
+  }
+  return [];
+}
 function zonaTxt(g) {
-  return (g.zona || []).map(z => ZONA_LBL[(z||'').toLowerCase()] || z).join(', ');
+  return zonaArr(g).map(z => ZONA_LBL[(z||'').toLowerCase()] || z).join(', ');
 }
 
 // ── AUTH ──────────────────────────────────────────────────
@@ -782,7 +790,7 @@ function toggleSidebar() {
 // ── DASHBOARD ────────────────────────────────────────────
 async function loadDashboard() {
   try {
-    const gRes = await fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,cotisation,photo_url,zona,orden&order=orden`, { headers: authHeaders() });
+    const gRes = await fetch(`${SUPA_URL}/rest/v1/agap_guides?select=id,prenom,nom,activo,cotisation,photo_url,zona,zonas,orden&order=orden`, { headers: authHeaders() });
     const guides = await gRes.json();
 
     const activos    = guides.filter(g => g.activo).length;
@@ -1028,12 +1036,12 @@ function openGuide(idOrNull) {
 
     <div class="f-section">ZONA(S) DE OPERACIÓN *</div>
     <div class="cb-grid" id="m-zona-grid">
-      ${ZONA_LIST.map(([slug,lbl]) => { const on = (g.zona||[]).some(z=>(z||'').toLowerCase()===slug); return `<label class="cb-item${on?' checked':''}">
+      ${ZONA_LIST.map(([slug,lbl]) => { const on = zonaArr(g).some(z=>(z||'').toLowerCase()===slug); return `<label class="cb-item${on?' checked':''}">
         <input type="checkbox" value="${slug}"${on?' checked':''}><div class="box"></div>${lbl}
       </label>`; }).join('')}
     </div>
     <div class="f"><label>Otras zonas</label>
-      <input id="m-otras-zona" value="${esc((g.zona||[]).filter(z => z && !ZONA_LIST.some(([s])=>s===(z||'').toLowerCase()) && z.toLowerCase()!=='otro').join(', '))}" placeholder="Ej. Río Baker, Fiordos… (separar con comas)">
+      <input id="m-otras-zona" value="${esc(zonaArr(g).filter(z => z && !ZONA_LIST.some(([s])=>s===(z||'').toLowerCase()) && z.toLowerCase()!=='otro').join(', '))}" placeholder="Ej. Río Baker, Fiordos… (separar con comas)">
     </div>
     <div class="f-row">
       <div class="f"><label>Bio</label><textarea id="m-bio">${esc(g.bio||'')}</textarea></div>
@@ -1193,8 +1201,8 @@ async function saveGuide() {
   const email  = document.getElementById('m-email').value.trim();
   const zonaChecked = [...document.querySelectorAll('#m-zona-grid input:checked')].map(c => c.value);
   const otrasZonaEl = document.getElementById('m-otras-zona').value.trim();
-  const zona = [...zonaChecked, ...(otrasZonaEl ? otrasZonaEl.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean) : [])];
-  if (!prenom || !nom || !email || !zona.length) { toast('Completa los campos obligatorios', 'err'); return; }
+  const zonas = [...zonaChecked, ...(otrasZonaEl ? otrasZonaEl.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean) : [])];
+  if (!prenom || !nom || !email || !zonas.length) { toast('Completa los campos obligatorios', 'err'); return; }
 
   const btn = document.getElementById('btn-save-guide');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
@@ -1215,7 +1223,7 @@ async function saveGuide() {
     const certificaciones = [...document.querySelectorAll('#m-cert-list input')].map(i=>i.value.trim()).filter(Boolean);
 
     const payload = {
-      prenom, nom, email, zona,
+      prenom, nom, email, zonas,
       bio:      document.getElementById('m-bio').value.trim() || null,
       telefono: document.getElementById('m-telefono').value.trim() || null,
       whatsapp: document.getElementById('m-whatsapp').value.trim() || null,
