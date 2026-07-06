@@ -1554,6 +1554,12 @@ function exportXLS() {
   const rows = ALL_GUIDES.map(g => ({
     'Nombre':          g.prenom || '',
     'Apellido':        g.nom || '',
+    'RUT':             g.rut || '',
+    'Fecha nacimiento':g.fecha_nacimiento ? new Date(g.fecha_nacimiento).toLocaleDateString('es-CL') : '',
+    'Género':          g.genero || '',
+    'Nacionalidad':    g.nacionalidad || '',
+    'Domicilio':       g.domicilio || '',
+    'Local patente':   g.local_patente || '',
     'Email':           g.email || '',
     'Teléfono':        g.telefono || '',
     'WhatsApp':        g.whatsapp || '',
@@ -1563,6 +1569,31 @@ function exportXLS() {
     'Actividades':  (g.especialidades || []).join(', '),
     'Idiomas':         (g.idiomas || []).join(', '),
     'Certificaciones': (g.certificaciones || []).join(' | '),
+    'Profesión':       g.profesion || '',
+    'Dirección laboral': g.direccion_laboral || '',
+    'Registro Sernatur': g.registro_sernatur || '',
+    'N° Sernatur':     g.num_sernatur || '',
+    'Primeros auxilios': g.primeros_auxilios || '',
+    'Tipo curso PAX':  g.tipo_paux || '',
+    'Vigencia PAX':    g.venc_paux ? new Date(g.venc_paux).toLocaleDateString('es-CL') : '',
+    'Empresa jurídica':g.tiene_empresa || '',
+    'Nombre empresa':  g.nombre_empresa || '',
+    'RUT empresa':     g.rut_empresa || '',
+    'Contacto emergencia': g.emerg_nombre || '',
+    'Teléfono emergencia': g.emerg_telefono || '',
+    'Parentesco emergencia': g.emerg_parentesco || '',
+    'Grupo sanguíneo': g.grupo_sanguineo || '',
+    'Donante órganos': g.donante_organos || '',
+    'Alergias':        g.alergias || '',
+    'Reacción medicamentos': g.reaccion_medicamentos || '',
+    'Enfermedad crónica': g.enfermedad_cronica || '',
+    'Antecedentes penales': g.antecedentes_penales || '',
+    'Expulsión instituciones': g.expulsion_instituciones || '',
+    'Cédula (URL)':    g.url_cedula || '',
+    'Licencia (URL)':  g.url_licencia || '',
+    'CV (URL)':        g.url_cv || '',
+    'Comprobante (URL)': g.url_comprobante || '',
+    'Inhabilidades (URL)': g.url_inhabilidades || '',
     'Activo':          g.activo ? 'Sí' : 'No',
     'Cotización':      g.cotisation ? 'Pagada' : 'Pendiente',
     'Encuesta':        g.encuesta_respondida ? 'Respondida' : 'Pendiente',
@@ -1575,9 +1606,14 @@ function exportXLS() {
 
   // Anchos de columna
   ws['!cols'] = [
-    {wch:14},{wch:18},{wch:28},{wch:16},{wch:16},
-    {wch:16},{wch:24},{wch:22},{wch:30},{wch:20},
-    {wch:35},{wch:8},{wch:12},{wch:12},{wch:14},{wch:7},{wch:14}
+    {wch:14},{wch:18},{wch:14},{wch:14},{wch:12},{wch:14},{wch:26},{wch:18},
+    {wch:28},{wch:16},{wch:16},{wch:16},{wch:24},{wch:22},{wch:30},{wch:20},{wch:35},
+    {wch:22},{wch:22},{wch:12},{wch:14},{wch:12},{wch:16},{wch:12},
+    {wch:14},{wch:22},{wch:14},
+    {wch:20},{wch:16},{wch:16},
+    {wch:10},{wch:12},{wch:9},{wch:16},{wch:26},{wch:12},{wch:14},
+    {wch:30},{wch:30},{wch:30},{wch:30},{wch:30},
+    {wch:8},{wch:12},{wch:12},{wch:14},{wch:7},{wch:14}
   ];
 
   // Style header (fond orange AGAP)
