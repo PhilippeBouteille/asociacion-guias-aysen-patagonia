@@ -1195,6 +1195,7 @@ function openCropModal(file, onConfirm) {
   reader.onload = ev => {
     const img = document.getElementById('crop-img');
     img.onload = () => {
+      document.getElementById('crop-modal').classList.add('open');
       const vp = document.getElementById('crop-viewport');
       const vpSize = vp.clientWidth;
       const baseScale = Math.max(vpSize / img.naturalWidth, vpSize / img.naturalHeight);
@@ -1206,7 +1207,6 @@ function openCropModal(file, onConfirm) {
       };
       document.getElementById('crop-zoom').value = 1;
       updateCropTransform();
-      document.getElementById('crop-modal').classList.add('open');
     };
     img.src = ev.target.result;
   };
