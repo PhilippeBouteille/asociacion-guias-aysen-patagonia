@@ -616,7 +616,7 @@ function renderGuides(list){
  updateCount(0);return;
  }
  grid.innerHTML = list.map(g=>`
- <div class="g-card fu" onclick="openGuideModal(${g.id})">
+ <div class="g-card fu" onclick="openGuideModal('${g.id}')">
  <div class="g-photo" style="background-image:url('${g.foto}')"></div>
  <div class="g-body">
  <div class="g-name">${g.nombre}</div>
@@ -636,7 +636,7 @@ function updateCount(n){
 
 /* ─── FICHA COMPLETA (modal) ─── */
 function openGuideModal(id){
- const g = ALL_GUIDES.find(x=>x.id===id);
+ const g = ALL_GUIDES.find(x=>String(x.id)===String(id));
  if(!g) return;
  document.getElementById('gm-photo').style.backgroundImage = `url('${g.foto}')`;
  document.getElementById('gm-name').textContent = g.nombre;
