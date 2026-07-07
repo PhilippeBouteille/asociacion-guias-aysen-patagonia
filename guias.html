@@ -91,12 +91,11 @@
 
  /* ── GUIDES GRID ── */
  .guias-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
- .g-card{background:white;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
+ .g-card{background:white;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;cursor:pointer;}
  .g-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.1);}
  .g-photo{height:200px;background-size:cover;background-position:center top;}
  .g-body{padding:1.2rem;}
- .g-name{font-family:var(--fd);font-size:1.45rem;color:var(--brown);}
- .g-zone{font-size:.78rem;color:var(--muted);margin-bottom:.7rem;}
+ .g-name{font-family:var(--fd);font-size:1.45rem;color:var(--brown);margin-bottom:.6rem;}
  .g-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.9rem;}
  .tag{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
  .tt{background:rgba(61,175,74,.12);color:var(--green);}
@@ -115,6 +114,23 @@
  .empty-state{text-align:center;padding:80px 20px;color:var(--muted);}
  .empty-state .ico{font-size:3.5rem;margin-bottom:1rem;}
  .empty-state p{font-size:1rem;}
+
+ /* ── FICHA COMPLETA (modal) ── */
+ .guide-modal-overlay{position:fixed;inset:0;background:rgba(35,31,32,.72);backdrop-filter:blur(3px);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;}
+ .guide-modal-overlay.open{display:flex;}
+ .guide-modal{background:white;border-radius:14px;max-width:560px;width:100%;max-height:86vh;overflow-y:auto;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+ .guide-modal-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);border:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--brown);z-index:2;}
+ .guide-modal-close:hover{background:var(--orange);color:white;}
+ .gm-photo{height:280px;background-size:cover;background-position:center top;border-radius:14px 14px 0 0;}
+ .gm-body{padding:1.7rem;}
+ .gm-name{font-family:var(--fd);font-size:2.1rem;color:var(--brown);line-height:1;}
+ .gm-zone{font-size:.85rem;color:var(--muted);margin:.4rem 0 .9rem;}
+ .gm-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:1.1rem;}
+ .gm-bio{font-size:.95rem;color:var(--brown);line-height:1.75;margin-bottom:1.1rem;}
+ .gm-langs,.gm-certs,.gm-links,.gm-contact{font-size:.88rem;color:var(--muted);margin-bottom:.6rem;}
+ .gm-langs strong,.gm-certs strong,.gm-contact strong{color:var(--brown);}
+ .gm-certs ul{margin:.3rem 0 0 1.1rem;}
+ .gm-links a,.gm-contact a{color:inherit;text-decoration:underline dotted;}
 
  /* ── FOOTER ── */
  footer{background:var(--brown);padding:60px 0 28px;color:rgba(255,255,255,.48);}
@@ -243,6 +259,24 @@
  <div class="guias-grid" id="guias-grid"></div>
  </div>
 </section>
+
+<!-- FICHA COMPLETA DEL GUÍA (modal) -->
+<div class="guide-modal-overlay" id="guide-modal" onclick="if(event.target===this) closeGuideModal()">
+ <div class="guide-modal">
+  <button class="guide-modal-close" onclick="closeGuideModal()" aria-label="Cerrar">×</button>
+  <div class="gm-photo" id="gm-photo"></div>
+  <div class="gm-body">
+   <div class="gm-name" id="gm-name"></div>
+   <div class="gm-zone" id="gm-zone"></div>
+   <div class="gm-tags" id="gm-tags"></div>
+   <p class="gm-bio" id="gm-bio"></p>
+   <div class="gm-langs" id="gm-langs"></div>
+   <div class="gm-certs" id="gm-certs"></div>
+   <div class="gm-links" id="gm-links"></div>
+   <div class="gm-contact" id="gm-contact"></div>
+  </div>
+ </div>
+</div>
 
 <!-- CÓDIGO DE CONDUCTA -->
 <section id="conducta" style="background:var(--warm);">
@@ -479,6 +513,10 @@ async function loadGuides(){
  langs:(g.idiomas||[]),
  telefono:g.telefono||null,
  whatsapp:g.whatsapp||null,
+ bio:g.bio||'',
+ certificaciones:g.certificaciones||[],
+ instagram:g.instagram||null,
+ sitio_web:g.sitio_web||null,
  }));
  renderFiltros(ALL_GUIDES);
  renderLangFiltros(ALL_GUIDES);
@@ -554,14 +592,19 @@ function applyFilters(){
  renderGuides(list);
 }
 
+/* Échappement HTML basique pour texte libre (bio, certificaciones) */
+function esc(s){
+ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 /* Ligne de contact (WhatsApp prioritaire, sinon téléphone) */
 function contactLine(g){
  if(g.whatsapp){
  const num = g.whatsapp.replace(/[^0-9]/g,'');
- return `<strong>WhatsApp:</strong> <a href="https://wa.me/${num}" target="_blank" rel="noopener">${g.whatsapp}</a>`;
+ return `<strong>WhatsApp:</strong> <a href="https://wa.me/${num}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${g.whatsapp}</a>`;
  }
  if(g.telefono){
- return `<strong>Tel:</strong> <a href="tel:${g.telefono.replace(/[^0-9+]/g,'')}">${g.telefono}</a>`;
+ return `<strong>Tel:</strong> <a href="tel:${g.telefono.replace(/[^0-9+]/g,'')}" onclick="event.stopPropagation()">${g.telefono}</a>`;
  }
  return '';
 }
@@ -573,11 +616,10 @@ function renderGuides(list){
  updateCount(0);return;
  }
  grid.innerHTML = list.map(g=>`
- <div class="g-card fu">
+ <div class="g-card fu" onclick="openGuideModal(${g.id})">
  <div class="g-photo" style="background-image:url('${g.foto}')"></div>
  <div class="g-body">
  <div class="g-name">${g.nombre}</div>
- <div class="g-zone">${(g.zonas||[]).map(zonaLabel).join(' · ')}</div>
  <div class="g-tags">${g.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')}</div>
  <div class="g-langs"><strong>Idiomas:</strong> ${g.idiomas}</div>
  ${(g.whatsapp||g.telefono) ? `<div class="g-contact">${contactLine(g)}</div>` : ''}
@@ -591,6 +633,40 @@ function updateCount(n){
  const count = n !== undefined ? n : ALL_GUIDES.length;
  document.getElementById('count-label').innerHTML = t('count_tmpl').replace('{n}',count);
 }
+
+/* ─── FICHA COMPLETA (modal) ─── */
+function openGuideModal(id){
+ const g = ALL_GUIDES.find(x=>x.id===id);
+ if(!g) return;
+ document.getElementById('gm-photo').style.backgroundImage = `url('${g.foto}')`;
+ document.getElementById('gm-name').textContent = g.nombre;
+ document.getElementById('gm-zone').textContent = (g.zonas||[]).map(zonaLabel).join(' · ');
+ document.getElementById('gm-tags').innerHTML = (g.esp||[]).map(e=>{
+  const c = (ESP_TAG[(e||'').toLowerCase()]||{}).c||'tt';
+  return `<span class="tag ${c}">${espLabel(e)}</span>`;
+ }).join('');
+ const bioEl = document.getElementById('gm-bio');
+ bioEl.textContent = g.bio||'';
+ bioEl.style.display = g.bio ? 'block' : 'none';
+ document.getElementById('gm-langs').innerHTML = g.idiomas ? `<strong>Idiomas:</strong> ${g.idiomas}` : '';
+ const certsEl = document.getElementById('gm-certs');
+ if(g.certificaciones && g.certificaciones.length){
+  certsEl.innerHTML = `<strong>Certificaciones:</strong><ul>${g.certificaciones.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`;
+  certsEl.style.display = 'block';
+ } else { certsEl.style.display = 'none'; }
+ const links = [];
+ if(g.instagram) links.push(`<a href="https://instagram.com/${g.instagram.replace(/^@/,'')}" target="_blank" rel="noopener">@${g.instagram.replace(/^@/,'')}</a>`);
+ if(g.sitio_web) links.push(`<a href="${g.sitio_web.startsWith('http')?g.sitio_web:'https://'+g.sitio_web}" target="_blank" rel="noopener">${g.sitio_web.replace(/^https?:\/\//,'')}</a>`);
+ document.getElementById('gm-links').innerHTML = links.join(' · ');
+ document.getElementById('gm-contact').innerHTML = (g.whatsapp||g.telefono) ? contactLine(g) : '';
+ document.getElementById('guide-modal').classList.add('open');
+ document.body.style.overflow = 'hidden';
+}
+function closeGuideModal(){
+ document.getElementById('guide-modal').classList.remove('open');
+ document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeGuideModal(); });
 
 /* ─── ANIMATIONS ─── */
 function observeFU(){
