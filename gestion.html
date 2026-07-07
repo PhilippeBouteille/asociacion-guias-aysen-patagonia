@@ -997,7 +997,6 @@ function openGuide(idOrNull) {
   const snOpt = v => `<option value=""${!v?' selected':''}>—</option><option value="Si"${v==='Si'?' selected':''}>Si</option><option value="No"${v==='No'?' selected':''}>No</option>`;
   const generoOpt = v => ['','Masculino','Femenino','Otro'].map(o=>`<option value="${o}"${(v||'')===o?' selected':''}>${o||'Seleccionar'}</option>`).join('');
   const nacOpt = v => ['','Chileno/a','Otro'].map(o=>`<option value="${o}"${(v||'')===o?' selected':''}>${o||'Seleccionar'}</option>`).join('');
-  const gsOpt = v => ['','A+','A-','B+','B-','AB+','AB-','O+','O-'].map(o=>`<option value="${o}"${(v||'')===o?' selected':''}>${o||'No informar'}</option>`).join('');
   const docField = (label, id, url) => `
     <div class="f-row">
       <div class="f">
@@ -1099,36 +1098,8 @@ function openGuide(idOrNull) {
       <div class="f"><label>RUT empresa</label><input id="m-rut_empresa" value="${esc(g.rut_empresa||'')}"></div>
     </div>
 
-    <div class="f-section">EMERGENCIAS Y DATOS MÉDICOS</div>
-    <div class="f-row c3">
-      <div class="f"><label>Nombre contacto</label><input id="m-emerg_nombre" value="${esc(g.emerg_nombre||'')}"></div>
-      <div class="f"><label>Teléfono contacto</label><input id="m-emerg_telefono" value="${esc(g.emerg_telefono||'')}"></div>
-      <div class="f"><label>Parentesco</label><input id="m-emerg_parentesco" value="${esc(g.emerg_parentesco||'')}"></div>
-    </div>
-    <div class="f-row c2">
-      <div class="f"><label>Grupo sanguíneo</label><select id="m-grupo_sanguineo" style="${selStyle}">${gsOpt(g.grupo_sanguineo)}</select></div>
-      <div class="f"><label>Donante de órganos</label><select id="m-donante_organos" style="${selStyle}">${snOpt(g.donante_organos)}</select></div>
-    </div>
-    <div class="f-row c2">
-      <div class="f"><label>Alergias</label><select id="m-alergias" style="${selStyle}">${snOpt(g.alergias)}</select></div>
-      <div class="f"><label>Reacción a medicamentos</label><select id="m-reaccion_medicamentos" style="${selStyle}">${snOpt(g.reaccion_medicamentos)}</select></div>
-    </div>
-    <div class="f-row">
-      <div class="f"><label>Enfermedad crónica / limitación relevante</label><input id="m-enfermedad_cronica" value="${esc(g.enfermedad_cronica||'')}"></div>
-    </div>
-
-    <div class="f-section">ANTECEDENTES</div>
-    <div class="f-row c2">
-      <div class="f"><label>Antecedentes penales</label><select id="m-antecedentes_penales" style="${selStyle}">${snOpt(g.antecedentes_penales)}</select></div>
-      <div class="f"><label>Expulsión de instituciones</label><select id="m-expulsion_instituciones" style="${selStyle}">${snOpt(g.expulsion_instituciones)}</select></div>
-    </div>
-
     <div class="f-section">DOCUMENTOS</div>
-    ${docField('Cédula de identidad', 'm-url_cedula', g.url_cedula)}
-    ${docField('Licencia / Título profesional', 'm-url_licencia', g.url_licencia)}
-    ${docField('Curriculum', 'm-url_cv', g.url_cv)}
     ${docField('Comprobante de transferencia', 'm-url_comprobante', g.url_comprobante)}
-    ${docField('Certificado de inhabilidades', 'm-url_inhabilidades', g.url_inhabilidades)}
 
     <div class="f-section">ESTADO</div>
     <div class="f-row c3">
@@ -1245,21 +1216,7 @@ async function saveGuide() {
       tiene_empresa: document.getElementById('m-tiene_empresa').value || null,
       nombre_empresa: document.getElementById('m-nombre_empresa').value.trim() || null,
       rut_empresa: document.getElementById('m-rut_empresa').value.trim() || null,
-      emerg_nombre: document.getElementById('m-emerg_nombre').value.trim() || null,
-      emerg_telefono: document.getElementById('m-emerg_telefono').value.trim() || null,
-      emerg_parentesco: document.getElementById('m-emerg_parentesco').value.trim() || null,
-      grupo_sanguineo: document.getElementById('m-grupo_sanguineo').value || null,
-      donante_organos: document.getElementById('m-donante_organos').value || null,
-      alergias: document.getElementById('m-alergias').value || null,
-      reaccion_medicamentos: document.getElementById('m-reaccion_medicamentos').value || null,
-      enfermedad_cronica: document.getElementById('m-enfermedad_cronica').value.trim() || null,
-      antecedentes_penales: document.getElementById('m-antecedentes_penales').value || null,
-      expulsion_instituciones: document.getElementById('m-expulsion_instituciones').value || null,
-      url_cedula: document.getElementById('m-url_cedula').value.trim() || null,
-      url_licencia: document.getElementById('m-url_licencia').value.trim() || null,
-      url_cv: document.getElementById('m-url_cv').value.trim() || null,
       url_comprobante: document.getElementById('m-url_comprobante').value.trim() || null,
-      url_inhabilidades: document.getElementById('m-url_inhabilidades').value.trim() || null,
       especialidades, idiomas, certificaciones, photo_url,
       activo:     document.getElementById('m-activo').value === 'true',
       cotisation: document.getElementById('m-cotisation').value === 'true',
@@ -1612,21 +1569,7 @@ function exportXLS() {
     'Empresa jurídica':g.tiene_empresa || '',
     'Nombre empresa':  g.nombre_empresa || '',
     'RUT empresa':     g.rut_empresa || '',
-    'Contacto emergencia': g.emerg_nombre || '',
-    'Teléfono emergencia': g.emerg_telefono || '',
-    'Parentesco emergencia': g.emerg_parentesco || '',
-    'Grupo sanguíneo': g.grupo_sanguineo || '',
-    'Donante órganos': g.donante_organos || '',
-    'Alergias':        g.alergias || '',
-    'Reacción medicamentos': g.reaccion_medicamentos || '',
-    'Enfermedad crónica': g.enfermedad_cronica || '',
-    'Antecedentes penales': g.antecedentes_penales || '',
-    'Expulsión instituciones': g.expulsion_instituciones || '',
-    'Cédula (URL)':    g.url_cedula || '',
-    'Licencia (URL)':  g.url_licencia || '',
-    'CV (URL)':        g.url_cv || '',
     'Comprobante (URL)': g.url_comprobante || '',
-    'Inhabilidades (URL)': g.url_inhabilidades || '',
     'Activo':          g.activo ? 'Sí' : 'No',
     'Cotización':      g.cotisation ? 'Pagada' : 'Pendiente',
     'Encuesta':        g.encuesta_respondida ? 'Respondida' : 'Pendiente',
@@ -1643,9 +1586,7 @@ function exportXLS() {
     {wch:28},{wch:16},{wch:16},{wch:16},{wch:24},{wch:22},{wch:30},{wch:20},{wch:35},
     {wch:22},{wch:22},{wch:12},{wch:14},{wch:12},{wch:16},{wch:12},
     {wch:14},{wch:22},{wch:14},
-    {wch:20},{wch:16},{wch:16},
-    {wch:10},{wch:12},{wch:9},{wch:16},{wch:26},{wch:12},{wch:14},
-    {wch:30},{wch:30},{wch:30},{wch:30},{wch:30},
+    {wch:30},
     {wch:8},{wch:12},{wch:12},{wch:14},{wch:7},{wch:14}
   ];
 

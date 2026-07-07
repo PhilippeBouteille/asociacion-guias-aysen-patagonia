@@ -125,7 +125,6 @@
   .step-pill.active { background: var(--orange); border-color: var(--orange); color: white; }
   a[href="#sec-2"].step-pill.active { background: var(--green); border-color: var(--green); }
   a[href="#sec-3"].step-pill.active { background: var(--blue); border-color: var(--blue); }
-  a[href="#sec-4"].step-pill.active { background: var(--red); border-color: var(--red); }
   a[href="#sec-5"].step-pill.active { background: var(--orange-d); border-color: var(--orange-d); }
   a[href="#sec-6"].step-pill.active { background: var(--blue); border-color: var(--blue); }
 
@@ -177,13 +176,11 @@
   #sec-2 .section-header { background: var(--green); }
   #sec-3 .section-header { background: var(--blue); }
   #sec-3 .section-header .num { background: white; color: var(--blue); }
-  #sec-4 .section-header { background: var(--red); }
-  #sec-4 .section-header .num { background: white; color: var(--red); }
   #sec-5 .section-header { background: var(--orange-d); }
   #sec-5 .section-header .num { background: white; color: var(--orange-d); }
 
   /* Toutes les sections sur fond beige uniforme */
-  #sec-1, #sec-2, #sec-3, #sec-4, #sec-5, #sec-6 { background: var(--cream); border-color: #e0d8ce; }
+  #sec-1, #sec-2, #sec-3, #sec-5, #sec-6 { background: var(--cream); border-color: #e0d8ce; }
 
   /* Numéros section 2 en vert */
   #sec-2 .section-header .num { background: white; color: var(--green); }
@@ -570,9 +567,8 @@
     <a class="step-pill active" href="#sec-1" onclick="scrollToPill(this,event)">1. Datos personales</a>
     <a class="step-pill" href="#sec-2" onclick="scrollToPill(this,event)">2. Perfil guía</a>
     <a class="step-pill" href="#sec-3" onclick="scrollToPill(this,event)">3. Datos laborales</a>
-    <a class="step-pill" href="#sec-4" onclick="scrollToPill(this,event)">4. Emergencias</a>
-    <a class="step-pill" href="#sec-5" onclick="scrollToPill(this,event)">5. Documentos</a>
-    <a class="step-pill" href="#sec-6" onclick="scrollToPill(this,event)">6. Encuesta</a>
+    <a class="step-pill" href="#sec-6" onclick="scrollToPill(this,event)">4. Ficha obligatoria</a>
+    <a class="step-pill" href="#sec-5" onclick="scrollToPill(this,event)">5. Pago</a>
   </div>
 </div>
 
@@ -872,216 +868,10 @@
       </div>
     </div>
 
-    <!-- ═══ 4. CONTACTO DE EMERGENCIAS ═══ -->
-    <div class="section-block" id="sec-4">
-      <div class="section-header">
-        <div class="num">4</div>
-        <h2>Emergencias e Informacion Medica</h2>
-      </div>
-      <div class="section-body">
-        <p style="font-size:0.88rem;color:var(--gray);margin-bottom:18px">En caso de emergencia durante actividades de guiado.</p>
-        <div class="row col3">
-          <div class="field">
-            <label>Nombre contacto <span class="req">*</span></label>
-            <input type="text" id="emerg_nombre" placeholder="Nombre y apellido" required>
-          </div>
-          <div class="field">
-            <label>Telefono contacto <span class="req">*</span></label>
-            <input type="tel" id="emerg_telefono" placeholder="+56 9 XXXX XXXX" required>
-          </div>
-          <div class="field">
-            <label>Parentesco <span class="req">*</span></label>
-            <input type="text" id="emerg_parentesco" placeholder="Ej. Conyuge, madre, amigo…" required>
-          </div>
-        </div>
-        <hr class="sec-divider">
-        <div class="row col2">
-          <div class="field">
-            <label>Grupo Sanguineo</label>
-            <div class="select-wrap">
-              <select id="grupo_sanguineo">
-                <option value="">No informar</option>
-                <option>A+</option><option>A-</option>
-                <option>B+</option><option>B-</option>
-                <option>AB+</option><option>AB-</option>
-                <option>O+</option><option>O-</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label>Donante de organos</label>
-            <div class="select-wrap">
-              <select id="donante_organos">
-                <option value="">No informar</option>
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="row col2">
-          <div class="field">
-            <label>Alergias</label>
-            <div class="radio-group" id="rg-alergias" style="margin-bottom:0">
-              <label class="radio-item" onclick="toggleRadio(this,'alergias','Si')"><input type="radio" name="alergias" value="Si">Si</label>
-              <label class="radio-item" onclick="toggleRadio(this,'alergias','No')"><input type="radio" name="alergias" value="No">No</label>
-            </div>
-          </div>
-          <div class="field">
-            <label>Reaccion a medicamentos</label>
-            <div class="radio-group" id="rg-medicamentos" style="margin-bottom:0">
-              <label class="radio-item" onclick="toggleRadio(this,'medicamentos','Si')"><input type="radio" name="medicamentos" value="Si">Si</label>
-              <label class="radio-item" onclick="toggleRadio(this,'medicamentos','No')"><input type="radio" name="medicamentos" value="No">No</label>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="field">
-            <label>Enfermedad cronica o limitacion fisica relevante</label>
-            <input type="text" id="enfermedad_cronica" placeholder="Si no aplica, dejar en blanco">
-          </div>
-        </div>
-        <hr class="sec-divider">
-        <!-- Antecedentes -->
-        <div class="field" style="margin-bottom:10px">
-          <label>Posee antecedentes penales</label>
-        </div>
-        <div class="radio-group" id="rg-penales">
-          <label class="radio-item" onclick="toggleRadio(this,'penales','Si')"><input type="radio" name="penales" value="Si">Si</label>
-          <label class="radio-item" onclick="toggleRadio(this,'penales','No')"><input type="radio" name="penales" value="No">No</label>
-        </div>
-        <div class="field" style="margin-top:12px;margin-bottom:10px">
-          <label>Ha sido expulsado de esta u otras instituciones</label>
-        </div>
-        <div class="radio-group" id="rg-expulsion">
-          <label class="radio-item" onclick="toggleRadio(this,'expulsion','Si')"><input type="radio" name="expulsion" value="Si">Si</label>
-          <label class="radio-item" onclick="toggleRadio(this,'expulsion','No')"><input type="radio" name="expulsion" value="No">No</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ 5. DOCUMENTOS Y PAGO ═══ -->
-    <div class="section-block" id="sec-5">
-      <div class="section-header">
-        <div class="num">5</div>
-        <h2>Documentos y Pago</h2>
-        <span class="sec-sub">Cuota anual $30.000 CLP</span>
-      </div>
-      <div class="section-body">
-
-        <div class="cuota-box">
-          <h3>Datos para deposito — Cuota Anual 2025</h3>
-          <div class="cuenta-row"><span>Asociacion</span><strong>Asociacion Gremial Regional de Guias de la Patagonia</strong></div>
-          <div class="cuenta-row"><span>RUT</span><strong>65.092.647-1</strong></div>
-          <div class="cuenta-row"><span>Banco</span><strong>Banco Estado</strong></div>
-          <div class="cuenta-row"><span>Tipo cuenta</span><strong>Cuenta Vista</strong></div>
-          <div class="cuenta-row"><span>Numero de cuenta</span><strong>843-7-049459-1</strong></div>
-          <div class="cuenta-row"><span>Email de confirmacion</span><strong>aguiasaysenpatagonia@gmail.com</strong></div>
-          <div class="cuenta-row"><span>Monto</span><strong>$30.000 CLP</strong></div>
-        </div>
-
-        <label class="check-item" style="margin-bottom:20px;display:inline-flex">
-          <input type="checkbox" id="ya_pago"><div class="box"></div><span>Ya pagué la cuota anual</span>
-        </label>
-        <p class="hint" style="font-size:0.78rem;color:var(--gray);font-style:italic;margin:-12px 0 20px">Si ya pagaste tu cuota anteriormente, marca esta casilla. El comprobante deja de ser obligatorio.</p>
-
-        <p class="hint" style="font-size:0.82rem;color:var(--brown);background:#fff8ed;border-left:3px solid var(--orange);padding:8px 12px;border-radius:6px;margin-bottom:16px">Por favor comprime tus fotos y documentos antes de subirlos (ideal: menos de 3 MB por archivo). Muchos celulares permiten reducir la calidad al tomar la foto, o puedes usar una app gratuita de compresión de imagen/PDF.</p>
-
-        <!-- Foto de perfil ya esta en seccion 2 -->
-
-        <div class="row col2" style="margin-bottom:20px">
-          <div class="field">
-            <label>Foto de perfil <span class="req">*</span></label>
-            <div class="upload-zone" onclick="document.getElementById('photo-input2').click()">
-              <input type="file" id="photo-input2" accept="image/jpeg,image/png,image/webp" onchange="handleFileUpload(this,'photo-name2')">
-              <div class="uz-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-              </div>
-              <p><strong>Foto de perfil</strong></p>
-              <p>JPG / PNG — min 400x400 px — máx. 3 MB</p>
-              <div class="file-name" id="photo-name2"></div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Cedula de identidad (ambos lados) <span class="req">*</span></label>
-            <div class="upload-zone" onclick="document.getElementById('doc-cedula').click()">
-              <input type="file" id="doc-cedula" accept="image/*,application/pdf" onchange="handleFileUpload(this,'cedula-name')">
-              <div class="uz-icon">
-                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-              </div>
-              <p><strong>Cedula de identidad</strong></p>
-              <p>PDF o imagen — ambos lados — máx. 3 MB</p>
-              <div class="file-name" id="cedula-name"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row col2" style="margin-bottom:20px">
-          <div class="field">
-            <label>Licencia / Titulo profesional</label>
-            <div class="upload-zone" onclick="document.getElementById('doc-licencia').click()">
-              <input type="file" id="doc-licencia" accept="image/*,application/pdf" onchange="handleFileUpload(this,'licencia-name')">
-              <div class="uz-icon">
-                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-              </div>
-              <p><strong>Licencia o titulo</strong></p>
-              <p>Si lo posee — PDF o imagen — máx. 3 MB</p>
-              <div class="file-name" id="licencia-name"></div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Curriculum profesional <span class="req">*</span></label>
-            <div class="upload-zone" onclick="document.getElementById('doc-cv').click()">
-              <input type="file" id="doc-cv" accept="application/pdf,application/msword,.docx" onchange="handleFileUpload(this,'cv-name')">
-              <div class="uz-icon">
-                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm1 9H9v-2h6v2zm2 4H9v-2h8v2zM13 9V3.5L18.5 9H13z"/></svg>
-              </div>
-              <p><strong>Curriculum</strong></p>
-              <p>PDF o Word — máx. 2 MB</p>
-              <div class="file-name" id="cv-name"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CERTIFICADO DE INHABILIDADES -->
-        <div class="field" style="margin-bottom:20px">
-          <label>Certificado de Inhabilidades para trabajar con menores <span class="req">*</span></label>
-          <div class="upload-zone" onclick="document.getElementById('doc-inhabilidades').click()">
-            <input type="file" id="doc-inhabilidades" accept="image/*,application/pdf" onchange="handleFileUpload(this,'inhab-name')">
-            <div class="uz-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-            </div>
-            <p><strong>Certificado de Inhabilidades</strong></p>
-            <p>PDF o imagen — emitido por el Registro Civil — máx. 3 MB</p>
-            <div class="file-name" id="inhab-name"></div>
-          </div>
-          <p style="font-size:0.82rem;color:var(--muted);margin-top:8px">
-            Obtén el certificado gratuito en
-            <a href="https://inhabilidades.srcei.cl/ConsInhab/consultaInhabilidad.do" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">inhabilidades.srcei.cl</a>
-          </p>
-        </div>
-
-        <!-- COMPROBANTE TRANSFERENCIA -->
-        <div class="field">
-          <label>Comprobante de transferencia — Cuota anual $30.000 <span class="req" id="comp-req">*</span></label>
-          <div class="upload-zone" id="comp-zone" onclick="document.getElementById('doc-comprobante').click()">
-            <input type="file" id="doc-comprobante" accept="image/*,application/pdf" onchange="handleFileUpload(this,'comp-name')">
-            <div class="uz-icon">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-            </div>
-            <p><strong>Comprobante de transferencia o deposito</strong></p>
-            <p>Imagen o PDF — cuota anual $30.000 CLP — máx. 2 MB</p>
-            <div class="file-name" id="comp-name"></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ═══ 6. ENCUESTA ═══ -->
+    <!-- ═══ 4. FICHA DE INSCRIPCIÓN OBLIGATORIA (antes n.6 — reordenada antes del pago) ═══ -->
     <div class="section-block" id="sec-6">
       <div class="section-header">
-        <div class="num">6</div>
+        <div class="num">4</div>
         <h2>Ficha de inscripción obligatoria</h2>
         <span class="sec-sub">Datos para el registro de la asociación</span>
       </div>
@@ -1109,6 +899,47 @@
           <p>Si el formulario no carga correctamente, puedes acceder directamente desde el siguiente botón.</p>
           <a href="https://forms.gle/ohM1iGVc9vV8kTV89" target="_blank" rel="noopener" class="btn-gform">ABRIR ENCUESTA</a>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══ 5. PAGO DE CUOTA (antes n.5 "Documentos y Pago" — recortada, id="sec-5" conservado por el CSS de color) ═══ -->
+    <div class="section-block" id="sec-5">
+      <div class="section-header">
+        <div class="num">5</div>
+        <h2>Pago de Cuota</h2>
+        <span class="sec-sub">Cuota anual $30.000 CLP</span>
+      </div>
+      <div class="section-body">
+
+        <div class="cuota-box">
+          <h3>Datos para deposito — Cuota Anual 2025</h3>
+          <div class="cuenta-row"><span>Asociacion</span><strong>Asociacion Gremial Regional de Guias de la Patagonia</strong></div>
+          <div class="cuenta-row"><span>RUT</span><strong>65.092.647-1</strong></div>
+          <div class="cuenta-row"><span>Banco</span><strong>Banco Estado</strong></div>
+          <div class="cuenta-row"><span>Tipo cuenta</span><strong>Cuenta Vista</strong></div>
+          <div class="cuenta-row"><span>Numero de cuenta</span><strong>843-7-049459-1</strong></div>
+          <div class="cuenta-row"><span>Email de confirmacion</span><strong>aguiasaysenpatagonia@gmail.com</strong></div>
+          <div class="cuenta-row"><span>Monto</span><strong>$30.000 CLP</strong></div>
+        </div>
+
+        <label class="check-item" style="margin-bottom:20px;display:inline-flex">
+          <input type="checkbox" id="ya_pago"><div class="box"></div><span>Ya pagué la cuota anual</span>
+        </label>
+        <p class="hint" style="font-size:0.78rem;color:var(--gray);font-style:italic;margin:-12px 0 20px">Si ya pagaste tu cuota anteriormente, marca esta casilla. El comprobante deja de ser obligatorio.</p>
+
+        <div class="field">
+          <label>Comprobante de transferencia — Cuota anual $30.000 <span class="req" id="comp-req">*</span></label>
+          <div class="upload-zone" id="comp-zone" onclick="document.getElementById('doc-comprobante').click()">
+            <input type="file" id="doc-comprobante" accept="image/*,application/pdf" onchange="handleFileUpload(this,'comp-name')">
+            <div class="uz-icon">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+            </div>
+            <p><strong>Comprobante de transferencia o deposito</strong></p>
+            <p>Imagen o PDF — cuota anual $30.000 CLP — máx. 2 MB</p>
+            <div class="file-name" id="comp-name"></div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1199,11 +1030,6 @@ photoZone.addEventListener('drop', e => {
 function handlePhoto(file) {
   if (!file) return;
   photoFile = file;
-  // sync hidden input in section 5
-  const dt = new DataTransfer();
-  dt.items.add(file);
-  document.getElementById('photo-input2').files = dt.files;
-  handleFileUpload(document.getElementById('photo-input2'), 'photo-name2');
   const reader = new FileReader();
   reader.onload = ev => {
     const prev = document.getElementById('photo-preview');
@@ -1215,11 +1041,6 @@ function handlePhoto(file) {
   };
   reader.readAsDataURL(file);
 }
-
-// Also handle direct upload from section 5
-document.getElementById('photo-input2').addEventListener('change', e => {
-  if (e.target.files[0]) handlePhoto(e.target.files[0]);
-});
 
 // ── Cert rows ─────────────────────────────────────────────────
 function addCert() {
@@ -1296,13 +1117,9 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
     const slug = `${prenom}-${nom}`.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // Upload archivos
-    const [photo_url, url_cedula, url_licencia, url_cv, url_comprobante, url_inhabilidades] = await Promise.all([
+    const [photo_url, url_comprobante] = await Promise.all([
       uploadFile(photoFile, BUCKET, slug),
-      uploadFile(document.getElementById('doc-cedula').files[0],      BUCKET_DOCS, `${slug}-cedula`),
-      uploadFile(document.getElementById('doc-licencia').files[0],     BUCKET_DOCS, `${slug}-licencia`),
-      uploadFile(document.getElementById('doc-cv').files[0],           BUCKET_DOCS, `${slug}-cv`),
-      uploadFile(document.getElementById('doc-comprobante').files[0],  BUCKET_DOCS, `${slug}-comprobante`),
-      uploadFile(document.getElementById('doc-inhabilidades').files[0],BUCKET_DOCS, `${slug}-inhabilidades`)
+      uploadFile(document.getElementById('doc-comprobante').files[0],  BUCKET_DOCS, `${slug}-comprobante`)
     ]);
 
     const especialidades = [
@@ -1353,21 +1170,8 @@ document.getElementById('form-registro').addEventListener('submit', async e => {
       tiene_empresa:      getRadio('empresa'),
       nombre_empresa:     document.getElementById('nombre_empresa').value.trim() || null,
       rut_empresa:        document.getElementById('rut_empresa').value.trim() || null,
-      // Emergencias
-      emerg_nombre:       document.getElementById('emerg_nombre').value.trim() || null,
-      emerg_telefono:     document.getElementById('emerg_telefono').value.trim() || null,
-      emerg_parentesco:   document.getElementById('emerg_parentesco').value.trim() || null,
-      // Medico
-      grupo_sanguineo:    document.getElementById('grupo_sanguineo').value || null,
-      donante_organos:    document.getElementById('donante_organos').value || null,
-      alergias:           getRadio('alergias'),
-      reaccion_medicamentos: getRadio('medicamentos'),
-      enfermedad_cronica: document.getElementById('enfermedad_cronica').value.trim() || null,
-      // Legal
-      antecedentes_penales: getRadio('penales'),
-      expulsion_instituciones: getRadio('expulsion'),
       // Documentos
-      url_cedula, url_licencia, url_cv, url_comprobante, url_inhabilidades,
+      url_comprobante,
       // Declaraciones
       cuota_pagada:        document.getElementById('ya_pago').checked,
       encuesta_respondida: document.getElementById('ya_respondio').checked,
